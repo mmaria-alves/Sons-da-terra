@@ -83,7 +83,7 @@ def mostrar_ouvindo():
 
 def shout_box():
     print("\nQual álbum você gostaria de avaliar mas não está disponível?")
-    sugestao = input("\nNome do álbum que você quer ver na plataforma: ")
+    sugestao = input("\nNome do álbum que você quer: ")
     artista = input("\nNome do artista/banda: ")
 
     shout = {"album": sugestao, "artista": artista}
