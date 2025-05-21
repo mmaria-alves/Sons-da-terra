@@ -3,11 +3,11 @@ import random
 def menu():
     while True:
         print("\n🎵 Bem-vindo ao Sons da terra 🎵")
-        print("1. avaliar")
-        print("2. o que as pessoas estão ouvindo")
-        print("3. shout-box")
-        print("4. novidades")
-        print("5. sair")
+        print("1. Avaliar")
+        print("2. O que as pessoas estão ouvindo?")
+        print("3. Shout-box")
+        print("4. Novidades")
+        print("5. Sair")
 
         opcao = input("Escolha uma opção (1-5): ")
 
@@ -63,13 +63,13 @@ def avaliar_album():
         }
 
         avaliacoes.append(avaliacao)
-        print(" Avaliação registrada com sucesso!\n")
+        print("Avaliação registrada com sucesso!\n")
 
     except ValueError:
-        print(" Tente novamente. Use números válidos.")
+        print("Tente novamente. Use números válidos.")
 
 def mostrar_ouvindo():
-    print("\n O que estão ouvindo agora:")
+    print("\nO que estão ouvindo agora:")
 
     if not avaliacoes:
         sugestoes = random.sample(albuns_disponiveis, k=min(3, len(albuns_disponiveis)))
@@ -88,11 +88,11 @@ def shout_box():
 
     shout = {"album": sugestao, "artista": artista}
     shouts.append(shout)
-    print(" Sugestão registrada! Obrigado por contribuir\n")
+    print("Sugestão registrada! Obrigado por contribuir\n")
 
 
 def novidades():
-    print("\nAlbuns lançados recentemente:")
+    print("\nÁlbuns lançados recentemente:")
 
     if not avaliacoes:
         sugestoes = random.sample(albuns_disponiveis, k=min(3, len(albuns_disponiveis)))
