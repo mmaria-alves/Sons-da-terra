@@ -14,10 +14,10 @@ os: utilizada para criar e manipular arquivos.
 
 ## Funcionalidades
 
-RF001 - CRUD completo: o usuário pode criar sua conta, ver, atualizar e deletar seus dados sempre que desejar;
-RF002 - Lista de recomendações de álbuns: No menu principal, é disponibilizada uma lista, que está em frequente atualização, de álbuns e EPs recomendados ;
-RF003 - Avaliações: o usuário pode dar nota e comentar os álbuns disponíveis, 
-RF004 - Shout-box: o usuário pode sugerir álbuns que não se encontram na plataforma;
+RF001 - CRUD completo: o usuário pode criar sua conta, ver, atualizar e deletar seus dados sempre que desejar;  
+RF002 - Lista de recomendações de álbuns: No menu principal, é disponibilizada uma lista, que está em frequente atualização, de álbuns e EPs recomendados;  
+RF003 - Avaliações: o usuário pode dar nota e comentar os álbuns disponíveis;  
+RF004 - Shout-box: o usuário pode sugerir álbuns que não se encontram na plataforma;  
 
 ## Fluxogramas do projeto
 
