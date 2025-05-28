@@ -51,12 +51,20 @@ def salvaravaliacoes(avaliacoesnew):
 
 # shoutbox
 def carregar_shouts():
-   shouts = []
-   if os.path.exists(ARQUIVO_TXT1):
-    with open(ARQUIVO_TXT1, 'r') as arquivo:
-       for linha in arquivo:
-            album, artista = linha.strip().split('|')
-            shouts.append({'álbum': album, 'artista': artista})
+    shouts = []
+    if os.path.exists(ARQUIVO_TXT1):
+        with open(ARQUIVO_TXT1, 'r') as arquivo:
+            for linha in arquivo:
+                linha = linha.strip()
+                if '|' in linha:
+                    partes = linha.split('|')
+                    if len(partes) == 2:
+                        album, artista = partes
+                        shouts.append({'album': album, 'artista': artista})
+                    else:
+                        print(f"Linha inválida (muitos '|'): {linha}")
+                elif linha:
+                    print(f"Linha inválida (sem '|'): {linha}")
     return shouts
 
 def salvar_shouts(shouts):
@@ -242,3 +250,4 @@ def avaliaralbum():
         salvaravaliacoes(avaliacoesnew)
         print("Avaliação registrada com sucesso!\n")
         return
+
