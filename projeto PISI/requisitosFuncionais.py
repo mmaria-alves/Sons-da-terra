@@ -91,7 +91,7 @@ def avaliar_album():
     avaliacoes = carregar_avaliacoes()
     print("\nÁlbuns:")
     for i, album in enumerate(albuns_disponiveis):
-        print(f"{i + 1}. {album['nome']} - {album['artista']}")
+       print(f"{i + 1}. {album['nome']} - {album['artista']} - {album['sobre']}")
     
     try:
         escolha = int(input('Escolha o número do álbum que deseja avaliar (digite "sair" caso deseje retornar): '))- 1
