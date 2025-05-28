@@ -1,7 +1,45 @@
 import random
-def menu():
+import os
+ARQUIVO_TXT1 = 'shoutbox.txt'
+ARQUIVO_TXT2 = "avaliacoes.txt"
+
+# avaliações
+def carregar_avaliacoes():
+    avaliacoes = []
+    if os.path.exists(ARQUIVO_TXT2):
+        with open(ARQUIVO_TXT2, 'r') as arquivo:
+            for linha in arquivo:
+                album, artista, nota, comentário = linha.strip().split('|')
+                avaliacoes.append({'álbum': album, 'artista': artista, 
+                               'nota': nota,'comentário': comentário})
+        return avaliacoes
+    
+def salvar_avaliacoes(avaliacoes):
+    with open(ARQUIVO_TXT2, 'w') as arquivo:
+        for avaliacao in avaliacoes:
+            linha = f"{avaliacao['album']}|{avaliacao['artista']}|{avaliacao['nota']}|{avaliacao['comentario']}\n"
+            arquivo.write(linha)
+
+# shoutbox
+def carregar_shouts():
+   shouts = []
+   if os.path.exists(ARQUIVO_TXT1):
+    with open(ARQUIVO_TXT1, 'r') as arquivo:
+       for linha in arquivo:
+            album, artista = linha.strip().split('|')
+            shouts.append({'álbum': album, 'artista': artista})
+    return shouts
+
+def salvar_shouts(shouts):
+    with open(ARQUIVO_TXT1, 'w') as arquivo:
+        for shout in shouts:
+            linha = f"{shout['album']}|{shout['artista']}\n"
+            arquivo.write(linha)
+            
+# menu: funcionalidades
+def menu_funcionalidades():
     while True:
-        print("\n🎵 Bem-vindo ao Sons da terra 🎵")
+        print("\n🎵 Sons da terra 🎵")
         print("1. avaliar")
         print("2. o que as pessoas estão ouvindo")
         print("3. shout-box")
@@ -22,7 +60,7 @@ def menu():
             print("Até a próxima!")
             break
         else:
-            print(" Tente novamente.")
+            print("Tente novamente.")
 
 # Lista de álbuns disponíveis
 albuns_disponiveis = [
@@ -49,33 +87,25 @@ albuns_disponiveis = [
     
 ]
 
-avaliacoes = []
-shouts = []
-
 def avaliar_album():
-    print("\n Álbuns:")
+    avaliacoes = carregar_avaliacoes()
+    print("\nÁlbuns:")
     for i, album in enumerate(albuns_disponiveis):
-        print(f"{i + 1}. {album['nome']} - {album['artista']} - {album['sobre']}")
+        print(f"{i + 1}. {album['nome']} - {album['artista']}")
     
     try:
-        escolha = int(input('Escolha o número do álbum que deseja avaliar: (digite "sair" caso deseje retornar)'))- 1
+        escolha = int(input('Escolha o número do álbum que deseja avaliar (digite "sair" caso deseje retornar): '))- 1
         if escolha < 0 or escolha >= len(albuns_disponiveis):
             print("Número inválido. Tente novamente.")
             return
         
-        
-        
-
-        nota = float(input('Dê uma nota de 0 a 5: (digite "sair" caso deseje retornar) ')) 
+        nota = float(input('Dê uma nota de 0 a 5 (digite "sair" caso deseje retornar): ')) 
         if nota < 0 or nota > 5:
             print("Tente novamente.")
             return
 
-        
         comentario = input("Deixe um comentário sobre o álbum: ")
        
-
-
         avaliacao = {
             "album": albuns_disponiveis[escolha]["nome"],
             "artista": albuns_disponiveis[escolha]["artista"],
@@ -84,13 +114,15 @@ def avaliar_album():
         }
 
         avaliacoes.append(avaliacao)
-        print(" Avaliação registrada com sucesso!\n")
+        salvar_avaliacoes(avaliacoes)
+        print("Avaliação registrada com sucesso!\n")
 
     except ValueError:
-        print(" Tente novamente. Use números válidos.")
+        print("Tente novamente. Use números válidos.")
 
 def mostrar():
-    print("\n O que estão ouvindo agora:")
+    avaliacoes = carregar_avaliacoes()
+    print("\nO que estão ouvindo agora:")
 
     if not avaliacoes:
         sugestoes = random.sample(albuns_disponiveis, k=min(3, len(albuns_disponiveis)))
@@ -103,17 +135,19 @@ def mostrar():
 
 
 def shout_box():
+    shouts = carregar_shouts()
     print("\nQual álbum você gostaria de avaliar mas não está disponível?")
     sugestao = input("\nNome do álbum que você quer ver na plataforma: ")
     artista = input("\nNome do artista/banda: ")
 
     shout = {"album": sugestao, "artista": artista}
     shouts.append(shout)
-    print(" Sugestão registrada! Obrigado por contribuir\n")
+    salvar_shouts(shouts)
+    print("Sugestão registrada! Obrigado por contribuir\n")
 
 
 def novidades():
-    print("\nAlbuns lançados recentemente:")
+    print("\nÁlbuns lançados recentemente:")
 
 news = [
     {"nome": "Movimento algum (NOVO)", "artista": "Fernando motta"},
@@ -127,11 +161,9 @@ news = [
 
 ]
 
-avaliacoes = []
-shouts = []
-
-def novidades():
-    print("\n Álbuns:")
+def avaliar_novidades():
+    avaliacoes = carregar_avaliacoes()
+    print("\nÁlbuns:")
     for i, album in enumerate(news):
         print(f"{i + 1}. {album['nome']} - {album['artista']}")
 
@@ -141,9 +173,6 @@ def novidades():
             print("Número inválido. Tente novamente.")
             return
         
-        
-        
-
         nota1 = float(input('Dê uma nota de 0 a 5: (digite "sair" caso deseje retornar) ')) 
         if nota1 < 0 or nota1 > 5:
             print("Tente novamente.")
@@ -160,9 +189,8 @@ def novidades():
         }
 
         avaliacoes.append(avaliacaobb)
-        print(" Avaliação registrada com sucesso!\n")
+        salvar_avaliacoes(avaliacoes)
+        print("Avaliação registrada com sucesso!\n")
 
     except ValueError:
-        print(" Tente novamente. Use números válidos.")
-
-menu()
+        print("Tente novamente. Use números válidos.")
