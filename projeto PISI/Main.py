@@ -1,30 +1,34 @@
+# CRUD
 import os
 from validadores import (email_valido, nome_valido, senha_valida)
 ARQUIVO_TXT = "usuarios.txt"
+ARQUIVO_TXT1 = "shoutbox.txt"
+ARQUIVO_TXT2 = 'avaliações.txt'
+from requisitosFuncionais import menu_funcionalidades
 
-
+# lê e carrega os dados no usuarios.txt
 def carregar_usuarios():
     usuarios = []
     if os.path.exists(ARQUIVO_TXT):
         with open(ARQUIVO_TXT, 'r') as arquivo:
             for linha in arquivo:
                 nome, email, senha = linha.strip().split('|')
-                usuarios.append({"nome": nome, "email": email, "senha": senha})
+            usuarios.append({"nome": nome, "email": email, "senha": senha})
     return usuarios
 
 # salva os dados no .txt
-
 def salvar_usuarios(usuarios):
     with open(ARQUIVO_TXT, 'w') as arquivo:
         for usuario in usuarios:
             linha = f"{usuario['nome']}|{usuario['email']}|{usuario['senha']}\n"
             arquivo.write(linha)
 
+# cadastrar usuário
 def cadastrar_usuario(nome, email, senha, confirm_senha):
     usuarios = carregar_usuarios()
 
     if any(u['email'] == email for u in usuarios):
-        return False, 'Este email já está cadastrado'  
+        return False, 'Este email já está cadastrado.'  
     
     if not nome_valido(nome):
         return False, 'Nome inválido. Por favor, insira outro nome.'
@@ -48,13 +52,17 @@ def cadastrar_usuario(nome, email, senha, confirm_senha):
     salvar_usuarios(usuarios)
     return True, 'Cadastro realizado com sucesso!'
 
-def buscar_usuario(email):
+# ver usuários 
+def ver_dados(email):
     usuarios = carregar_usuarios()
-    for usuario in usuarios:
-        if usuario['email'] == email:
-            return usuario
-    return None
+    with open('usuarios.txt', 'r') as arquivo:
+        for usuario in usuarios:
+            if usuario['email'] == email:
+                return usuario
+        return False, 'Email não encontrado. Por favor, tente novamente.'
 
+
+# atualizar dados
 def atualizar_usuario(email, novo_nome, nova_senha):
     usuarios = carregar_usuarios()
 
@@ -72,18 +80,23 @@ def atualizar_usuario(email, novo_nome, nova_senha):
             
             salvar_usuarios(usuarios)
             return True, 'Dados atualizados com sucesso.'
-    return False, 'Email não encontrado.'
+    return False, 'Email não encontrado. Por favor, tente novamente.'
 
-def deletar_usuario(email):
+# deletar dados
+def deletar_dados(email):
     usuarios = carregar_usuarios()
-    usuarios = [u for u in usuarios if u['email'] != email]
-    salvar_usuarios(usuarios)
-    return len(usuarios) != len(carregar_usuarios())
+    if any(u['email'] == email for u in usuarios): # busca o email
+            usuarios = [u for u in usuarios if u['email'] != email] # exclui dados
+            salvar_usuarios(usuarios)
+            return True, 'Dados deletados com sucesso!'
+    return False, 'Email não encontrado. Por favor, tente novamente.'
 
 
-def menu():
+# menu de dados pessoais
+def menu_dados():
+    usuarios = carregar_usuarios()
     while True:
-        print("\n---- MENU ----")
+        print("\n----- MENU -----")
         print("1. Cadastrar usuário")
         print("2. Visualizar dados")
         print("3. Atualizar dados")
@@ -95,34 +108,50 @@ def menu():
         if opcao == "1":
             nome = input("Nome: ")
             email = input("Email: ")
-            senha = input("Senha: ")
+            senha = input("Senha (apenas números): ")
             confirm_senha = input('Confirme sua senha: ')
             sucesso, mensagem = cadastrar_usuario(nome, email, senha, confirm_senha)
             print(mensagem if sucesso else mensagem)
             
         elif opcao == "2":
-            email = input("Digite o email: ")
-            usuario = buscar_usuario(email)
-            if usuario:
-                print("\nDados do usuário:")
-                print(f"Nome: {usuario['nome']}")
+            email = input("Digite seu email: ")
+            usuario = ver_dados(email)
+            if usuario in usuarios:
+                print("\nSeus dados:")
+                print(f'Nome: {usuario['nome']}')
                 print(f"Email: {usuario['email']}")
+                print(f'Senha: {usuario['senha']}')
             else:
-                print("Usuário não encontrado!")
+                print("Usuário não encontrado.")
 
         elif opcao == "3":
             email = input("Digite seu email: ")
-            novo_nome = input("Novo nome (pressione Enter para manter): ")
-            nova_senha = input("Nova senha (pressione Enter para manter): ")
+            novo_nome = input("Novo nome: ")
+            nova_senha = input("Nova senha: ")
             sucesso, mensagem = atualizar_usuario(email, novo_nome, nova_senha)
             print(mensagem if sucesso else mensagem)
 
         elif opcao == "4":
-            email = input("Digite seu email: ")
-            if deletar_usuario(email):
-                print("Usuário removido com sucesso!")
-            else:
-                print("Falha ao remover: usuário não encontrado!")
+            email = input('\nDigite seu email: ').strip()
+            print('Tem certeza que deseja deletar sua conta? ')
+            print('1. Sim')
+            print('2. Não')
+
+            escolha = input('Escolha uma opção: ')
+
+            if escolha == "1":
+                sucesso, mensagem = deletar_dados(email)
+                print(mensagem if sucesso else mensagem)
+                if sucesso:
+                    return menu_dados()
+                
+
+            elif escolha == "2": 
+                return menu_dados()
+
+            else: 
+                print('Opção inválida. Por favor, tente novamente.')
+                return menu_dados()
 
         elif opcao == "5":
             print("Saindo do sistema...")
@@ -131,5 +160,24 @@ def menu():
         else:
             print("Opção inválida!")
 
+def pag_inicial(): 
+    while True: 
+        print('\nBem vindo ao Sons da Terra. O que deseja fazer? ')
+        print('1. Dados pessoais')
+        print('2. Menu principal')
+        print('3. Sair')
+
+        opcao = input('Escolha uma opção: ').strip()
+
+        if opcao == '1':
+            menu_dados()
+        elif opcao == '2':
+            menu_funcionalidades()
+        elif opcao == '3':
+            print('\nAté a próxima!\n')
+            break
+        else:
+            print('\nOpção inválida.')
+
 if __name__ == "__main__":
-    menu()
+    pag_inicial()
