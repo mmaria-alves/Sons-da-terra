@@ -2,6 +2,7 @@ import random
 import os
 ARQUIVO_TXT1 = 'shoutbox.txt'
 ARQUIVO_TXT2 = "avaliações.txt"
+ARQUIVO_TXT3 = "novidades.txt"
 
 # avaliações
 def carregar_avaliacoes():
@@ -24,6 +25,28 @@ def salvar_avaliacoes(avaliacoes):
     with open(ARQUIVO_TXT2, 'w') as arquivo:
         for avaliacao in avaliacoes:
             linha = f"{avaliacao['album']}|{avaliacao['artista']}|{avaliacao['nota']}|{avaliacao['comentario']}\n"
+            arquivo.write(linha)
+
+def carregaravaliacoes():
+    avaliacoesnew = []
+    if os.path.exists(ARQUIVO_TXT3):
+        with open(ARQUIVO_TXT3, 'r') as arquivo:
+            for linha in arquivo:
+                dadosnew = linha.strip().split('|')
+                if len(dadosnew) == 4:
+                    album, artista, nota, comentario = dadosnew
+                    avaliacoesnew.append({
+                        'album': album,
+                        'artista': artista,
+                        'nota': float(nota),  
+                        'comentario': comentario
+                    })
+    return avaliacoesnew
+    
+def salvaravaliacoes(avaliacoesnew):
+    with open(ARQUIVO_TXT3, 'w') as arquivo:
+        for avaliacaonew in avaliacoesnew:
+            linha = f"{avaliacaonew['album']}|{avaliacaonew['artista']}|{avaliacaonew['nota']}|{avaliacaonew['comentario']}\n"
             arquivo.write(linha)
 
 # shoutbox
@@ -61,7 +84,7 @@ def menu_funcionalidades():
         elif opcao == '3':
             shout_box()
         elif opcao == '4':
-            novidades()
+            avaliaralbum()
         elif opcao == '5':
             print("Até a próxima!")
             break
@@ -97,8 +120,8 @@ def avaliar_album():
     avaliacoes = carregar_avaliacoes()
     while True:
         print("\nÁlbuns:")
-        for i, album in enumerate(albuns_disponiveis):
-            print(f"{i + 1}. {album['nome']} - {album['artista']}")
+        for i, album1 in enumerate(albuns_disponiveis):
+            print(f"{i + 1}. {album1['nome']} - {album1['artista']}")
         
         escolha_input = input('Escolha o número do álbum que deseja avaliar (ou digite "sair" para voltar): ')
         if escolha_input.lower() == "sair":
@@ -163,51 +186,59 @@ def shout_box():
     print("Sugestão registrada! Obrigado por contribuir\n")
 
 
-def novidades():
-    print("\nÁlbuns lançados recentemente:")
-
-news = [
-    {"nome": "Movimento algum (NOVO)", "artista": "Fernando motta"},
-    {"nome": "Imagina (single)", "artista": "Barbarize feat. Oreia"},
-    {"nome": "Tropical do brasil (single)", "artista": "Uana feat. Leoa"},
-    {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-    {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-    {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de pau"},
-    {"nome": "Dvd (single)", "artista": "Mirela Hazin"},
-    {"nome": "KM2 (2025)", "artista": "Ebony"} 
-
+# novidades:
+novidades = [
+        {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
+        {"nome": "Imagina (single)", "artista": "Barbarize feat. Oreia"},
+        {"nome": "Tropical do Brasil (single)", "artista": "Uana feat. Leoa"},
+        {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
+        {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
+        {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de Pau"},
+        {"nome": "Dvd (single)", "artista": "Mirela Hazin"},
+        {"nome": "KM2 (2025)", "artista": "Ebony"}
 ]
 
-def avaliar_novidades():
-    avaliacoes = carregar_avaliacoes()
-    print("\nÁlbuns:")
-    for i, album in enumerate(news):
-        print(f"{i + 1}. {album['nome']} - {album['artista']}")
 
-    try:
-        escolhabb = int(input('Escolha o número do álbum que deseja avaliar: (digite "sair" caso deseje retornar)'))- 1
-        if escolhabb < 0 or escolhabb >= len(news):
+def avaliaralbum():
+    avaliacoesnew = carregaravaliacoes()
+    while True:
+        print("\nÁlbuns lançados recentemente:")
+        for i, album in enumerate(novidades):
+            print(f"{i + 1}. {album['nome']} - {album['artista']}")
+        
+        escolha_input = input('Escolha o número do álbum que deseja avaliar (ou digite "sair" para voltar): ')
+        if escolha_input.lower() == "sair":
+            return
+        
+        if not escolha_input.isdigit() or not (1 <= int(escolha_input) <= len(novidades)):
             print("Número inválido. Tente novamente.")
-            return
-        
-        nota1 = float(input('Dê uma nota de 0 a 5: (digite "sair" caso deseje retornar) ')) 
-        if nota1 < 0 or nota1 > 5:
-            print("Tente novamente.")
+            continue
+
+        escolha = int(escolha_input) - 1
+
+        nota_input = input('Dê uma nota de 0 a 5 (ou digite "sair" para voltar): ')
+        if nota_input.lower() == "sair":
             return
 
-        
-        comentario1 = input("Deixe um comentário sobre o álbum: ")
-       
-        avaliacaobb = {
-            "album": news[escolhabb]["nome"],
-            "artista": news[escolhabb]["artista"],
-            "nota": nota1,
-            "comentario": comentario1
+        try:
+            nota = float(nota_input)
+            if nota < 0 or nota > 5:
+                print("Nota fora do intervalo permitido. Tente novamente.")
+                continue
+        except ValueError:
+            print("Entrada inválida para nota. Use um número entre 0 e 5.")
+            continue
+
+        comentario = input("Deixe um comentário sobre o álbum: ")
+
+        avaliacaonew = {
+            "album": novidades[escolha]["nome"],
+            "artista": novidades[escolha]["artista"],
+            "nota": nota,
+            "comentario": comentario
         }
 
-        avaliacoes.append(avaliacaobb)
-        salvar_avaliacoes(avaliacoes)
+        avaliacoesnew.append(avaliacaonew)
+        salvaravaliacoes(avaliacoesnew)
         print("Avaliação registrada com sucesso!\n")
-
-    except ValueError:
-        print("Tente novamente. Use números válidos.")
+        return
