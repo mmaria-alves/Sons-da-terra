@@ -26,26 +26,27 @@ def menu():
 
 # Lista de álbuns disponíveis
 albuns_disponiveis = [
-    {"nome": "Mundhana (2022)", "artista": "Mun-há"},
-    {"nome": "Megalomania (2024)", "artista": "Uana"},
-    {"nome": "Tanto pra dizer (2024)", "artista": "Mirela Hazin"},
-    {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-    {"nome": "Âmago (2024)", "artista": "Zendo"},
-    {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de pau"},
-    {"nome": "Grimestar (2024)", "artista": "Tremsete"},
-    {"nome": "Jogo de Cintura (2024)", "artista": "Bell Puã"},
-    {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-    {"nome": "Bacuri (2024)", "artista": "Boogarins"},
-    {"nome": "Abaixo de zero: Hello Hell (2019)", "artista": "Black alien"},
-    {"nome": "KM2 (2025)", "artista": "Ebony"},
-    {"nome": "Letrux como Mulher Girafa (2023)", "artista": "Letrux"},
-    {"nome": "SIM SIM SIM (2022)", "artista": "Bala Desejo"},
-    {"nome": "Me Chama de Gato Que Eu Sou Sua (2023)", "artista": "Ana Frango Elétrico"},
-    {"nome": "o fim é um começo (2024)", "artista": "a terra vai se tornar um planeta inabitável"},
-    {"nome": "MAU (2023)", "artista": "Jaloo"},
-    {"nome": "Antiasfixiante (2024)", "artista": "Kinoa"},
-    {"nome": "Quebra Asa, vol.1 (2023)", "artista": "Fernando motta"},
-    {"nome": "Muganga (2023)", "artista": "IDLIBRA"}
+    {"nome": "Mundhana (2022)", "artista": "Mun-há", "sobre": "Artista independente pernambucana, travesti e dona de uma energia incrivel. MUn-ha é Conhecida como a “Não-binária” do brega, esse albúm reforça sua identidade e força na cena. "},
+    {"nome": "Megalomania (2024)", "artista": "Uana", "sobre": "Artista pernambucana explora as variedades sonoras de seu território e se define como o “pop pernambucano”. Megalomania vai do brega-funk ao house em disco e tem participação de Rachel Reis e Mago de Tarso"},
+    {"nome": "Tanto pra dizer (2024)", "artista": "Mirela Hazin", "sobre": "Artista recifense nesse albúm a cantora relata desilusões amorosas, sentimentos que surgiram na transição da adolescência para o começo da fase universitária. "},
+    {"nome": "Coisas naturais (2025)", "artista": "Marina Sena", "sobre": "Artista mineira, participou de 2 bandas e com esse disco, composto de maneira autoral, se consolida como uma das grandes novas vozes da geração."},
+    {"nome": "Âmago (2024)", "artista": "Zendo", "sobre": "Artista recifense chama atenção por sua identidade visual ousada, sensual e composições sensíveis."},
+    {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de pau", "sobre": "Dupla de funkeiras que ousam e subvertem padrões em seus próprios termos. Esse albúm é a continuaçao de um projeto que descreve vivência periférica, autonomia e estética com som iconico das artistas, mesclam funk ao drill."},
+    {"nome": "Grimestar (2024)", "artista": "Tremsete, Zoebeats", "sobre": "Trem7 e Zoe sentiram uma grande conexão musical assim criaram esse EP, eles ja haviam colaborado em outro projeto do Zoebeats “Destalado”."},
+    {"nome": "Jogo de Cintura (2024)", "artista": "Bell Puã", "sobre": "Poetisa usa os seus versos rasgados para escancarar a realidade das minorias sociais e bradar a resistência das mulheres negras, dos negros, dos periféricos. "},
+    {"nome": "Casa Coração (2025)", "artista": "Joyce Alane", "sobre": "Joyce Alane é uma cantora e compositora pernambucana da nova cena musical. Joyce vem expandindo o seu público, levando o Nordeste consigo e ocupando seu espaço em âmbito nacional."},
+    {"nome": "Bacuri (2024)", "artista": "Boogarins", "sobre": "Banda goiana composta por 4 integrantes possui uma discografia inovadora e ciclica nas inventivas. “BACURI” é o projeto que marca um retorno às raízes criativas por ser gravado inteiramente em casa."},
+    {"nome": "Abaixo de zero: Hello Hell (2019)", "artista": "Black alien", "sobre": " Rapper brasileiro conhecido pelo trabalho provocador com o músico Speed Freaks (1972-2010) e a banda Planet Hemp. Apresenta estilo único, com rima rápida em inglês e português. "},
+    {"nome": "KM2 (2025)", "artista": "Ebony", "sobre": "Um dos maiores nomes femininos do cenário urbano. O albúm soa muito mais pessoal e amadurecido, até mesmo como uma conversa casual."},
+    {"nome": "Letrux como Mulher Girafa (2023)", "artista": "Letrux", "sobre": "Cantora, compositora, poeta e atriz carioca. Tem três álbuns lançados. "},
+    {"nome": "SIM SIM SIM (2022)", "artista": "Bala Desejo", "sobre": "Quarteto formado por Dora Morelenbaum, Julia Mestre, Lucas Nunes e Zé Ibarra. União de quatro forças que já aconteciam e colaboraram na criação desse albúm"},
+    {"nome": "Me Chama de Gato Que Eu Sou Sua (2023)", "artista": "Ana Frango Elétrico", "sobre": "Cantora, compositora, multiinstrumentista, produtora, poetisa e artista visual brasileira. "},
+    {"nome": "o fim é um começo (2024)", "artista": "a terra vai se tornar um planeta inabitável", "sobre": "Projeto músical de música experimental e brasileira. Esse albúm assim como os outros retrata por meio de musicas melancolicas temas como fim do mundo, relacionamento e despedidas. "},
+    {"nome": "MAU (2023)", "artista": "Jaloo", "sobre": "A artista paraense e trans é um dos nomes mais relevantes do pop brasileiro. Esse album foi inteiramente produzido e composta somente por ela, onde é nitido sua identidade musical. "},
+    {"nome": "Antiasfixiante (2024)", "artista": "Kinoa", "sobre": "Banda de São Lourenço da Mata. O “Antiasfixiante” mistura sonoridades enérgicas e rebeldes do punk até momentos íntimos e emocionais que puxam pro indie rock, tudo isso unido a um carisma enorme e uma presença lírica muito destacável. "},
+    {"nome": "Quebra Asa, vol.1 (2023)", "artista": "Fernando motta", "sobre": "Movimento algum representa a força e o sentimento que uma música tem por si só. São letras que não se localizam num espaço/tempo específicos, mas que encontram correspondência no que nos emociona e nos instiga. "},
+    {"nome": "Muganga (2023)", "artista": "IDLIBRA", "sobre": "Artista pernambucana Libra Lima, a Idlibra, apresenta um repertório de cinco faixas que abraça a estranheza e utiliza da inusitada combinação de elementos como estímulo para brincar com a interpretação do ouvinte. "}
+    
 ]
 
 avaliacoes = []
@@ -54,7 +55,7 @@ shouts = []
 def avaliar_album():
     print("\n Álbuns:")
     for i, album in enumerate(albuns_disponiveis):
-        print(f"{i + 1}. {album['nome']} - {album['artista']}")
+        print(f"{i + 1}. {album['nome']} - {album['artista']} - {album['sobre']}")
     
     try:
         escolha = int(input('Escolha o número do álbum que deseja avaliar: (digite "sair" caso deseje retornar)'))- 1
