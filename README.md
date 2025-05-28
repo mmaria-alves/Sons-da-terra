@@ -21,5 +21,5 @@ RF004 - Shout-box: o usuário pode sugerir álbuns que não se encontram na plat
 
 ## Fluxogramas do projeto
 
-- [Fluxograma do CRUD]()
-- [Fluxograma das funcionalidades]()
+- [Fluxograma do CRUD](https://drive.google.com/file/d/1LdmUFJJ50fUBIOtOuPOlCgfKJaNrkG8p/view?usp=drivesdk)
+- [Fluxograma das funcionalidades](https://drive.google.com/file/d/12JIuusqXzoGaLwlM3jDaPeVWD9sl-XUf/view?usp=sharing)
