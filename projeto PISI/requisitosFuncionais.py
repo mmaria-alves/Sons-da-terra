@@ -1,6 +1,6 @@
 import random
 import os
-ARQUIVO_TXT1 = 'shoutbox.txt'
+ARQUIVO_TXT1 = "shoutbox.txt"
 ARQUIVO_TXT2 = "avaliações.txt"
 ARQUIVO_TXT3 = "novidades.txt"
 
@@ -194,6 +194,7 @@ def shout_box():
     print("Sugestão registrada! Obrigado por contribuir\n")
 
 
+
 # novidades:
 novidades = [
         {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
@@ -250,4 +251,4 @@ def avaliaralbum():
         salvaravaliacoes(avaliacoesnew)
         print("Avaliação registrada com sucesso!\n")
         return
-
+    

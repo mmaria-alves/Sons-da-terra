@@ -1,24 +1,38 @@
 # CRUD
 import os
-from validadores import (email_valido, nome_valido, senha_valida)
+<<<<<<< Updated upstream
+from validadores import *
 ARQUIVO_TXT = "usuarios.txt"
 ARQUIVO_TXT1 = "shoutbox.txt"
+ARQUIVO_TXT2 = "avaliações.txt"
+=======
+from validadores import (email_valido, nome_valido, senha_valida)
+ARQUIVO_TXT = 'usuarios.txt'
+ARQUIVO_TXT1 = 'shoutbox.txt'
 ARQUIVO_TXT2 = 'avaliações.txt'
+>>>>>>> Stashed changes
 from requisitosFuncionais import menu_funcionalidades
+
+def limpar_terminal():
+    if os.name == 'nt':
+       os.system('cls')
+    else:
+       os.system('clear')
 
 # lê e carrega os dados no usuarios.txt
 def carregar_usuarios():
     usuarios = []
+
     if os.path.exists(ARQUIVO_TXT):
         with open(ARQUIVO_TXT, 'r') as arquivo:
             for linha in arquivo:
                 nome, email, senha = linha.strip().split('|')
-            usuarios.append({"nome": nome, "email": email, "senha": senha})
+                usuarios.append({"nome": nome, "email": email, "senha": senha})
     return usuarios
 
 # salva os dados no .txt
 def salvar_usuarios(usuarios):
-    with open(ARQUIVO_TXT, 'w') as arquivo:
+    with open(ARQUIVO_TXT, 'a') as arquivo:
         for usuario in usuarios:
             linha = f"{usuario['nome']}|{usuario['email']}|{usuario['senha']}\n"
             arquivo.write(linha)
@@ -27,7 +41,7 @@ def salvar_usuarios(usuarios):
 def cadastrar_usuario(nome, email, senha, confirm_senha):
     usuarios = carregar_usuarios()
 
-    if any(u['email'] == email for u in usuarios):
+    if any(usuario["email"] == email for usuario in usuarios):
         return False, 'Este email já está cadastrado.'  
     
     if not nome_valido(nome):
@@ -55,11 +69,10 @@ def cadastrar_usuario(nome, email, senha, confirm_senha):
 # ver usuários 
 def ver_dados(email):
     usuarios = carregar_usuarios()
-    with open('usuarios.txt', 'r') as arquivo:
-        for usuario in usuarios:
-            if usuario['email'] == email:
-                return usuario
-        return False, 'Email não encontrado. Por favor, tente novamente.'
+    for usuario in usuarios:
+        if usuario['email'] == email:
+            return usuario
+    return False, 'Email não encontrado. Por favor, tente novamente.'
 
 
 # atualizar dados
@@ -85,7 +98,7 @@ def atualizar_usuario(email, novo_nome, nova_senha):
 # deletar dados
 def deletar_dados(email):
     usuarios = carregar_usuarios()
-    if any(u['email'] == email for u in usuarios): # busca o email
+    if any(u['email'] == email for u in usuarios): 
             usuarios = [u for u in usuarios if u['email'] != email] # exclui dados
             salvar_usuarios(usuarios)
             return True, 'Dados deletados com sucesso!'
@@ -96,12 +109,13 @@ def deletar_dados(email):
 def menu_dados():
     usuarios = carregar_usuarios()
     while True:
-        print("\n----- MENU -----")
-        print("1. Cadastrar usuário")
-        print("2. Visualizar dados")
-        print("3. Atualizar dados")
-        print("4. Deletar dados")
-        print("5. Sair")
+        print("\n --------- MENU --------- ")
+        print("|1. Cadastrar usuário    |")
+        print("|2. Visualizar dados     |")
+        print("|3. Atualizar dados      |")
+        print("|4. Deletar dados        |")
+        print("|5. Sair                 |")
+        print(" ------------------------ ")
 
         opcao = input("Escolha uma opção: ")
 
@@ -142,10 +156,8 @@ def menu_dados():
             if escolha == "1":
                 sucesso, mensagem = deletar_dados(email)
                 print(mensagem if sucesso else mensagem)
-                if sucesso:
-                    return menu_dados()
                 
-
+                
             elif escolha == "2": 
                 return menu_dados()
 
@@ -175,6 +187,7 @@ def pag_inicial():
             menu_funcionalidades()
         elif opcao == '3':
             print('\nAté a próxima!\n')
+            limpar_terminal()
             break
         else:
             print('\nOpção inválida.')
