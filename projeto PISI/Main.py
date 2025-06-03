@@ -2,11 +2,14 @@
 import os
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from validadores import *
 ARQUIVO_TXT = "usuarios.txt"
 ARQUIVO_TXT1 = "shoutbox.txt"
 ARQUIVO_TXT2 = "avaliações.txt"
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 from validadores import (email_valido, nome_valido, senha_valida)
