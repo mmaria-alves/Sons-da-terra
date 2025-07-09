@@ -28,6 +28,17 @@ albuns_disponiveis = [
     {"nome": "Muganga (2023)", "artista": "IDLIBRA"}
 ]
 
+novidades = [
+        {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
+        {"nome": "Imagina (single)", "artista": "Barbarize feat. Oreia"},
+        {"nome": "Tropical do Brasil (single)", "artista": "Uana feat. Leoa"},
+        {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
+        {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
+        {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de Pau"},
+        {"nome": "Dvd (single)", "artista": "Mirela Hazin"},
+        {"nome": "KM2 (2025)", "artista": "Ebony"}
+]
+
 def carregar_avaliacoes():
     if os.path.exists(ARQUIVO_AVALIACOES):
         with open(ARQUIVO_AVALIACOES, 'r', encoding='utf-8') as arquivo:
@@ -38,65 +49,53 @@ def salvar_avaliacoes(avaliacoes):
     with open(ARQUIVO_AVALIACOES, 'w', encoding='utf-8') as arquivo:
         json.dump(avaliacoes, arquivo, indent=4, ensure_ascii=False)
 
-def carregar_shoutbox():
+def carregar_shoutbox(): ###
     if os.path.exists(ARQUIVO_SHOUTBOX):
         with open(ARQUIVO_SHOUTBOX, 'r', encoding='UTF-8') as arquivo:
             json.load(arquivo)
     return {}
 
-def salvar_shouts(shouts):
+def salvar_shouts(shouts): ###
     with open(ARQUIVO_SHOUTBOX, 'w', encoding='UTF-8') as arquivo:
         json.dump(shouts, arquivo, indent=4, ensure_ascii=False)
 
-def avaliar_album():
-    pass
+def avaliar_album(): ###
+    global usuario_logado
+    email = usuario_logado.get('email')
 
-
-
-
-def avaliar_album():
     avaliacoes = carregar_avaliacoes()
-    while True:
-        print("\nÁlbuns:")
-        for i, album1 in enumerate(albuns_disponiveis):
-            print(f"{i + 1}. {album1['nome']} - {album1['artista']}")
-        
-        escolha_input = input('Escolha o número do álbum que deseja avaliar (ou digite "sair" para voltar): ')
-        if escolha_input.lower() == "sair":
-            return
-        
-        if not escolha_input.isdigit() or not (1 <= int(escolha_input) <= len(albuns_disponiveis)):
-            print("Número inválido. Tente novamente.")
-            continue
+    print('Álbuns disponíveis: ')
+    for i, album in enumerate(albuns_disponiveis):
+       print(f'{i + 1}. {album['nome']} - {album['artista']}')
+    opcao = input('Digite o número do álbum que você deseja avaliar (pressione "s" para sair): ').lower()
+    
+    while True:    
+        if opcao == 's':
+            break
 
-        escolha = int(escolha_input) - 1
-
-        nota_input = input('Dê uma nota de 0 a 5 (ou digite "sair" para voltar): ')
-        if nota_input.lower() == "sair":
-            return
-
-        try:
-            nota = float(nota_input)
-            if nota < 0 or nota > 5:
-                print("Nota fora do intervalo permitido. Tente novamente.")
-                continue
-        except ValueError:
-            print("Entrada inválida para nota. Use um número entre 0 e 5.")
-            continue
-
-        comentario = input("Deixe um comentário sobre o álbum: ")
-
-        avaliacao = {
-            "album": albuns_disponiveis[escolha]["nome"],
-            "artista": albuns_disponiveis[escolha]["artista"],
-            "nota": nota,
-            "comentario": comentario
-        }
-
-        avaliacoes.append(avaliacao)
-        salvar_avaliacoes(avaliacoes)
-        print("Avaliação registrada com sucesso!\n")
-        return
+        elif opcao.isdigit() and (1 <= int(opcao) <= len(albuns_disponiveis)):
+            nota = input('Dê uma nota para esse álbum: ')
+            if nota.isdigit():
+                nota = float(nota)
+                if nota < 0 or nota > 5:
+                    print('Erro. Digite apenas números no intervalo de 0 até 5.')
+                else: 
+                    comentario = input('Deixe um comentário sobre o álbum: ')
+                    if len(comentario) < 300:
+                        break
+                    else:
+                        print('Ops, você atingiu o limite de 300 caracteres. Tente Novamente.')
+            else: 
+                print('Erro. Digite apenas números.')
+        else:
+            print('Número inválido. Tente novamente.')
+    avaliacoes[email] = {
+        'album': album,
+        'nota': nota,
+        'comentario': comentario
+    }
+    salvar_avaliacoes(avaliacoes)
+    print('Avaliação registrada com sucesso!')
 
 def mostrar():
     avaliacoes = carregar_avaliacoes()
@@ -111,97 +110,19 @@ def mostrar():
         for item in escolhas:
             print(f"- {item['album']} by {item['artista']} ({item['nota']}/5): \"{item['comentario']}\"")
 
-
-def shout_box():
+def adicionar_shout():
+    global usuario_logado
+    email = usuario_logado.get('email')
     shouts = carregar_shoutbox()
-    print("\nQual álbum você gostaria de avaliar mas não está disponível?")
-    sugestao = input("\nNome do álbum que você quer ver na plataforma: ")
-    artista = input("\nNome do artista/banda: ")
 
-    shout = {"album": sugestao, "artista": artista}
-    shouts.append(shout)
+    print('Qual álbum você gostaria de ver no Sons da Terra?')
+    album = input('Nome do álbum: ')
+    artista = input('Nome do artista: ')
+
+    shouts[email] = {
+        'album': album,
+        'artista': artista
+    }
     salvar_shouts(shouts)
-    print("Sugestão registrada! Obrigado por contribuir\n")
-
-
-
-# novidades:
-novidades = [
-        {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
-        {"nome": "Imagina (single)", "artista": "Barbarize feat. Oreia"},
-        {"nome": "Tropical do Brasil (single)", "artista": "Uana feat. Leoa"},
-        {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-        {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-        {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de Pau"},
-        {"nome": "Dvd (single)", "artista": "Mirela Hazin"},
-        {"nome": "KM2 (2025)", "artista": "Ebony"}
-]
-
-
-def avaliaralbum():
-    avaliacoes = carregar_avaliacoes()
-    while True:
-        print("\nÁlbuns lançados recentemente:")
-        for i, album in enumerate(novidades):
-            print(f"{i + 1}. {album['nome']} - {album['artista']}")
-        
-        escolha_input = input('Escolha o número do álbum que deseja avaliar (ou digite "sair" para voltar): ')
-        if escolha_input.lower() == "sair":
-            return
-        
-        if not escolha_input.isdigit() or not (1 <= int(escolha_input) <= len(novidades)):
-            print("Número inválido. Tente novamente.")
-            continue
-
-        escolha = int(escolha_input) - 1
-
-        nota_input = input('Dê uma nota de 0 a 5 (ou digite "sair" para voltar): ')
-        if nota_input.lower() == "sair":
-            return
-
-        try:
-            nota = float(nota_input)
-            if nota < 0 or nota > 5:
-                print("Nota fora do intervalo permitido. Tente novamente.")
-                continue
-        except ValueError:
-            print("Entrada inválida para nota. Use um número entre 0 e 5.")
-            continue
-
-        comentario = input("Deixe um comentário sobre o álbum: ")
-
-        avaliacao = {
-            "album": novidades[escolha]["nome"],
-            "artista": novidades[escolha]["artista"],
-            "nota": nota,
-            "comentario": comentario
-        }
-
-        avaliacoes.append(avaliacao)
-        salvar_avaliacoes(avaliacoes)
-        print("Avaliação registrada com sucesso!\n")
-        return
+    print('Sugestão adicionada!')
     
-def menu_funcionalidades():
-    while True:
-        print("\n🎵 Sons da terra 🎵")
-        print("1. avaliar")
-        print("2. o que as pessoas estão ouvindo")
-        print("3. shout-box")
-        print("4. novidades")
-        print("5. sair")
-        opcao = input("Escolha uma opção (1-5): ")
-
-        if opcao == '1':
-            avaliar_album()
-        elif opcao == '2':
-            mostrar()
-        elif opcao == '3':
-            shout_box()
-        elif opcao == '4':
-            avaliaralbum()
-        elif opcao == '5':
-            print("Até a próxima!")
-            break
-        else:
-            print("Tente novamente.")

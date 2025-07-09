@@ -1,9 +1,11 @@
 import os
-from requisitosFuncionais import menu_funcionalidades
+from requisitosFuncionais import *
 import json
 ARQUIVO_USUARIOS = "usuarios.json"
 ARQUIVO_SHOUTBOX = "shoutbox.json"
 ARQUIVO_AVALIACOES = "avaliações.json"
+
+## Corrigir erros nas funções de atualizar, ver e deletar dados
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -24,7 +26,7 @@ def carregar_dados_usuario(email):
 
 usuario_logado = None
 
-def cadastrar_usuarios(): ### 
+def cadastrar_usuario(): ### 
     usuarios = carregar_usuarios()
     while True:
         nome = input('Qual é o seu nome? ').title().strip()
@@ -53,7 +55,6 @@ def cadastrar_usuarios(): ###
         else:
             print('Senha inválida. Sua senha deve conter apenas seis números.')
     while True:
-        tentativas = 3
         confirmacao_senha = input('Confirme sua senha: ')
         if confirmacao_senha == senha:
             break
@@ -74,21 +75,22 @@ def cadastrar_usuarios(): ###
     }
 
     salvar_usuarios(usuarios)
-    print('Cadastro realizado com sucesso!')
+    print('Cadastro realizado com sucesso!\n')
 
-def login(): ###
+def login():
     global usuario_logado
     usuarios = carregar_usuarios()
-    print('Bom te ver de novo!')
-    email = input('Insira seu email: ')
-    senha = input('Insira sua senha: ')
+    print('Bom te ver de volta!')
+    email = input('Qual é seu email? ')
+    senha = input('Qual é sua senha? ')
+    
     usuario = carregar_dados_usuario(email)
 
     if (email in usuarios and usuarios[email]['senha'] == senha):
-        print(f'Olá {usuarios[email]['nome']}')
+        print(f'Olá {usuarios[email]['nome']}!')
         usuario_logado = usuario
-    else: 
-        print('Email ou senha inválidos. Tente novamente')
+    else:
+        print('Email ou senha inválidos. Tente novamente.')
 
 
 def ver_dados():
@@ -178,20 +180,18 @@ def deletar_conta(): ###
 
 # menu de dados pessoais
 def menu_dados():
-    usuarios = carregar_usuarios()
     while True:
         print("\n --------- MENU --------- ")
         print("|1. Cadastrar usuário    |")
         print("|2. Visualizar dados     |")
         print("|3. Atualizar dados      |")
         print("|4. Deletar dados        |")
-        print("|5. Sair                 |")
+        print("|5. Voltar               |")
         print(" ------------------------ ")
-
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
-            cadastrar_usuarios()
+            cadastrar_usuario()
             
         elif opcao == "2":
             ver_dados()
@@ -200,51 +200,58 @@ def menu_dados():
             atualizar_dados()
 
         elif opcao == "4":
-            email = input('\nDigite seu email: ').strip()
-            print('Tem certeza que deseja deletar sua conta? ')
-            print('1. Sim')
-            print('2. Não')
-
-            escolha = input('Escolha uma opção: ')
-
-            if escolha == "1":
-                sucesso, mensagem = deletar_conta(email)
-                print(mensagem if sucesso else mensagem)
-                
-                
-            elif escolha == "2": 
-                return menu_dados()
-
-            else: 
-                print('Opção inválida. Por favor, tente novamente.')
-                return menu_dados()
+            deletar_conta()
 
         elif opcao == "5":
-            print("Saindo do sistema...")
+            print("Voltando...")
             break
-
         else:
             print("Opção inválida!")
 
-def pag_inicial(): 
-    while True: 
-        print('\nBem vindo ao Sons da Terra. O que deseja fazer? ')
-        print('1. Dados pessoais')
-        print('2. Menu principal')
-        print('3. Sair')
-
-        opcao = input('Escolha uma opção: ').strip()
+def menu_funcionalidades():
+    while True:
+        print("\n🎵 Sons da terra 🎵")
+        print("1. avaliar")
+        print("2. o que as pessoas estão ouvindo")
+        print("3. shout-box")
+        print("4. novidades")
+        print('5. configurações')
+        print("6. sair")
+        opcao = input("Escolha uma opção (1-6): ")
 
         if opcao == '1':
-            menu_dados()
+            avaliar_album()
         elif opcao == '2':
-            menu_funcionalidades()
+            mostrar()
         elif opcao == '3':
-            print('\nAté a próxima!\n')
+            adicionar_shout()
+        elif opcao == '4':
+            avaliar_album()
+        elif opcao == '5':
+            menu_dados()
+        elif opcao == '6':
+            print("Até a próxima!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+def pag_inicial(): 
+    print('Bem vindo(a) ao Sons da Terra!')
+    while True: 
+        opcao = input('Você já tem uma conta? (s/n), digite "sair" para sair: ').lower()
+        if opcao == 'n':
+            print('Então vamos criar uma conta para você!')
+            cadastrar_usuario()
+        elif opcao == 's':
+            login()
+            menu_funcionalidades()
+        elif opcao == 'sair':
+            print('Até a próxima! Saindo...')
             limpar_terminal()
             break
         else:
-            print('\nOpção inválida.')
+            print('Opção inválida. Digite apenas "s", "n" ou "sair".')
 
 if __name__ == "__main__":
     pag_inicial()
