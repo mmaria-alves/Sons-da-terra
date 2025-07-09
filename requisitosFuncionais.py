@@ -1,105 +1,10 @@
 import random
 import os
-ARQUIVO_TXT1 = "shoutbox.txt"
-ARQUIVO_TXT2 = "avaliações.txt"
-ARQUIVO_TXT3 = "novidades.txt"
+import json
+ARQUIVO_SHOUTBOX = "shoutbox.json"
+ARQUIVO_AVALIACOES = "avaliacoes.json"
+ARQUIVO_NOVIDADES = "novidades.json"
 
-# avaliações
-def carregar_avaliacoes():
-    avaliacoes = []
-    if os.path.exists(ARQUIVO_TXT2):
-        with open(ARQUIVO_TXT2, 'r') as arquivo:
-            for linha in arquivo:
-                dados = linha.strip().split('|')
-                if len(dados) == 4:
-                    album, artista, nota, comentario = dados
-                    avaliacoes.append({
-                        'album': album,
-                        'artista': artista,
-                        'nota': float(nota),  
-                        'comentario': comentario
-                    })
-    return avaliacoes
-    
-def salvar_avaliacoes(avaliacoes):
-    with open(ARQUIVO_TXT2, 'w') as arquivo:
-        for avaliacao in avaliacoes:
-            linha = f"{avaliacao['album']}|{avaliacao['artista']}|{avaliacao['nota']}|{avaliacao['comentario']}\n"
-            arquivo.write(linha)
-
-def carregaravaliacoes():
-    avaliacoesnew = []
-    if os.path.exists(ARQUIVO_TXT3):
-        with open(ARQUIVO_TXT3, 'r') as arquivo:
-            for linha in arquivo:
-                dadosnew = linha.strip().split('|')
-                if len(dadosnew) == 4:
-                    album, artista, nota, comentario = dadosnew
-                    avaliacoesnew.append({
-                        'album': album,
-                        'artista': artista,
-                        'nota': float(nota),  
-                        'comentario': comentario
-                    })
-    return avaliacoesnew
-    
-def salvaravaliacoes(avaliacoesnew):
-    with open(ARQUIVO_TXT3, 'w') as arquivo:
-        for avaliacaonew in avaliacoesnew:
-            linha = f"{avaliacaonew['album']}|{avaliacaonew['artista']}|{avaliacaonew['nota']}|{avaliacaonew['comentario']}\n"
-            arquivo.write(linha)
-
-# shoutbox
-def carregar_shouts():
-    shouts = []
-    if os.path.exists(ARQUIVO_TXT1):
-        with open(ARQUIVO_TXT1, 'r') as arquivo:
-            for linha in arquivo:
-                linha = linha.strip()
-                if '|' in linha:
-                    partes = linha.split('|')
-                    if len(partes) == 2:
-                        album, artista = partes
-                        shouts.append({'album': album, 'artista': artista})
-                    else:
-                        print(f"Linha inválida (muitos '|'): {linha}")
-                elif linha:
-                    print(f"Linha inválida (sem '|'): {linha}")
-    return shouts
-
-def salvar_shouts(shouts):
-    with open(ARQUIVO_TXT1, 'w') as arquivo:
-        for shout in shouts:
-            linha = f"{shout['album']}|{shout['artista']}\n"
-            arquivo.write(linha)
-            
-# menu: funcionalidades
-def menu_funcionalidades():
-    while True:
-        print("\n🎵 Sons da terra 🎵")
-        print("1. avaliar")
-        print("2. o que as pessoas estão ouvindo")
-        print("3. shout-box")
-        print("4. novidades")
-        print("5. sair")
-
-        opcao = input("Escolha uma opção (1-5): ")
-
-        if opcao == '1':
-            avaliar_album()
-        elif opcao == '2':
-            mostrar()
-        elif opcao == '3':
-            shout_box()
-        elif opcao == '4':
-            avaliaralbum()
-        elif opcao == '5':
-            print("Até a próxima!")
-            break
-        else:
-            print("Tente novamente.")
-
-# Lista de álbuns disponíveis
 albuns_disponiveis = [
     {"nome": "Mundhana (2022)", "artista": "Mun-há"},
     {"nome": "Megalomania (2024)", "artista": "Uana"},
@@ -121,8 +26,33 @@ albuns_disponiveis = [
     {"nome": "Antiasfixiante (2024)", "artista": "Kinoa"},
     {"nome": "Quebra Asa, vol.1 (2023)", "artista": "Fernando motta"},
     {"nome": "Muganga (2023)", "artista": "IDLIBRA"}
-    
 ]
+
+def carregar_avaliacoes():
+    if os.path.exists(ARQUIVO_AVALIACOES):
+        with open(ARQUIVO_AVALIACOES, 'r', encoding='utf-8') as arquivo:
+            return json.load(arquivo)
+    return {}
+
+def salvar_avaliacoes(avaliacoes):
+    with open(ARQUIVO_AVALIACOES, 'w', encoding='utf-8') as arquivo:
+        json.dump(avaliacoes, arquivo, indent=4, ensure_ascii=False)
+
+def carregar_shoutbox():
+    if os.path.exists(ARQUIVO_SHOUTBOX):
+        with open(ARQUIVO_SHOUTBOX, 'r', encoding='UTF-8') as arquivo:
+            json.load(arquivo)
+    return {}
+
+def salvar_shouts(shouts):
+    with open(ARQUIVO_SHOUTBOX, 'w', encoding='UTF-8') as arquivo:
+        json.dump(shouts, arquivo, indent=4, ensure_ascii=False)
+
+def avaliar_album():
+    pass
+
+
+
 
 def avaliar_album():
     avaliacoes = carregar_avaliacoes()
@@ -183,7 +113,7 @@ def mostrar():
 
 
 def shout_box():
-    shouts = carregar_shouts()
+    shouts = carregar_shoutbox()
     print("\nQual álbum você gostaria de avaliar mas não está disponível?")
     sugestao = input("\nNome do álbum que você quer ver na plataforma: ")
     artista = input("\nNome do artista/banda: ")
@@ -209,7 +139,7 @@ novidades = [
 
 
 def avaliaralbum():
-    avaliacoesnew = carregaravaliacoes()
+    avaliacoes = carregar_avaliacoes()
     while True:
         print("\nÁlbuns lançados recentemente:")
         for i, album in enumerate(novidades):
@@ -240,15 +170,38 @@ def avaliaralbum():
 
         comentario = input("Deixe um comentário sobre o álbum: ")
 
-        avaliacaonew = {
+        avaliacao = {
             "album": novidades[escolha]["nome"],
             "artista": novidades[escolha]["artista"],
             "nota": nota,
             "comentario": comentario
         }
 
-        avaliacoesnew.append(avaliacaonew)
-        salvaravaliacoes(avaliacoesnew)
+        avaliacoes.append(avaliacao)
+        salvar_avaliacoes(avaliacoes)
         print("Avaliação registrada com sucesso!\n")
         return
     
+def menu_funcionalidades():
+    while True:
+        print("\n🎵 Sons da terra 🎵")
+        print("1. avaliar")
+        print("2. o que as pessoas estão ouvindo")
+        print("3. shout-box")
+        print("4. novidades")
+        print("5. sair")
+        opcao = input("Escolha uma opção (1-5): ")
+
+        if opcao == '1':
+            avaliar_album()
+        elif opcao == '2':
+            mostrar()
+        elif opcao == '3':
+            shout_box()
+        elif opcao == '4':
+            avaliaralbum()
+        elif opcao == '5':
+            print("Até a próxima!")
+            break
+        else:
+            print("Tente novamente.")

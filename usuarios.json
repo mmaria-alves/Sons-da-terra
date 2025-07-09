@@ -1,0 +1,12 @@
+{
+    "maria@gmail.com": {
+        "nome": "Maria",
+        "senha": "123456",
+        "idade": "18"
+    },
+    "marianne@gmail.com": {
+        "nome": "Marianne",
+        "senha": "789456",
+        "idade": "16"
+    }
+}
