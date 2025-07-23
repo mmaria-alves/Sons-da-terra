@@ -1,7 +1,7 @@
 import random
 import os
 import json
-ARQUIVO_SHOUTBOX = "shoutbox.json"
+ARQUIVO_SHOUTBOXD = "shoutbox.json"
 ARQUIVO_AVALIACOES = "avaliacoes.json"
 ARQUIVO_NOVIDADES = "novidades.json"
 
@@ -50,13 +50,13 @@ def salvar_avaliacoes(avaliacoes):
         json.dump(avaliacoes, arquivo, indent=4, ensure_ascii=False)
 
 def carregar_shoutbox(): ###
-    if os.path.exists(ARQUIVO_SHOUTBOX):
-        with open(ARQUIVO_SHOUTBOX, 'r', encoding='UTF-8') as arquivo:
+    if os.path.exists(ARQUIVO_SHOUTBOXD):
+        with open(ARQUIVO_SHOUTBOXD, 'r', encoding='UTF-8') as arquivo:
             json.load(arquivo)
     return {}
 
 def salvar_shouts(shouts): ###
-    with open(ARQUIVO_SHOUTBOX, 'w', encoding='UTF-8') as arquivo:
+    with open(ARQUIVO_SHOUTBOXD, 'w', encoding='UTF-8') as arquivo:
         json.dump(shouts, arquivo, indent=4, ensure_ascii=False)
 
 def avaliar_album(): ###
@@ -109,20 +109,3 @@ def mostrar():
         escolhas = random.sample(avaliacoes, k=min(3, len(avaliacoes)))
         for item in escolhas:
             print(f"- {item['album']} by {item['artista']} ({item['nota']}/5): \"{item['comentario']}\"")
-
-def adicionar_shout():
-    global usuario_logado
-    email = usuario_logado.get('email')
-    shouts = carregar_shoutbox()
-
-    print('Qual álbum você gostaria de ver no Sons da Terra?')
-    album = input('Nome do álbum: ')
-    artista = input('Nome do artista: ')
-
-    shouts[email] = {
-        'album': album,
-        'artista': artista
-    }
-    salvar_shouts(shouts)
-    print('Sugestão adicionada!')
-    

@@ -8,5 +8,10 @@
         "nome": "Marianne",
         "senha": "789456",
         "idade": "16"
+    },
+    "maria2@gmail.com": {
+        "nome": "Maria",
+        "senha": "147852",
+        "idade": "18"
     }
 }
