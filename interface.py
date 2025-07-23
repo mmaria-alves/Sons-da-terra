@@ -2,38 +2,19 @@ import sys
 import json
 import os
 import random
+from Main import *
 from PySide6.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit,
     QPushButton, QVBoxLayout, QMessageBox, QInputDialog
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QFontDatabase, QFont, QIcon
 
-ARQUIVO_USUARIOS = "usuarios.json"
-ARQUIVO_AVALIACOES = "avaliacoes.json"
-ARQUIVO_SHOUTBOX = "shoutbox.json"
+ARQUIVO_USUARIOS = "dados/usuarios.json"
+ARQUIVO_AVALIACOES = "dados/avaliacoes.json"
+ARQUIVO_SHOUTBOX = "dados/shoutbox.json"
+ARQUIVO_ALBUNS = "dados/albuns.json"
 
-albuns_disponiveis = [
-    {"nome": "Mundhana (2022)", "artista": "Mun-há"},
-    {"nome": "Megalomania (2024)", "artista": "Uana"},
-    {"nome": "Tanto pra dizer (2024)", "artista": "Mirela Hazin"},
-    {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-    {"nome": "Âmago (2024)", "artista": "Zendo"},
-    {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de pau"},
-    {"nome": "Grimestar (2024)", "artista": "Tremsete"},
-    {"nome": "Jogo de Cintura (2024)", "artista": "Bell Puã"},
-    {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-    {"nome": "Bacuri (2024)", "artista": "Boogarins"},
-    {"nome": "Abaixo de zero: Hello Hell (2019)", "artista": "Black alien"},
-    {"nome": "KM2 (2025)", "artista": "Ebony"},
-    {"nome": "Letrux como Mulher Girafa (2023)", "artista": "Letrux"},
-    {"nome": "SIM SIM SIM (2022)", "artista": "Bala Desejo"},
-    {"nome": "Me Chama de Gato Que Eu Sou Sua (2023)", "artista": "Ana Frango Elétrico"},
-    {"nome": "o fim é um começo (2024)", "artista": "a terra vai se tornar um planeta inabitável"},
-    {"nome": "MAU (2023)", "artista": "Jaloo"},
-    {"nome": "Antiasfixiante (2024)", "artista": "Kinoa"},
-    {"nome": "Quebra Asa, vol.1 (2023)", "artista": "Fernando motta"},
-    {"nome": "Muganga (2023)", "artista": "IDLIBRA"}
-]
 
 novidades = [
     {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
@@ -60,22 +41,26 @@ class MenuPrincipal(QWidget):
     def __init__(self, usuario):
         super().__init__()
         self.usuario = usuario
-        self.setWindowTitle(f"Bem-vindo(a), {self.usuario.get('nome')}!")
-        self.setGeometry(100, 100, 400, 400)
-
-        self.setStyleSheet("background-color: #fff176;")  # Fundo amarelo
+        self.setWindowTitle(f"Sons da Terra")
+        self.setGeometry(200, 200, 500, 500)
+        self.setWindowIcon(QIcon("imagens/Logo.png"))
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        
+        self.setStyleSheet("background-color: #fcd967") 
 
         layout = QVBoxLayout()
 
-        btn_avaliar = QPushButton("avaliar álbum")
-        btn_ouvindo = QPushButton("Ver o que estão ouvindo")
+        btn_avaliar = QPushButton("Avaliar álbum")
+        btn_ouvindo = QPushButton("O que as pessoas estão ouvindo?")
         btn_shout = QPushButton("Shout-boxd")
         btn_novidades = QPushButton("Novidades")
-        btn_sair = QPushButton("Encerrar sessao")
+        btn_sair = QPushButton("Sair")
 
         for btn in [btn_avaliar, btn_ouvindo, btn_shout, btn_novidades, btn_sair]:
-            btn.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
-
+            btn.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold;")
+            
         btn_avaliar.clicked.connect(self.avaliar_album)
         btn_ouvindo.clicked.connect(self.ver_ouvindo)
         btn_shout.clicked.connect(self.adicionar_shout)
@@ -89,6 +74,15 @@ class MenuPrincipal(QWidget):
         layout.addWidget(btn_sair)
 
         self.setLayout(layout)
+
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+        else:
+            return QFont("Arial", 20)
 
     def avaliar_album(self):
         avaliacoes = carregar_json(ARQUIVO_AVALIACOES)
@@ -178,13 +172,19 @@ def salvar_usuarios(usuarios):
         json.dump(usuarios, arquivo, indent=4, ensure_ascii=False)
 
 
-class LoginCadastro(QWidget):
+
+
+class telaInicial(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Songue")
-        self.setGeometry(200, 200, 400, 300)
-
-        self.setStyleSheet("background-color: #fff176;")  
+        self.setWindowTitle("Sons da Terra")
+        self.setGeometry(200, 200, 500, 500)
+        self.setWindowIcon(QIcon("imagens/Logo.png"))
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        
+        self.setStyleSheet("background-color: #fcd967") 
 
         self.stack = QVBoxLayout()
         self.setLayout(self.stack)
@@ -197,10 +197,25 @@ class LoginCadastro(QWidget):
             if widget:
                 widget.deleteLater()
 
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+        else:
+            return QFont("Arial", 20)
+        
+
     def tela_login(self):
+        sistema = sistemaDados
         self.limpar_layout()
 
-        label = QLabel("Login")
+        label = QLabel("Login:")
+        label.setFont(self.fonte_subtitulo)
+        label.setStyleSheet("color: #fffffd;")
+        label.setAlignment(Qt.AlignBottom)
+        
         self.email_input = QLineEdit()
         self.email_input.setPlaceholderText("Email")
 
@@ -209,11 +224,11 @@ class LoginCadastro(QWidget):
         self.senha_input.setEchoMode(QLineEdit.Password)
 
         botao_login = QPushButton("Entrar")
-        botao_login.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
-        botao_login.clicked.connect(self.login)
+        botao_login.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold;")
+        botao_login.clicked.connect(sistema.login()) 
 
-        botao_ir_cadastro = QPushButton("Não tem conta? Cadastre-se!!")
-        botao_ir_cadastro.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
+        botao_ir_cadastro = QPushButton("Não tem conta? Cadastre-se agora!")
+        botao_ir_cadastro.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold;")
         botao_ir_cadastro.clicked.connect(self.tela_cadastro)
 
         self.stack.addWidget(label)
@@ -225,15 +240,18 @@ class LoginCadastro(QWidget):
     def tela_cadastro(self):
         self.limpar_layout()
 
-        label = QLabel("Cadastro")
+        label = QLabel("Cadastro:")
+        label.setFont(self.fonte_subtitulo)
+        label.setStyleSheet("color: #fffffd;")
+        label.setAlignment(Qt.AlignBottom)
         self.nome_input = QLineEdit()
         self.nome_input.setPlaceholderText("Nome")
 
         self.email_cadastro = QLineEdit()
-        self.email_cadastro.setPlaceholderText("email")
+        self.email_cadastro.setPlaceholderText("Email")
 
         self.senha_cadastro = QLineEdit()
-        self.senha_cadastro.setPlaceholderText("Senha (6 numero)")
+        self.senha_cadastro.setPlaceholderText("Senha (6 números)")
         self.senha_cadastro.setEchoMode(QLineEdit.Password)
 
         self.confirmar_senha = QLineEdit()
@@ -244,11 +262,11 @@ class LoginCadastro(QWidget):
         self.idade_input.setPlaceholderText("Idade")
 
         botao_cadastrar = QPushButton("Cadastrar")
-        botao_cadastrar.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
+        botao_cadastrar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold;")
         botao_cadastrar.clicked.connect(self.cadastrar)
 
         botao_voltar = QPushButton("Voltar")
-        botao_voltar.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
+        botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold;")
         botao_voltar.clicked.connect(self.tela_login)
 
         self.stack.addWidget(label)
@@ -261,6 +279,13 @@ class LoginCadastro(QWidget):
         self.stack.addWidget(botao_voltar)
 
     def login(self):
+        sistema = sistemaDados
+        email = self.email_input.text()
+        senha = self.senha_input.text()
+        sistema.login(email, senha)
+        QMessageBox.information(self, "Login", f"Olá")
+    
+    def login(self):
         email = self.email_input.text()
         senha = self.senha_input.text()
         usuarios = carregar_usuarios()
@@ -271,7 +296,7 @@ class LoginCadastro(QWidget):
             self.menu.show()
             self.close()  
         else:
-            QMessageBox.warning(self,  "erro ne", "Email ou senha inválidos.")
+            QMessageBox.warning(self,  "Erro", "Email ou senha inválidos.")
 
     def cadastrar(self):
         nome = self.nome_input.text().title().strip()
@@ -301,17 +326,16 @@ class LoginCadastro(QWidget):
         usuarios[email] = {
             "nome": nome,
             "senha": senha,
-            "idade": idade,
-            "email": email
+            "idade": idade
         }
 
         salvar_usuarios(usuarios)
-        QMessageBox.information(self, "sucessor", "Cadastro realizado!")
+        QMessageBox.information(self, "Sucesso", "Cadastro realizado!")
         self.tela_login()
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    janela = LoginCadastro()
+    janela = telaInicial()
     janela.show()
     sys.exit(app.exec())

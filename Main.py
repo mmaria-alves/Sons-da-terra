@@ -1,10 +1,10 @@
 import os
 from requisitosFuncionais import *
 import json
-ARQUIVO_USUARIOS = "usuarios.json"
-ARQUIVO_SHOUTBOXD = "shoutbox.json"
-ARQUIVO_AVALIACOES = "avaliações.json"
-ARQUIVO_ALBUNS = "albuns.json"
+ARQUIVO_USUARIOS = "dados/usuarios.json"
+ARQUIVO_SHOUTBOXD = "dados/shoutbox.json"
+ARQUIVO_AVALIACOES = "dados/avaliações.json"
+ARQUIVO_ALBUNS = "dados/albuns.json"
 
 novidades = [
         {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
@@ -21,39 +21,59 @@ class Utils:
     def limpar_terminal():
         os.system('cls' if os.name == 'nt' else 'clear')
 
+class Aunteticadores:
+    def __init__(self, caminho_arquivo='dados/usuarios.json'):
+        self.caminho_arquivo = caminho_arquivo
+        self.usuarios = self.carregar_usuarios()
+    
+    def carregar_usuarios(self):
+        if os.path.exists(self.caminho_arquivo):
+            with open(self.caminho_arquivo, 'r', encoding='UTF-8') as arquivo:
+                return json.load(arquivo)
+        return {}
+        
+    def salvar_usuarios(self):
+        with open(self.caminho_arquivo, 'w', encoding='UTF-8') as arquivo:
+            return json.dump(self.usuarios, arquivo, indent=4, ensure_ascii=False)
+
+    def carregar_usuario(self, email):
+        if email in self.usuarios:
+            return Usuario.from_dict(self.usuarios[email])
+        return None
+    
+    def login(self, email, senha):
+        usuario = self.carregar_usuario(email)
+        if usuario and usuario.senha == senha:
+            return usuario
+        return None
+        
+
 class Album:
     def __init__(self, album, artista):
         self.album = album
         self.artista = artista
 
-        @staticmethod
-        def from_dict(dados):
-            return Album(dados['album'], dados['artista'])
+    @staticmethod
+    def from_dict(dados):
+        return Album(dados['album'], dados['artista'])
         
-        def to_dict(dados):
-            return {
-                'album': self.album,
-                'artista': self.artista
-            }
+    def to_dict(self):
+        return {'album': self.album, 'artista': self.artista}
         
 class gerenciarAlbuns:
     def __init__(self):
         self.albuns = self.carregar_albuns()
 
-        def carregar_albuns(self):
-            if os.path.exists(ARQUIVO_ALBUNS):
-                with open(ARQUIVO_ALBUNS, 'r', encoding='UTF-8') as arquivo:
-                    dados = json.load(arquivo)
-                    return [Album.from_dict(album) for album in dados]
-            return []
-
-        def salvar_albuns(self):
-            with open(ARQUIVO_ALBUNS, 'w', encoding='utf-8') as arquivo:
-                json.dump([album.to_dict() for album in self.albuns], arquivo, indent=4, ensure_ascii=False)
+    def carregar_albuns(self):
+        if os.path.exists(ARQUIVO_ALBUNS):
+            with open(ARQUIVO_ALBUNS, 'r', encoding='UTF-8') as arquivo:
+                dados = json.load(arquivo)
+                return [Album.from_dict(album) for album in dados]
+        return []
         
-        def listar_albuns(self):
-            for i, album in enumerate(self.albuns, 1):
-                print(f'{i}. {album.nome} - {album.artista}')
+    def listar_albuns(self):
+        for i, album in enumerate(self.albuns, 1):
+           print(f'{i}. {album.nome} - {album.artista}')
 
 class Usuario:
     def __init__(self, nome, email, senha):
@@ -61,12 +81,12 @@ class Usuario:
         self.email = email
         self.senha = senha
 
-        @staticmethod
-        def from_dict(dados):
-            return Usuario(dados['nome'], dados['email'], dados['senha'])
-
-        def to_dict(self):
-            return {'nome': self.nome, 'email': self.email, 'senha': self.senha}
+    @staticmethod
+    def from_dict(dados):
+        return Usuario(dados['nome'], dados['email'], dados['senha'])
+    
+    def to_dict(self):
+        return {'nome': self.nome, 'email': self.email, 'senha': self.senha}
 
 
 class sistemaDados:
@@ -132,20 +152,16 @@ class sistemaDados:
             self.salvar_usuarios()
             print('Cadastro realizado com sucesso!\n')
 
-    def login(self):
-        print('Bom te ver de volta!')
+    def login(self, email, senha):
         while True:
-            email = input('Qual é o seu email? ')
-            senha = input('Qual é a sua senha? ')
             usuario = self.carregar_usuario(email)
 
             if usuario and usuario.senha == senha:
                 print(f'Olá {usuario.nome}!')
                 self.usuario_logado = usuario
-                print("Login realizado com sucesso!")
                 break
             else:
-                print("E-mail ou senha incorretos. Tente novamente.")
+                return False
     
     def ver_dados(self):
         if not self.usuario_logado:
@@ -232,16 +248,16 @@ class Avaliacao:
         self.nota = nota
         self.comentario = comentario
 
-        @staticmethod
-        def from_dict(dados):
-            return Avaliacao(dados['email'], dados['album'], dados['nota'], dados['comentario'])
-        
-        def to_dict(self):
-            return {'email': self.email, 
-                    'album': self.album, 
-                    'nota': self.nota, 
-                    'comentario': self.comentario
-            }
+    @staticmethod
+    def from_dict(dados):
+        return Avaliacao(dados['email'], dados['album'], dados['nota'], dados['comentario'])
+    
+    def to_dict(self):
+        return {'email': self.email, 
+                'album': self.album, 
+                'nota': self.nota, 
+                'comentario': self.comentario
+        }
 
 class sistemaAvaliacao:
     def __init__(self, usuario_logado, albuns_disponiveis):
@@ -301,15 +317,15 @@ class Shoutboxd:
         self.album = album
         self.artista = artista
 
-        @staticmethod
-        def from_dict(dados):
-            return Shoutboxd(dados['email'], dados['album'], dados['artista'])
-        
-        def to_dict(self):
-            return {'email': self.email,
-                    'album': self.album,
-                    'artista': self.artista
-            }
+    @staticmethod
+    def from_dict(dados):
+        return Shoutboxd(dados['email'], dados['album'], dados['artista'])
+    
+    def to_dict(self):
+        return {'email': self.email,
+                'album': self.album,
+                'artista': self.artista
+        }
 
 class sistemaShoutboxd:
     def __init__(self, usuario_logado, albuns_disponiveis):
