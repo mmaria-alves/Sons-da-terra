@@ -1,4 +1,4 @@
-from Main import sistemaDados, Utils
+from sistemas import sistemaDados, Utils
 import time
 
 class Menu():
@@ -74,7 +74,7 @@ class menuPrincipal(Menu):
                 menuConfiguracoes.exibir()
             elif opcao == '':
                 print('Foi bom te ver por aqui!')
-                time.sleep(1)
+
                 break
             else:
                 print('opção inválida. Digite apenas números de 1-5 ou pressione ENTER.')

@@ -1,8 +1,8 @@
 {
     "maria@gmail.com": {
         "nome": "Maria",
-        "senha": "123456",
-        "idade": "18"
+        "email": "maria@gmail.com",
+        "senha": "123456"
     },
     "marianne@gmail.com": {
         "nome": "Marianne",
@@ -23,5 +23,10 @@
         "nome": "bangchan",
         "email": "cb97@gmail.com",
         "senha": "159632"
+    },
+    "spearb@gmail.com": {
+        "nome": "changbin",
+        "email": "spearb@gmail.com",
+        "senha": "456456"
     }
 }

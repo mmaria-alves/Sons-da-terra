@@ -1,396 +1,406 @@
-import os
-from requisitosFuncionais import *
-import json
-ARQUIVO_USUARIOS = "dados/usuarios.json"
-ARQUIVO_SHOUTBOXD = "dados/shoutbox.json"
-ARQUIVO_AVALIACOES = "dados/avaliações.json"
-ARQUIVO_ALBUNS = "dados/albuns.json"
+import sys
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QLabel,
+    QLineEdit, QPushButton, QMessageBox, QInputDialog
+)
+from PySide6.QtGui import QFontDatabase, QFont, QIcon
+from PySide6.QtCore import Qt, QTimer
+from autenticadores import Autenticadores, configuracoesUsuario
+from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
 
-novidades = [
-        {"nome": "Movimento algum (NOVO)", "artista": "Fernando Motta"},
-        {"nome": "Imagina (single)", "artista": "Barbarize feat. Oreia"},
-        {"nome": "Tropical do Brasil (single)", "artista": "Uana feat. Leoa"},
-        {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-        {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-        {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de Pau"},
-        {"nome": "Dvd (single)", "artista": "Mirela Hazin"},
-        {"nome": "KM2 (2025)", "artista": "Ebony"}
-]
 
-class Utils:
-    def limpar_terminal():
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-class Aunteticadores:
-    def __init__(self, caminho_arquivo='dados/usuarios.json'):
-        self.caminho_arquivo = caminho_arquivo
-        self.usuarios = self.carregar_usuarios()
-    
-    def carregar_usuarios(self):
-        if os.path.exists(self.caminho_arquivo):
-            with open(self.caminho_arquivo, 'r', encoding='UTF-8') as arquivo:
-                return json.load(arquivo)
-        return {}
+class telaLogin(QWidget):
+    def __init__(self, autenticadores):
+        super().__init__()
+        self.autenticador = autenticadores
+        self.setWindowTitle("Sons da Terra")
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 200, 500, 500)
         
-    def salvar_usuarios(self):
-        with open(self.caminho_arquivo, 'w', encoding='UTF-8') as arquivo:
-            return json.dump(self.usuarios, arquivo, indent=4, ensure_ascii=False)
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        
+        self.texto1 = "SONS DA TERRA SONS DA TERRA "
+        self.posicao1 = 0
+        self.texto2 = "SONS DA TERRA SONS DA TERRA "
+        self.posicao2 = 0
 
-    def carregar_usuario(self, email):
-        if email in self.usuarios:
-            return Usuario.from_dict(self.usuarios[email])
-        return None
+        self.init_ui()
+        
+        self.setStyleSheet('background-color: #fcd967')
     
-    def login(self, email, senha):
-        usuario = self.carregar_usuario(email)
-        if usuario and usuario.senha == senha:
-            return usuario
-        return None
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+
+        else:
+            return QFont("Arial", 20)
+
+    def animar_textos(self):
+        # Letreiro 1 - anda pra direita
+        self.posicao1 = (self.posicao1 + 1) % len(self.texto1)
+        texto_1_animado = self.texto1[self.posicao1:] + self.texto1[:self.posicao1]
+        self.label_animada1.setText(texto_1_animado)
+
+        # Letreiro 2 - anda pra esquerda
+        self.posicao2 = (self.posicao2 - 1) % len(self.texto2)
+        texto_2_animado = self.texto2[self.posicao2:] + self.texto2[:self.posicao2]
+        self.label_animada2.setText(texto_2_animado)
+    
+    # inicializa a interface  
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText("Email")
+
+        self.senha_input = QLineEdit()
+        self.senha_input.setPlaceholderText("Senha")
+        self.senha_input.setEchoMode(QLineEdit.Password)
+
+        botao_login = QPushButton("Entrar")
+        botao_login.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_login.clicked.connect(self.fazer_login)
+
+        botao_cadastro = QPushButton("Não possui uma conta? Cadastre-se agora!")
+        botao_cadastro.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_cadastro.clicked.connect(self.abrir_cadastro)
+
+        label = QLabel("Bem-vindo!")
+        label.setFont(self.fonte_titulo)
+        label.setStyleSheet("color: #fffffd; font-size: 70px; font-weight: bold;")
+        label.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+
+        self.label_animada1 = QLabel(self.texto1)
+        self.label_animada1.setFont(self.fonte_titulo)
+        self.label_animada1.setStyleSheet('''
+                                          background-color: #fffffd;
+                                          color: #fbcf41;
+                                          border-radius: 25px;
+                                          font-size: 25px; 
+                                          ''')
+        self.label_animada1.setAlignment(Qt.AlignCenter)
+        
+        self.label_animada2 = QLabel(self.texto2)
+        self.label_animada2.setFont(self.fonte_titulo)
+        self.label_animada2.setStyleSheet('''
+                                          background-color: #fffffd;
+                                          color: #fbcf41;
+                                          border-radius: 25px;
+                                          font-size: 25px; 
+                                          ''')
+        self.label_animada2.setAlignment(Qt.AlignCenter)
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.animar_textos)
+        self.timer.start(750)
+
+        label_login = QLabel('Login: ')
+        label_login.setFont(self.fonte_subtitulo)
+        label_login.setStyleSheet("color: #fffffd; font-size: 40px")
+        label_login.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+        layout.addWidget(label)
+        layout.addWidget(self.label_animada1)
+        layout.addWidget(self.label_animada2)
+        layout.addWidget(label_login)
+        layout.addWidget(self.email_input)
+        layout.addWidget(self.senha_input)
+        layout.addWidget(botao_login)
+        layout.addWidget(botao_cadastro)
+
+        self.setLayout(layout)
+
+    def abrir_menu_principal(self, usuario):
+        self.menu = menuPrincipal(self.autenticador)
+        self.menu.show()
+        self.close()
+
+    def fazer_login(self):
+        email = self.email_input.text()
+        senha = self.senha_input.text()
+        
+        sucesso, usuario = self.autenticador.login(email, senha)
+        if sucesso:
+            QMessageBox.information(self, "Login", f"Bem-vindo, {usuario.nome}!")
+            self.abrir_menu_principal(usuario)
+        else:
+            QMessageBox.warning(self, "Erro", "Email ou senha inválidos.")
+
+    def abrir_cadastro(self):
+        self.hide()
+        self.cadastro = telaCadastro(self.autenticador)
+        self.cadastro.show()
+
+
+class telaCadastro(QWidget):
+    def __init__(self, autenticador):
+        super().__init__()
+        self.autenticador = autenticador
+        self.setWindowTitle("Sons da Terra")
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 200, 500, 500)
+        
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+
+        self.init_ui()
+
+        self.setStyleSheet('background-color: #fcd967')
+    
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+
+        else:
+            return QFont("Arial", 20)
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        self.nome_input = QLineEdit()
+        self.nome_input.setPlaceholderText("Nome")
+
+        self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText("Email")
+
+        self.senha_input = QLineEdit()
+        self.senha_input.setPlaceholderText("Senha (6 dígitos)")
+        self.senha_input.setEchoMode(QLineEdit.Password)
+
+        self.confirmar_senha_input = QLineEdit()
+        self.confirmar_senha_input.setPlaceholderText("Confirmar senha")
+        self.confirmar_senha_input.setEchoMode(QLineEdit.Password)
+
+        botao_cadastrar = QPushButton("Cadastrar")
+        botao_cadastrar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_cadastrar.clicked.connect(self.realizar_cadastro)
+
+        botao_voltar = QPushButton("Voltar")
+        botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_voltar.clicked.connect(self.voltar)
+
+        label_cadastro = QLabel("Cadastro")
+        label_cadastro.setFont(self.fonte_subtitulo)
+        label_cadastro.setStyleSheet("color: #fffffd; font-size: 70px; font-weight: bold;")
+        label_cadastro.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+        layout.addWidget(label_cadastro)
+        layout.addWidget(self.nome_input)
+        layout.addWidget(self.email_input)
+        layout.addWidget(self.senha_input)
+        layout.addWidget(self.confirmar_senha_input)
+        layout.addWidget(botao_cadastrar)
+        layout.addWidget(botao_voltar)
+
+        self.setLayout(layout)
+
+    def realizar_cadastro(self):
+        nome = self.nome_input.text()
+        email = self.email_input.text()
+        senha = self.senha_input.text()
+        confirmar = self.confirmar_senha_input.text()
+
+        sucesso, mensagem = self.autenticador.cadastrar_usuario(nome, email, senha, confirmar)
+        if sucesso:
+            QMessageBox.information(self, "Sucesso", mensagem)
+            self.voltar()
+        else:
+            QMessageBox.warning(self, "Erro", mensagem)
+
+    def voltar(self):
+        self.hide()
+        self.login = telaLogin(self.autenticador)
+        self.login.show()
+
+class menuPrincipal(QWidget):
+    def __init__(self, autenticador):
+        super().__init__()
+        self.autenticador = autenticador
+        self.usuario = autenticador.usuario_logado
+
+
+        self.setWindowTitle("Sons da Terra")
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 200, 500, 500)
+        
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        
+        self.init_ui()
+
+        self.setStyleSheet('background-color: #fcd967')
+    
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+
+        else:
+            return QFont("Arial", 20)
+        
+    def init_ui(self):
+        layout = QVBoxLayout()
+        
+        destaque = self.autenticador.destaque_da_semana()
+
+        destaque = self.autenticador.destaque_da_semana()
+        texto_destaque = f"Destaque da Semana: {destaque['nome']} - {destaque['artista']}" if isinstance(destaque, dict) else f"Destaque da Semana: {destaque}"
+        self.label_destaque = QLabel(texto_destaque)
+
+        self.label_destaque.setFont(self.fonte_titulo)
+        self.label_destaque.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        self.label_destaque.setStyleSheet("""
+            background-color: #5966b1;
+            color: #fffffd;
+            font-size: 20px;
+        """)
+        self.label_destaque.setAlignment(Qt.AlignCenter)
+
+
+        botao_avaliar = QPushButton("Avaliar Álbuns")
+        botao_avaliar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_avaliar.clicked.connect(self.avaliar_albuns)
         
 
-class Album:
-    def __init__(self, album, artista):
-        self.album = album
-        self.artista = artista
+        botao_shoutboxd = QPushButton("Shoutboxd")
+        botao_shoutboxd.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_shoutboxd.clicked.connect(self.adicionar_shout)
 
-    @staticmethod
-    def from_dict(dados):
-        return Album(dados['album'], dados['artista'])
+
+        botao_ouvindo_agora = QPushButton("Ouvindo Agora")
+        botao_ouvindo_agora.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_ouvindo_agora.clicked.connect(self.ouvindo_agora)
+
+        botao_config = QPushButton("Configurações")
+        botao_config.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_config.clicked.connect(self.abrir_configuracoes)
         
-    def to_dict(self):
-        return {'album': self.album, 'artista': self.artista}
         
-class gerenciarAlbuns:
-    def __init__(self):
-        self.albuns = self.carregar_albuns()
-
-    def carregar_albuns(self):
-        if os.path.exists(ARQUIVO_ALBUNS):
-            with open(ARQUIVO_ALBUNS, 'r', encoding='UTF-8') as arquivo:
-                dados = json.load(arquivo)
-                return [Album.from_dict(album) for album in dados]
-        return []
+        layout.addWidget(self.label_destaque)
+        layout.addWidget(botao_avaliar)
+        layout.addWidget(botao_shoutboxd)
+        layout.addWidget(botao_ouvindo_agora)
+        layout.addWidget(botao_config)
         
-    def listar_albuns(self):
-        for i, album in enumerate(self.albuns, 1):
-           print(f'{i}. {album.nome} - {album.artista}')
+        self.setLayout(layout)
 
-class Usuario:
-    def __init__(self, nome, email, senha):
-        self.nome = nome
-        self.email = email
-        self.senha = senha
+    def avaliar_albuns(self):
+        if not hasattr(self.autenticador, 'albuns_disponiveis'):
+            self.autenticador.albuns_disponiveis = self.autenticador.carregar_albuns()
 
-    @staticmethod
-    def from_dict(dados):
-        return Usuario(dados['nome'], dados['email'], dados['senha'])
+        self.avaliacao_window = sistemaAvaliacao(
+            usuario_logado=self.autenticador.usuario_logado,
+            albuns_disponiveis=self.autenticador.albuns_disponiveis
+        )
+        self.avaliacao_window.show()
     
-    def to_dict(self):
-        return {'nome': self.nome, 'email': self.email, 'senha': self.senha}
-
-
-class sistemaDados:
-    def __init__(self):
-        self.usuarios = self.carregar_usuarios()
-        self.usuario_logado = None
-
-    def carregar_usuarios(self):
-        if os.path.exists(ARQUIVO_USUARIOS):
-            with open(ARQUIVO_USUARIOS, 'r', encoding='UTF-8') as arquivo:
-                return json.load(arquivo)
-        return {}
-    
-    def carregar_usuario(self, email):
-        if email in self.usuarios:
-            return Usuario.from_dict(self.usuarios[email])
-        return None
-    
-    def salvar_usuarios(self):
-        with open('usuarios.json', 'w', encoding='UTF-8') as arquivo:
-            json.dump(self.usuarios, arquivo, indent=4, ensure_ascii=False)
-    
-    def cadastrar_usuario(self):
-        # nome
-        while True:
-            nome = input('Qual é o seu nome? ').title().strip()
-            if all(n.isalpha() or n.isspace() for n in nome):
-                break
-            else:
-                print('Nome inválido. Utilize apenas letras.')
-        # email
-        while True:
-            email = input('Qual é o seu email? ')
-            if email in self.usuarios:
-                print('Esse email já está sendo utilizado. Tente novamente')
-            elif " " in email:
-                print('Email inválido. Contém espaços.')
-            elif "@" not in email:
-                print('Email inválido. Não contém @.')
-            elif not(email.endswith("gmail.com") or email.endswith("ufrpe.br")):
-                print('Email inválido. Domínio inválido, deve terminar com "gmail.com" ou "ufrpe.br".')
-            else:
-                break
-            # senha
-            while True:
-                senha = input('Digite sua senha: ')
-                if len(senha) == 6 and senha.isdigit():
-                    break
-                else: 
-                    print('Senha inválida. Deve conter apenas seis números.')
-            # confirmação de senha
-            while True:
-                confirmacao_senha = input('Confirme sua senha: ')
-                if confirmacao_senha == senha:
-                    break
-                else:
-                    print('Confirmação de senha falhou. Tente novamente.')
-
-            novo_usuario = Usuario(nome = nome, email = email, senha = senha)
-            dados_usuario = novo_usuario.to_dict()
-
-            self.usuarios[email] = dados_usuario
-            self.salvar_usuarios()
-            print('Cadastro realizado com sucesso!\n')
-
-    def login(self, email, senha):
-        while True:
-            usuario = self.carregar_usuario(email)
-
-            if usuario and usuario.senha == senha:
-                print(f'Olá {usuario.nome}!')
-                self.usuario_logado = usuario
-                break
-            else:
-                return False
-    
-    def ver_dados(self):
-        if not self.usuario_logado:
-            print('Nenhum usuário logado.')
-            return
-        
-        usuario = self.usuario_logado
-        while True:
-            print('-' * 20)
-            print(f'Aqui estão os dados de {usuario.email}')
-            print(f'Nome: {usuario.nome}')
-            print(f'Senha: {usuario.senha}')
-            print('-' * 20)
-            sair = input('Pressione qualquer tecla para sair.')
-            if sair == '':
-                break
-            else:
-                break
-
-    def atualizar_dados(self):
-        if not self.usuario_logado:
-            print('Nenhum usuário logado.')
-            return
-        
-        usuario = self.usuario_logado
-        senha = input('Confirme sua senha: ')
-        if senha == usuario.senha:
-
-            while True:
-                print(' ---------------------------------- ')
-                print('| Qual dado você deseja atualizar: |')
-                print('| [1] Nome                         |')
-                print('| [2] Senha                        |')
-                print(' ---------------------------------  ')
-                opcao = input('Escolha uma opção: ')
-
-                if opcao == '1':
-                    novo_nome = input('Digite o novo nome: ').title().strip()
-                    if all(n.isalpha() or n.isspace() for n in novo_nome):
-                        print('Nome atualizado com sucesso!')
-                        break
-                    else:
-                        print('Nome inválido. Utilize apenas letras.')
+    def adicionar_shout(self):
+        try:
+            if not self.autenticador.usuario_logado:
+                print("Erro: Nenhum usuário logado")
+                return
                 
-                elif opcao == '2':
-                    nova_senha = input('Digite sua nova senha: ')
-                    if len(nova_senha) == 6 and nova_senha.isdigit():
-                        print('Senha atualizada com sucesso!')
-                        break
-                    else:
-                        print('Senha inválida. Sua senha deve conter apenas seis números')
-                else: 
-                    print('Opção inválida. Tente novamente.')
-    
-                self.usuario[usuario.email] = usuario.to_dict()
-                self.salvar_usuarios()
-    
-    def apagar_dados(self):
-        if not self.usuario_logado:
-            print('Nenhum usuário logado.')
-            return
-        
-        usuario = self.usuario_logado
-        while True:
-            confirmacao = input('Tem certeza que deseja deletar sua conta (s/n)? ')
-            if confirmacao == 's':
-                senha = input('Confirme sua senha: ')
-                if senha == usuario.senha:
-                    del usuario
-                    self.salvar_usuarios()
-                    print('Dados deletados com sucesso!')
-                    break
-                else:
-                    print('Senha incorreta. Tente novamente.')
-            elif confirmacao == 'n':
-                print('Ok! Voltando para o menu.')
-            else:
-                print('Opção inválida. Digite apenas "s" se sim e "n" se não.')
-
-class Avaliacao:
-    def __init__(self, email, album, nota, comentario):
-        self.email = email
-        self.album = album
-        self.nota = nota
-        self.comentario = comentario
-
-    @staticmethod
-    def from_dict(dados):
-        return Avaliacao(dados['email'], dados['album'], dados['nota'], dados['comentario'])
-    
-    def to_dict(self):
-        return {'email': self.email, 
-                'album': self.album, 
-                'nota': self.nota, 
-                'comentario': self.comentario
-        }
-
-class sistemaAvaliacao:
-    def __init__(self, usuario_logado, albuns_disponiveis):
-        self.avaliacoes = self.carregar_avaliacoes()
-        self.usuario_logado = usuario_logado
-        self.albuns_disponiveis = albuns_disponiveis
-
-    def carregar_avaliacoes(self):
-        if os.path.exists(ARQUIVO_AVALIACOES):
-            with open(ARQUIVO_AVALIACOES, 'r', encoding='UTF-8') as arquivo:
-                return json.load(arquivo)
-            return {}
-        
-    def salvar_avaliacoes(self):
-        with open(ARQUIVO_AVALIACOES, 'w', encoding='UTF-8') as arquivo:
-            json.dump(self.avaliacoes, arquivo, indent=4, ensure_ascii=False)
-
-    def avaliar_album(self):
-        gerenciar = gerenciarAlbuns
-        email = self.usuario_logado.email if hasattr(self.usuario_logado, 'email') else self.usuario_logado.get('email')
-
-        print('Álbuns disponíveis: ')
-        gerenciar.listar_albuns(self)
-        while True:
-            opcao = input('\nDigite o número do álbum que deseja avaliar (ou "s" para sair): ').lower()
-            if opcao == 's':
-                break
-            elif opcao.isdigit() and (1 <= int(opcao) <= len(self.albuns_disponiveis)):
-                album_escolhido = self.albuns_disponiveis [int(opcao) - 1]
-
-                nota = input('Dê uma nota para esse álbum (0-5): ')
-                if not nota.replace('.', '', 1).isdigit():
-                    print('Nota inválida. Digite um número.')
-                    continue
-
-                nota = float(nota)
-                if nota < 0 or nota > 5:
-                    print('Nota fora do intervalo permitido. Digite um número no intervalo permitido.')
-                    continue
-
-                comentario = input('Deixe um comentário (até 250 caracteres): ')
-                if len(comentario) > 250:
-                    print('Comentário muito longo. Não exceda o limite de caracteres.')
-                    continue
-
-                avaliacao = Avaliacao(email, album_escolhido, nota, comentario)
-                self.avaliacoes[email] = avaliacao.to_dict()
-                self.salvar_avaliacoes()
-                print('Avaliação registrada com sucesso!')
-                break
-            else: 
-                print('Opção inválida. Tente novamente.')
-
-class Shoutboxd:
-    def __init__(self, email, album, artista):
-        self.email = email
-        self.album = album
-        self.artista = artista
-
-    @staticmethod
-    def from_dict(dados):
-        return Shoutboxd(dados['email'], dados['album'], dados['artista'])
-    
-    def to_dict(self):
-        return {'email': self.email,
-                'album': self.album,
-                'artista': self.artista
-        }
-
-class sistemaShoutboxd:
-    def __init__(self, usuario_logado, albuns_disponiveis):
-        self.shouts = self.carregar_shoutboxd()
-        self.usuario_logado = usuario_logado
-        self.albuns_disponiveis = albuns_disponiveis
-
-    def carregar_shoutboxd(self):
-        if os.path.exists(ARQUIVO_SHOUTBOXD):
-            with open(ARQUIVO_SHOUTBOXD, 'r', encoding='UTF-8') as arquivo:
-                json.load(arquivo)
-            return {}
-    
-    def salvar_shouts(self):
-        with open(ARQUIVO_SHOUTBOXD, 'w', encoding='UTF-8') as arquivo:
-            json.dump(self.shouts, arquivo, indent=4, ensure_ascii=False)
-
-    def adicionar_shouts(self):
-        email = self.usuario_logado.email if hasattr(self.usuario_logado, 'email') else self.usuario_logado.get('email')
-        while True:
-            print('Qual álbum você gostaria de ver no Sons da Terra? ')
-            album_novo = input('Nome do álbum: ').strip()
-            artista_novo = input('Nome do artista: ').strip()
-
-            for a in self.albuns_disponiveis:
-                if album_novo.lower() == a['album'].lower() and artista_novo.lower() == a['artista']:
-                    print('Esse álbum já está disponível aqui!')
-                    return
-
-
-            shout = Shoutboxd(email, album_novo, artista_novo) 
-            self.shouts[email] = shout.to_dict()
-            self.salvar_shouts()
-            print('Shout registrado com sucesso!')
-            break  
-
-class sistemaOuvindo:
-    def __init__(self, caminho_avaliacoes=ARQUIVO_AVALIACOES, caminho_albuns=ARQUIVO_ALBUNS):
-        self.caminho_avaliacoes = caminho_avaliacoes
-        self.caminho_albuns = caminho_albuns
-        self.avaliacoes = self.carregar_avaliacoes()
-        self.albuns_disponiveis = self.carregar_albuns()
-
-    def carregar_avaliacoes(self):
-        if os.path.exists(self.caminho_avaliacoes):
-            with open(self.caminho_avaliacoes, 'r', encoding='utf-8') as arquivo:
-                return list(json.load(arquivo).values())
-        return []
-    
-    def carregar_albuns(self):
-        if os.path.exists(self.caminho_albuns):
-            with open (self.caminho_albuns, 'r', encoding='UTF-8') as arquivo:
-                return json.load(arquivo)
-            return []
+            if not hasattr(self.autenticador, 'albuns_disponiveis'):
+                self.autenticador.albuns_disponiveis = self.autenticador.carregar_albuns()
+                
+            sistema = sistemaShoutboxd(self.autenticador.usuario_logado,
+                                     self.autenticador.albuns_disponiveis)
+            sistema.adicionar_shouts()
+        except Exception as e:
+            print(f"Erro ao adicionar shout: {e}")
     
     def ouvindo_agora(self):
-        if not self.avaliacoes:
-            sugestoes = random.sample(self.albuns_disponiveis, k=min(3, len(self.albuns_disponiveis)))
-            for album in sugestoes:
-                print(f'- {album['album']} by {album['artista']}')
-        else:
-            escolha = random.sample(self.avaliacoes, k=min(3, len(self.avaliacoes)))
-            for item in escolha:
-                album = item.get('album')
-                artista = item.get('artista')
-                nota = item.get('nota')
-                comentario = item.get('comentario')
-                print(f'- {album} by {artista} | ({nota}/5): \"{comentario}\"')
+        try:
+            sistema = sistemaOuvindo()
+            sistema.ouvindo_agora()
+        except Exception as e:
+            print(f"Erro ao abrir 'ouvindo agora': {e}")
+    
+    def abrir_configuracoes(self):
+        self.tela_config = TelaConfiguracoes(self.usuario_logado, self.usuarios, self.voltar_ao_login)
+        self.tela_config.show()
+        self.close()
+
+    
+
+class TelaConfiguracoes(QWidget):
+    def __init__(self, usuario_logado, usuarios, voltar_callback):
+        super().__init__()
+        self.setWindowTitle("Configurações da Conta")
+        self.configuracoes = configuracoesUsuario(usuario_logado, usuarios)
+        self.voltar_callback = voltar_callback
+        self.setup_ui()
+
+    def setup_ui(self):
+        layout = QVBoxLayout()
+
+        btn_ver_dados = QPushButton("Ver meus dados")
+        btn_atualizar_nome = QPushButton("Atualizar Nome")
+        btn_atualizar_senha = QPushButton("Atualizar Senha")
+        btn_apagar_conta = QPushButton("Apagar minha conta")
+        btn_voltar = QPushButton("Voltar")
+
+        btn_ver_dados.clicked.connect(self.exibir_dados)
+        btn_atualizar_nome.clicked.connect(self.atualizar_nome)
+        btn_atualizar_senha.clicked.connect(self.atualizar_senha)
+        btn_apagar_conta.clicked.connect(self.apagar_conta)
+        btn_voltar.clicked.connect(self.voltar_callback)
+
+        layout.addWidget(btn_ver_dados)
+        layout.addWidget(btn_atualizar_nome)
+        layout.addWidget(btn_atualizar_senha)
+        layout.addWidget(btn_apagar_conta)
+        layout.addWidget(btn_voltar)
+        self.setLayout(layout)
+
+    def exibir_dados(self):
+        dados = self.configuracoes.ver_dados()
+        QMessageBox.information(self, "Seus Dados",
+            f"Email: {dados['email']}\nNome: {dados['nome']}\nSenha: {dados['senha']}")
+
+    def atualizar_nome(self):
+        novo_nome, ok = QInputDialog.getText(self, "Atualizar Nome", "Novo nome:")
+        if ok and novo_nome:
+            sucesso, msg = self.configuracoes.atualizar_nome(novo_nome.strip().title())
+            if sucesso:
+                self.configuracoes.salvar_usuarios()
+            QMessageBox.information(self, "Atualização", msg)
+
+    def atualizar_senha(self):
+        nova_senha, ok = QInputDialog.getText(self, "Atualizar Senha", "Nova senha (6 números):")
+        if ok and nova_senha:
+            sucesso, msg = self.configuracoes.atualizar_senha(nova_senha.strip())
+            if sucesso:
+                self.configuracoes.salvar_usuarios()
+            QMessageBox.information(self, "Atualização", msg)
+
+    def apagar_conta(self):
+        confirmacao = QMessageBox.question(self, "Apagar Conta",
+            "Tem certeza que deseja apagar sua conta?", QMessageBox.Yes | QMessageBox.No)
+        if confirmacao == QMessageBox.Yes:
+            sucesso = self.configuracoes.apagar_conta()
+            if sucesso:
+                QMessageBox.information(self, "Sucesso", "Conta apagada.")
+                self.close()
+                self.voltar_callback()  # Voltar ao login
+
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    autenticador = Autenticadores()
+    janela_login = telaLogin(autenticador)
+    janela_login.show()
+    sys.exit(app.exec())
