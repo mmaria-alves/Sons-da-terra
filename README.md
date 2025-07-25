@@ -1,31 +1,62 @@
-# Sons da Terra.
+# 🎶 Sons da Terra
 
-Desenvolvedores: Luiz Filipe F. Q. da Silva e Maria Eduarda A. dos Santos.
+Plataforma musical para promover a diversidade cultural e dar visibilidade a artistas independentes do cenário regional brasileiro.
 
-## Sobre o projeto:
-O Sons da Terra é uma plataforma que visa estimular a diversidade cultural de seus usuários e promover a visibilidade de artistas independentes do cenário regional e, a partir disso, tornar o cenário musical um espaço mais democrático e inclusivo.
+## 🎯 Sobre o projeto
 
-### Linguagem utilizada: 
-python.
+**Sons da Terra** é uma plataforma interativa desenvolvida em Python que promove a diversidade cultural e dá visibilidade a artistas independentes do cenário regional. Nosso objetivo é contribuir para um ambiente musical mais democrático, acessível e inclusivo.
 
-### Bibliotecas utilizadas: 
-random: para recomendação de álbuns aleatórios.  
-os: utilizada para criar e manipular arquivos.
-json: para armazenamento de dados de usuário, álbuns, avaliações e etc.
+## 🛠️ Tecnologias utilizadas
 
-## Funcionalidades
+- **Linguagem**: Python
+- **Bibliotecas**:
+  - `random` — recomendações aleatórias de álbuns
+  - `os` — manipulação de arquivos e diretórios
+  - `json` — persistência de dados
+  - `PySide6` — interface gráfica (GUI)
 
-RF001 - CRUD completo: o usuário pode criar sua conta, ver, atualizar e deletar seus dados sempre que desejar;  
-RF002 - Lista de recomendações de álbuns: No menu principal, é disponibilizada uma lista, que está em frequente atualização, de álbuns e EPs recomendados;  
-RF003 - Avaliações: o usuário pode dar nota e comentar os álbuns disponíveis;  
-RF004 - Shout-box: o usuário pode sugerir álbuns que não se encontram na plataforma;  
-RF005 - Destaque da semana: toda semana um álbum é escolhido
-RF006 - Interface gráfica: utilizando PySide6
+## ✨ Funcionalidades
 
-## Artigo
-- [Artigo](http[SonsdaTerra.pdf](https://github.com/user-attachments/files/21420999/SonsdaTerra.pdf)
+- **RF001 - CRUD completo**  
+  Criação, leitura, atualização e exclusão de contas de usuários.
 
-## Fluxogramas do projeto
+- **RF002 - Recomendação de álbuns**  
+  Lista atualizada com sugestões de álbuns e EPs.
 
-- [Fluxograma do CRUD](https://drive.google.com/file/d/1LdmUFJJ50fUBIOtOuPOlCgfKJaNrkG8p/view?usp=drivesdk)
-- [Fluxograma das funcionalidades](https://drive.google.com/file/d/12JIuusqXzoGaLwlM3jDaPeVWD9sl-XUf/view?usp=sharing)
+- **RF003 - Avaliações de álbuns**  
+  Usuários podem dar nota e comentar os álbuns.
+
+- **RF004 - Shout-box**  
+  Área para sugestão de álbuns que ainda não estão na plataforma.
+
+- **RF005 - Destaque da semana**  
+  Um álbum é selecionado toda semana como destaque.
+
+- **RF006 - Interface gráfica com PySide6**  
+  Experiência visual amigável e intuitiva.
+
+
+
+## 🧪 Como executar o projeto
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seuusuario/sons-da-terra.git
+2. Navegue até o diretório do projeto:
+   ```bash
+   cd sons-da-terra
+3. Execute o arquivo:
+   ```bash
+   python main.py
+
+## 📎 Documentação complementar
+
+- [📄 Artigo Sons da Terra (PDF)](https://github.com/user-attachments/files/21420999/SonsdaTerra.pdf)
+- [📌 Fluxograma do CRUD](https://drive.google.com/file/d/1LdmUFJJ50fUBIOtOuPOlCgfKJaNrkG8p/view?usp=drivesdk)
+- [📌 Fluxograma das funcionalidades](https://drive.google.com/file/d/12JIuusqXzoGaLwlM3jDaPeVWD9sl-XUf/view?usp=sharing)
+
+## 👩‍💻 Desenvolvedores
+
+- Luiz Filipe F. Q. da Silva  
+- Maria Eduarda A. dos Santos
+
