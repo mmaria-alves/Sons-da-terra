@@ -1,3 +1,4 @@
+# pppd jwml xftl uwxb
 import sys
 from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel,
@@ -50,6 +51,10 @@ class telaLogin(QWidget):
         self.posicao2 = (self.posicao2 - 1) % len(self.texto2)
         texto_2_animado = self.texto2[self.posicao2:] + self.texto2[:self.posicao2]
         self.label_animada2.setText(texto_2_animado)
+
+    def abrir_recuperacao(self):
+        self.tela_recuperacao = recuperarSenha()
+        self.tela_recuperacao.show()
     
     # inicializa a interface  
     def init_ui(self):
@@ -65,6 +70,10 @@ class telaLogin(QWidget):
         botao_login = QPushButton("Entrar")
         botao_login.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
         botao_login.clicked.connect(self.fazer_login)
+
+        botao_esqueci_senha = QPushButton('Esqueci a senha')
+        botao_esqueci_senha.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_esqueci_senha.clicked.connect(self.abrir_recuperacao)
 
         botao_cadastro = QPushButton("Não possui uma conta? Cadastre-se agora!")
         botao_cadastro.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
@@ -110,6 +119,7 @@ class telaLogin(QWidget):
         layout.addWidget(label_login)
         layout.addWidget(self.email_input)
         layout.addWidget(self.senha_input)
+        layout.addWidget(botao_esqueci_senha)
         layout.addWidget(botao_login)
         layout.addWidget(botao_cadastro)
 
@@ -221,6 +231,61 @@ class telaCadastro(QWidget):
         self.login = telaLogin(self.autenticador)
         self.login.show()
 
+class recuperarSenha(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Recuperar Senha')
+        layout = QVBoxLayout()
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 200, 500, 500)
+        self.setStyleSheet('background-color: #fcd967')
+
+        label_recuperacao = QLabel("Recuperação de senha")
+
+        self.email_input = QLineEdit()
+        self.email_input.setPlaceholderText('Email')
+
+        self.botao_enviar_codigo = QPushButton('Enviar código')
+        self.botao_enviar_codigo.clicked.connect(self.enviar_codigo)
+
+        self.codigo_input = QLineEdit()
+        self.codigo_input.setPlaceholderText('Digite o código')
+
+        self.nova_senha_input = QLineEdit()
+        self.nova_senha_input.setPlaceholderText('Nova senha')
+        self.nova_senha_input.setEchoMode(QLineEdit.Password)
+
+        self.botao_confirmar = QPushButton('Confirmar nova senha')
+        self.botao_confirmar.clicked.connect(self.validar_codigo)
+
+        layout.addWidget(label_recuperacao)
+        layout.addWidget(self.email_input)
+        layout.addWidget(self.botao_enviar_codigo)
+        layout.addWidget(self.codigo_input)
+        layout.addWidget(self.nova_senha_input)
+        layout.addWidget(self.botao_confirmar)
+
+        self.setLayout(layout)
+    
+    def enviar_codigo(self):
+        email = self.email_input.text()
+        if Autenticadores.solicitar_codigo(email):
+            QMessageBox.information(self, "Sucesso", "Código enviado por email")
+        else: 
+            QMessageBox.warning(self, "Erro", "E-mail não encontrado ou falha no envio")
+            
+    def validar_codigo(self):
+        email = self.email_input.text()
+        codigo = self.codigo_input.text()
+        nova_senha = self.nova_senha_input.text()
+
+        resultado = Autenticadores.validar_codigo(email, codigo, nova_senha)
+        if resultado == "Senha redefinada com sucesso!":
+            QMessageBox.information(self, 'ok', resultado)
+            self.close()
+        else:
+            QMessageBox.warning(self, 'Erro', resultado)
+
 class menuPrincipal(QWidget):
     def __init__(self, autenticador):
         super().__init__()
@@ -231,7 +296,7 @@ class menuPrincipal(QWidget):
         self.setWindowTitle("Sons da Terra")
         self.setWindowIcon(QIcon('imagens/Logo.png'))
         self.setGeometry(200, 200, 500, 500)
-        
+
         self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
         self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
         self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
@@ -394,8 +459,7 @@ class TelaConfiguracoes(QWidget):
             if sucesso:
                 QMessageBox.information(self, "Sucesso", "Conta apagada.")
                 self.close()
-                self.voltar_callback()  # Voltar ao login
-
+                self.voltar_callback()
 
 
 if __name__ == "__main__":

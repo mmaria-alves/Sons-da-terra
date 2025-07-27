@@ -1,8 +1,13 @@
 import os
 import json
-import datetime
+from datetime import datetime, timedelta
 import random
+import smtplib
+from email.message import EmailMessage
 from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
+
+EMAIL_REMETENTE = 'noreply.sonsdaterra@gmail.com'
+SENHA_REMETENTE = 'pppd jwml xftl uwxb'
 
 class Usuario:
     def __init__(self, nome, email, senha,):
@@ -16,7 +21,8 @@ class Usuario:
     
     def to_dict(self):
         return {'nome': self.nome, 'email': self.email, 'senha': self.senha}
-    
+
+
 class Autenticadores:
     def __init__(self, caminho_arquivo="dados/usuarios.json"):
         self.caminho_arquivo = caminho_arquivo
@@ -82,7 +88,6 @@ class Autenticadores:
             return False, None
         
     def avaliar_album_terminal(self):
-        """Método para avaliar álbuns que será chamado pelo menu"""
         try:
             # Verifica se os álbuns estão carregados
             if not hasattr(self, 'albuns_disponiveis') or not self.albuns_disponiveis:
@@ -101,7 +106,7 @@ class Autenticadores:
         return True
     
     def adicionar_shouts_terminal(self):
-        sistema = sistemaShoutboxd(self.usuario_logado, self.albuns_disponiveis)  # Corrigido aqui
+        sistema = sistemaShoutboxd(self.usuario_logado, self.albuns_disponiveis)
         sistema.adicionar_shouts()
     
     def ouvindo_agora_terminal(self):
@@ -109,7 +114,6 @@ class Autenticadores:
         sistema.ouvindo_agora()
         
     def destaque_da_semana(self, caminho='dados/destaque.json'):
-    # Use self.albuns_disponiveis em vez do parâmetro
         hoje = datetime.date.today()
         semana_atual = hoje.isocalendar()[1]
 
@@ -123,7 +127,60 @@ class Autenticadores:
         with open(caminho, 'w', encoding='utf-8') as arquivo:
             json.dump({'semana': semana_atual, 'album': destaque}, arquivo)
         return destaque
+    
+    @staticmethod
+    def enviar_codigo(destinatario, codigo):
+        mensagem = EmailMessage()
+        mensagem['Subject'] = 'Recuperação de Senha'
+        mensagem['From'] = EMAIL_REMETENTE
+        mensagem['To'] = destinatario
+        mensagem.set_content(f'''
+                             Seu código de verificação é {codigo}
+                             Válido por 10 minutos
+                            ''')
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(EMAIL_REMETENTE, SENHA_REMETENTE)
+                smtp.send_message(mensagem)
+                return True
         
+        except Exception as e:
+            print(f'Erro ao enviar e-mail: {e}')
+            return False
+    
+    @staticmethod
+    def solicitar_codigo(email_usuario):
+        usuarios = Autenticadores.carregar_usuarios()
+        for usuario, dados in usuarios.items():
+            if dados['email'] == email_usuario:
+                codigo = random.randomint(100000, 999999)
+                tempo = (datetime.now() + timedelta(minutes=10)).isoformat()
+
+                dados['codigo'] = codigo
+                dados['tempo'] = tempo
+                Autenticadores.salvar_usuarios()
+
+                enviado = Autenticadores.enviar_codigo(email_usuario, codigo)
+                return enviado
+        return False
+    
+    @staticmethod
+    def validar_codigo(email_usuario, codigo_digitado, nova_senha):
+        usuarios = Autenticadores.carregar_usuarios()
+        for usuario, dados in usuario.items():
+            if dados['email'] == email_usuario:
+                if dados['codigo'] != codigo_digitado:
+                    return 'Código inválido'
+                if datetime.now() > datetime.fromisoformat(dados['tempo']):
+                    return 'Código expirado'
+                
+                dados['senha'] == nova_senha
+                dados['codigo'] == ''
+                dados['tempo'] == ''
+                Autenticadores.salvar_usuarios()
+                return "Senha redefinada com sucesso!"
+        return "Email não encontrado."
+
 class configuracoesUsuario:
     def __init__(self, usuario_logado, usuarios):
         self.usuario_logado = usuario_logado
