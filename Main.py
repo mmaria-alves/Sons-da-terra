@@ -1,10 +1,7 @@
 import sys
-from PySide6.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QLabel,
-    QLineEdit, QPushButton, QMessageBox, QInputDialog
-)
-from PySide6.QtGui import QFontDatabase, QFont, QIcon
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QInputDialog
+from PySide6.QtGui import QFontDatabase, QFont, QIcon, QPixmap, QTransform
+from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, Property
 from autenticadores import Autenticadores, configuracoesUsuario
 from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
 
@@ -16,6 +13,7 @@ class telaLogin(QWidget):
         self.setWindowTitle("Sons da Terra")
         self.setWindowIcon(QIcon('imagens/Logo.png'))
         self.setGeometry(200, 200, 500, 500)
+        self.setStyleSheet('background-color: #fcd967')
         
         self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
         self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
@@ -28,7 +26,6 @@ class telaLogin(QWidget):
 
         self.init_ui()
         
-        self.setStyleSheet('background-color: #fcd967')
     
     def carregar_fonte(self, caminho_fonte: str):
         id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
@@ -57,17 +54,32 @@ class telaLogin(QWidget):
 
         self.email_input = QLineEdit()
         self.email_input.setPlaceholderText("Email")
+        self.email_input.setFixedSize(500, 23)
+        self.email_input.setStyleSheet("color: #001f54; font-size: 13px")
 
         self.senha_input = QLineEdit()
         self.senha_input.setPlaceholderText("Senha")
+        self.senha_input.setFixedSize(500, 23)
         self.senha_input.setEchoMode(QLineEdit.Password)
+        self.senha_input.setStyleSheet("color: #001f54; font-size: 13px")
+
 
         botao_login = QPushButton("Entrar")
-        botao_login.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_login.setFixedSize(500, 25)
+        botao_login.setFont(self.fonte_texto)
+        botao_login.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_login.clicked.connect(self.fazer_login)
 
+        botao_esqueci_senha = QPushButton('Esqueceu sua senha?')
+        botao_esqueci_senha.setFixedSize(500, 25)
+        botao_esqueci_senha.setFont(self.fonte_texto)
+        botao_esqueci_senha.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        botao_esqueci_senha.clicked.connect(self.abrir_recuperacao)
+
         botao_cadastro = QPushButton("Não possui uma conta? Cadastre-se agora!")
-        botao_cadastro.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_cadastro.setFont(self.fonte_texto)
+        botao_cadastro.setFixedSize(500, 25)
+        botao_cadastro.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_cadastro.clicked.connect(self.abrir_cadastro)
 
         label = QLabel("Bem-vindo!")
@@ -101,7 +113,7 @@ class telaLogin(QWidget):
 
         label_login = QLabel('Login: ')
         label_login.setFont(self.fonte_subtitulo)
-        label_login.setStyleSheet("color: #fffffd; font-size: 40px")
+        label_login.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold;")
         label_login.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
         layout.addWidget(label)
@@ -110,7 +122,8 @@ class telaLogin(QWidget):
         layout.addWidget(label_login)
         layout.addWidget(self.email_input)
         layout.addWidget(self.senha_input)
-        layout.addWidget(botao_login)
+        layout.addWidget(botao_login)        
+        layout.addWidget(botao_esqueci_senha)
         layout.addWidget(botao_cadastro)
 
         self.setLayout(layout)
@@ -126,7 +139,7 @@ class telaLogin(QWidget):
         
         sucesso, usuario = self.autenticador.login(email, senha)
         if sucesso:
-            QMessageBox.information(self, "Login", f"Bem-vindo, {usuario.nome}!")
+            mensagem_login = QMessageBox.information(self, "Login", f"Bem-vindo, {usuario.nome}!")
             self.abrir_menu_principal(usuario)
         else:
             QMessageBox.warning(self, "Erro", "Email ou senha inválidos.")
@@ -135,33 +148,75 @@ class telaLogin(QWidget):
         self.hide()
         self.cadastro = telaCadastro(self.autenticador)
         self.cadastro.show()
+    
+    def abrir_recuperacao(self):
+        self.hide()
+        self.recuperacao = telaRecuperar1(autenticador)
+        self.recuperacao.show()
 
 
 class telaCadastro(QWidget):
     def __init__(self, autenticador):
         super().__init__()
         self.autenticador = autenticador
+        # Configurações da página
         self.setWindowTitle("Sons da Terra")
         self.setWindowIcon(QIcon('imagens/Logo.png'))
         self.setGeometry(200, 200, 500, 500)
+        self.setStyleSheet('background-color: #fcd967')
         
         self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
         self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
         self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
 
+        self.original_pixmap = None
+        self._angle = 0
+        self.animacao = None
+        self.label_imagem = None
+
         self.init_ui()
 
-        self.setStyleSheet('background-color: #fcd967')
-    
+
     def carregar_fonte(self, caminho_fonte: str):
         id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
         familias = QFontDatabase.applicationFontFamilies(id_fonte)
 
         if familias:
             return QFont(familias[0], 50)
-
         else:
             return QFont("Arial", 20)
+
+    @Property(float)
+    def angle(self):
+        return self._angle
+    
+    @angle.setter
+    def angle(self, valor):
+        self._angle = valor
+        self.atualizar_rotacao()
+    
+    def atualizar_rotacao(self):
+        if self.original_pixmap and self.label_imagem:
+            transform = QTransform()
+            transform.rotate(self._angle)
+            rotated_pixmap = self.original_pixmap.transformed(transform, Qt.SmoothTransformation)
+            self.label_imagem.setPixmap(rotated_pixmap)
+    
+    def animacao_logo(self):
+        self.animacao = QPropertyAnimation(self, b"angle")
+        self.animacao.setDuration(3000)
+        self.animacao.setStartValue(0)
+        self.animacao.setEndValue(360)
+        self.animacao.setLoopCount(-1)
+        self.animacao.setEasingCurve(QEasingCurve.Linear)
+    
+    def iniciar_animacao(self):
+        if self.animacao:
+            self.animacao.start()
+
+    def parar_animacao(self):
+        if self.animacao:
+            self.animacao.stop()
 
     def init_ui(self):
         layout = QVBoxLayout()
@@ -181,18 +236,34 @@ class telaCadastro(QWidget):
         self.confirmar_senha_input.setEchoMode(QLineEdit.Password)
 
         botao_cadastrar = QPushButton("Cadastrar")
-        botao_cadastrar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_cadastrar.setFixedSize(500, 25)
+        botao_cadastrar.setFont(self.fonte_texto)
+        botao_cadastrar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_cadastrar.clicked.connect(self.realizar_cadastro)
 
         botao_voltar = QPushButton("Voltar")
-        botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_voltar.setFixedSize(500, 25)
+        botao_voltar.setFont(self.fonte_texto)
+        botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_voltar.clicked.connect(self.voltar)
 
-        label_cadastro = QLabel("Cadastro")
+        label_cadastro = QLabel("Cadastro:")
         label_cadastro.setFont(self.fonte_subtitulo)
         label_cadastro.setStyleSheet("color: #fffffd; font-size: 70px; font-weight: bold;")
         label_cadastro.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
+        imagem = QPixmap('imagens/Logo.png')
+        self.original_pixmap = imagem.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        
+        self.label_imagem = QLabel(self)
+        self.label_imagem.setFixedSize(500, 200)
+        self.label_imagem.setAlignment(Qt.AlignCenter)
+        self.label_imagem.setPixmap(self.original_pixmap)
+        
+        self.animacao_logo()
+        self.iniciar_animacao()
+
+        layout.addWidget(self.label_imagem)
         layout.addWidget(label_cadastro)
         layout.addWidget(self.nome_input)
         layout.addWidget(self.email_input)
@@ -200,6 +271,7 @@ class telaCadastro(QWidget):
         layout.addWidget(self.confirmar_senha_input)
         layout.addWidget(botao_cadastrar)
         layout.addWidget(botao_voltar)
+
 
         self.setLayout(layout)
 
@@ -217,9 +289,171 @@ class telaCadastro(QWidget):
             QMessageBox.warning(self, "Erro", mensagem)
 
     def voltar(self):
+        self.parar_animacao()
         self.hide()
         self.login = telaLogin(self.autenticador)
         self.login.show()
+
+class telaRecuperar1(QWidget):
+    def __init__(self, autenticador):
+        super().__init__()
+        self.autenticador = autenticador
+        self.setWindowTitle('Recuperar Senha')
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 200, 400, 200)
+        self.setStyleSheet('background-color: #fcd967')
+        
+        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+
+        self.init_ui()
+
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+        else:
+            return QFont("Arial", 20)
+        
+    def enviar_codigo(self):
+        email = self.email_input.text()
+        if Autenticadores.solicitar_codigo(email):
+            QMessageBox.information(self, "Sucesso", "Código enviado por email")
+        else: 
+            QMessageBox.warning(self, "Erro", "E-mail não encontrado ou falha no envio")
+    
+    def validar_codigo(self):
+        email = self.email_input.text()
+        codigo = self.codigo_input.text()
+        nova_senha = self.nova_senha_input.text()
+
+        resultado = Autenticadores.validar_codigo(email, codigo, nova_senha)
+        if resultado == "Senha redefinada com sucesso!":
+            QMessageBox.information(self, 'Ok', resultado)
+            self.close()
+        else:
+            QMessageBox.warning(self, 'Erro', resultado)
+
+    def voltar(self):
+        self.hide()
+        self.login = telaLogin(self.autenticador)
+        self.login.show()
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+        label_recuperacao = QLabel(
+        '''
+Recuperação 
+De senha: ''')
+        
+        label_recuperacao.setFont(self.fonte_subtitulo)
+        label_recuperacao.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold;")
+        label_recuperacao.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+        self.email_input = QLineEdit()
+        self.email_input.setFixedSize(400, 23)
+        self.email_input.setPlaceholderText('Email')
+        self.email_input.setStyleSheet("color: #001f54; font-size: 13px")
+        
+        self.botao_enviar_codigo = QPushButton('Enviar código')
+        self.botao_enviar_codigo.setFixedSize(400, 25)
+        self.botao_enviar_codigo.setFont(self.fonte_texto)
+        self.botao_enviar_codigo.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px;")
+        self.botao_enviar_codigo.clicked.connect(self.enviar_codigo)
+        self.botao_enviar_codigo.clicked.connect(self.abrir_recuperacao2)
+
+        self.botao_voltar = QPushButton('Voltar')
+        self.botao_voltar.setFixedSize(400, 25)
+        self.botao_voltar.setFont(self.fonte_texto)
+        self.botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px;")
+        self.botao_voltar.clicked.connect(self.voltar)
+        
+        layout.addWidget(label_recuperacao)
+        layout.addWidget(self.email_input)
+        layout.addWidget(self.botao_enviar_codigo)
+        layout.addWidget(self.botao_voltar)
+
+        self.setLayout(layout)
+
+    def abrir_recuperacao2(self):
+        self.hide()
+        self.recuperacao = telaRecuperar2()
+        self.recuperacao.show()
+
+class telaRecuperar2(QWidget):
+        def __init__(self):
+            super().__init__()
+            self.setWindowTitle("Recuperar senha")
+            self.setWindowIcon(QIcon('imagens/Logo.png'))
+            self.setGeometry(200, 200, 400, 200)
+            self.setStyleSheet('background-color: #fcd967')
+            
+            self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
+            self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
+            self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+
+            self.init_ui()
+        
+        def carregar_fonte(self, caminho_fonte: str):
+            id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+            familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+            if familias:
+                return QFont(familias[0], 50)
+
+            else:
+                return QFont("Arial", 20)
+        
+        def validar_codigo(self):
+            email = self.email_input.text()
+            codigo = self.codigo_input.text()
+            nova_senha = self.nova_senha_input.text()
+
+            resultado = Autenticadores.validar_codigo(email, codigo, nova_senha)
+            if resultado == "Senha redefinada com sucesso!":
+                QMessageBox.information(self, 'ok', resultado)
+                self.close()
+            else:
+                QMessageBox.warning(self, 'Erro', resultado)
+        
+        def init_ui(self):
+            layout = QVBoxLayout()
+            label_recuperacao = QLabel('Código: ')
+            label_recuperacao.setFont(self.fonte_subtitulo)
+            label_recuperacao.setStyleSheet("color: #fffffd; font-size: 40px;")
+            label_recuperacao.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+            self.codigo_input = QLineEdit()
+            self.codigo_input.setFixedSize(400, 23) 
+            self.codigo_input.setStyleSheet("color: #001f54; font-size: 13px")
+            self.codigo_input.setPlaceholderText('Digite o código')
+            
+            label_nova_senha = QLabel('Nova senha: ')
+            label_nova_senha.setFont(self.fonte_subtitulo)
+            label_nova_senha.setStyleSheet("color: #fffffd; font-size: 40px;")
+            label_nova_senha.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+            self.nova_senha_input = QLineEdit()
+            self.nova_senha_input.setFixedSize(400, 23)
+            self.nova_senha_input.setStyleSheet("color: #001f54; font-size: 13px")
+            self.nova_senha_input.setPlaceholderText('Nova senha')
+            self.nova_senha_input.setEchoMode(QLineEdit.Password)
+
+            self.botao_confirmar = QPushButton('Confirmar nova senha')
+            self.botao_confirmar.setFont(self.fonte_texto)
+            self.botao_confirmar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 14px; font-weight: bold")
+            self.botao_confirmar.clicked.connect(self.validar_codigo)
+
+            layout.addWidget(label_recuperacao)
+            layout.addWidget(self.codigo_input)
+            layout.addWidget(label_nova_senha)
+            layout.addWidget(self.nova_senha_input)
+            layout.addWidget(self.botao_confirmar)
+
+            self.setLayout(layout)
 
 class menuPrincipal(QWidget):
     def __init__(self, autenticador):
@@ -227,18 +461,22 @@ class menuPrincipal(QWidget):
         self.autenticador = autenticador
         self.usuario = autenticador.usuario_logado
 
-
         self.setWindowTitle("Sons da Terra")
         self.setWindowIcon(QIcon('imagens/Logo.png'))
         self.setGeometry(200, 200, 500, 500)
+        self.setStyleSheet('background-color: #fcd967')
         
         self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
         self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
         self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
         
+        self.original_pixmap = None
+        self._angle = 0
+        self.animacao = None
+        self.label_imagem = None
+
         self.init_ui()
 
-        self.setStyleSheet('background-color: #fcd967')
     
     def carregar_fonte(self, caminho_fonte: str):
         id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
@@ -249,45 +487,93 @@ class menuPrincipal(QWidget):
 
         else:
             return QFont("Arial", 20)
-        
+    
+    @Property(float)
+    def angle(self):
+        return self._angle
+    
+    @angle.setter
+    def angle(self, valor):
+        self._angle = valor
+        self.atualizar_rotacao()
+    
+    def atualizar_rotacao(self):
+        if self.original_pixmap and self.label_imagem:
+            transform = QTransform()
+            transform.rotate(self._angle)
+            rotated_pixmap = self.original_pixmap.transformed(transform, Qt.SmoothTransformation)
+            self.label_imagem.setPixmap(rotated_pixmap)
+    
+    def animacao_logo(self):
+        self.animacao = QPropertyAnimation(self, b"angle")
+        self.animacao.setDuration(3000)
+        self.animacao.setStartValue(0)
+        self.animacao.setEndValue(360)
+        self.animacao.setLoopCount(-1)
+        self.animacao.setEasingCurve(QEasingCurve.Linear)
+    
+    def iniciar_animacao(self):
+        if self.animacao:
+            self.animacao.start()
+
+    def parar_animacao(self):
+        if self.animacao:
+            self.animacao.stop()
+
     def init_ui(self):
         layout = QVBoxLayout()
         
         destaque = self.autenticador.destaque_da_semana()
 
-        destaque = self.autenticador.destaque_da_semana()
-        texto_destaque = f"Destaque da Semana: {destaque['nome']} - {destaque['artista']}" if isinstance(destaque, dict) else f"Destaque da Semana: {destaque}"
+        album = destaque['album']
+        if isinstance(destaque, dict):
+            texto_destaque = (f"""Destaque da Semana: 
+{album['nome']} - {album['artista']}""")
+        else:
+            texto_destaque = (f"Destaque da Semana: {destaque}")
+        
         self.label_destaque = QLabel(texto_destaque)
-
         self.label_destaque.setFont(self.fonte_titulo)
         self.label_destaque.setAlignment(Qt.AlignCenter | Qt.AlignTop)
-        self.label_destaque.setStyleSheet("""
-            background-color: #5966b1;
-            color: #fffffd;
-            font-size: 20px;
-        """)
-        self.label_destaque.setAlignment(Qt.AlignCenter)
+        self.label_destaque.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 20px;")
 
 
         botao_avaliar = QPushButton("Avaliar Álbuns")
-        botao_avaliar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_avaliar.setFixedSize(500, 25)
+        botao_avaliar.setFont(self.fonte_texto)
+        botao_avaliar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_avaliar.clicked.connect(self.avaliar_albuns)
         
-
         botao_shoutboxd = QPushButton("Shoutboxd")
-        botao_shoutboxd.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_shoutboxd.setFixedSize(500, 25)
+        botao_shoutboxd.setFont(self.fonte_texto)
+        botao_shoutboxd.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_shoutboxd.clicked.connect(self.adicionar_shout)
 
-
-        botao_ouvindo_agora = QPushButton("Ouvindo Agora")
-        botao_ouvindo_agora.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_ouvindo_agora = QPushButton("Ouvindo agora")
+        botao_ouvindo_agora.setFixedSize(500, 25)
+        botao_ouvindo_agora.setFont(self.fonte_texto)
+        botao_ouvindo_agora.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px;")
         botao_ouvindo_agora.clicked.connect(self.ouvindo_agora)
 
         botao_config = QPushButton("Configurações")
-        botao_config.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: light;")
+        botao_config.setFixedSize(500, 25)
+        botao_config.setFont(self.fonte_texto)
+        botao_config.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
         botao_config.clicked.connect(self.abrir_configuracoes)
         
+        imagem = QPixmap('imagens/Logo.png')
+        self.original_pixmap = imagem.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
+        self.label_imagem = QLabel(self)
+        self.label_imagem.setFixedSize(500, 200)
+        self.label_imagem.setAlignment(Qt.AlignCenter)
+        self.label_imagem.setPixmap(self.original_pixmap)
+
+        self.animacao_logo()
+        self.iniciar_animacao()
+
+        layout.addWidget(self.label_imagem)
         layout.addWidget(self.label_destaque)
         layout.addWidget(botao_avaliar)
         layout.addWidget(botao_shoutboxd)
@@ -329,6 +615,7 @@ class menuPrincipal(QWidget):
             print(f"Erro ao abrir 'ouvindo agora': {e}")
     
     def abrir_configuracoes(self):
+        self.parar_animacao()
         self.tela_config = TelaConfiguracoes(self.usuario_logado, self.usuarios, self.voltar_ao_login)
         self.tela_config.show()
         self.close()
@@ -341,12 +628,14 @@ class TelaConfiguracoes(QWidget):
         self.setWindowTitle("Configurações da Conta")
         self.configuracoes = configuracoesUsuario(usuario_logado, usuarios)
         self.voltar_callback = voltar_callback
-        self.setup_ui()
+        
+        self.init_ui()
 
-    def setup_ui(self):
+    def init_ui(self):
         layout = QVBoxLayout()
 
         btn_ver_dados = QPushButton("Ver meus dados")
+
         btn_atualizar_nome = QPushButton("Atualizar Nome")
         btn_atualizar_senha = QPushButton("Atualizar Senha")
         btn_apagar_conta = QPushButton("Apagar minha conta")
@@ -363,6 +652,7 @@ class TelaConfiguracoes(QWidget):
         layout.addWidget(btn_atualizar_senha)
         layout.addWidget(btn_apagar_conta)
         layout.addWidget(btn_voltar)
+        
         self.setLayout(layout)
 
     def exibir_dados(self):
@@ -373,10 +663,10 @@ class TelaConfiguracoes(QWidget):
     def atualizar_nome(self):
         novo_nome, ok = QInputDialog.getText(self, "Atualizar Nome", "Novo nome:")
         if ok and novo_nome:
-            sucesso, msg = self.configuracoes.atualizar_nome(novo_nome.strip().title())
+            sucesso, mensagem = self.configuracoes.atualizar_nome(novo_nome.strip().title())
             if sucesso:
                 self.configuracoes.salvar_usuarios()
-            QMessageBox.information(self, "Atualização", msg)
+            QMessageBox.information(self, "Atualização", mensagem)
 
     def atualizar_senha(self):
         nova_senha, ok = QInputDialog.getText(self, "Atualizar Senha", "Nova senha (6 números):")
@@ -394,8 +684,7 @@ class TelaConfiguracoes(QWidget):
             if sucesso:
                 QMessageBox.information(self, "Sucesso", "Conta apagada.")
                 self.close()
-                self.voltar_callback()  # Voltar ao login
-
+                self.voltar_callback()
 
 
 if __name__ == "__main__":
