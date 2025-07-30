@@ -47,6 +47,10 @@ class telaLogin(QWidget):
         self.posicao2 = (self.posicao2 - 1) % len(self.texto2)
         texto_2_animado = self.texto2[self.posicao2:] + self.texto2[:self.posicao2]
         self.label_animada2.setText(texto_2_animado)
+
+    def abrir_recuperacao(self):
+        self.tela_recuperacao = telaRecuperar1()
+        self.tela_recuperacao.show()
     
     # inicializa a interface  
     def init_ui(self):
