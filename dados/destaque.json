@@ -1,7 +1,9 @@
 {
     "semana": 31,
     "album": {
-        "nome": "Âmago (2024)",
-        "artista": "Zendo"
+        "nome": "Bacuri (2025)",
+        "artista": "Boogarins",
+        "capa": "imagens/Capa_Bacuri_Boogarins",
+        "descricao": "blebleble"
     }
 }

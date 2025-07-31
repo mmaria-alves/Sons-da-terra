@@ -1,8 +1,10 @@
 import os
 import json
-from datetime import datetime, timedelta, date
 import random
 import smtplib
+from PySide6.QtGui import QPixmap, Qt
+from datetime import datetime, timedelta, date
+from pathlib import Path
 from email.message import EmailMessage
 from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
 
@@ -29,16 +31,18 @@ class Autenticadores:
         self.usuarios = self.carregar_usuarios()
         self.usuario_logado = None
         self.albuns_disponiveis = self.carregar_albuns()
-    
-    def carregar_usuarios(self):
-        if os.path.exists(self.caminho_arquivo):
-            with open(self.caminho_arquivo, "r", encoding="utf-8") as arquivo:
+    @staticmethod
+    def carregar_usuarios():
+        caminho_arquivo = 'dados/usuarios.json'
+        if os.path.exists(caminho_arquivo):
+            with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
                 return json.load(arquivo)
         return {}
-
-    def salvar_usuarios(self):
-        with open(self.caminho_arquivo, "w", encoding="utf-8") as arquivo:
-            json.dump(self.usuarios, arquivo, indent=4, ensure_ascii=False)
+    @staticmethod
+    def salvar_usuarios(usuarios):
+        caminho_arquivo = 'dados/usuarios.json'
+        with open(caminho_arquivo, "w", encoding="utf-8") as arquivo:
+            json.dump(usuarios, arquivo, indent=4, ensure_ascii=False)
     
     def carregar_usuario(self, email):
         if email in self.usuarios:
@@ -116,29 +120,70 @@ class Autenticadores:
     def destaque_da_semana(self, caminho='dados/destaque.json'):
         hoje = date.today()
         semana_atual = hoje.isocalendar()[1]
-        ano_atual = hoje.year
-        chave_semana = f"{ano_atual}_S{semana_atual}"
-
+    
         if os.path.exists(caminho):
             with open(caminho, 'r', encoding='utf-8') as arquivo:
                 dados = json.load(arquivo)
+                if dados.get('semana') == semana_atual:
+                    return dados
         
-        if chave_semana in dados:
-            return dados[chave_semana]
-
         destaque = random.choice(self.albuns_disponiveis)
         
         resultado = {
             'semana': semana_atual,
             'album': destaque
         }
-        dados[chave_semana] = resultado
 
         with open(caminho, 'w', encoding='utf-8') as arquivo:
             json.dump(resultado, arquivo, ensure_ascii=False, indent=4)
         
         return resultado
     
+    def carregar_capa(self):
+        try:
+            destaque_info = self.destaque_da_semana()
+            album_destaque = destaque_info['album']
+
+            caminho_imagem = album_destaque['capa'][0]
+
+            if not os.path.exists(caminho_imagem):
+                script_dir = Path(__file__).parent
+                caminho_completo = script_dir / caminho_imagem
+
+                if caminho_completo.exists():
+                    caminho_imagem = str(caminho_completo)
+                else:
+                    raise FileNotFoundError(f"Imagem não encontrada: {caminho_imagem}")
+            
+            return caminho_imagem
+        except (KeyError, IndexError, FileNotFoundError) as e:
+            print(f"Erro ao carregar capa do álbum: {e}")
+    
+    def pixmap_capa_destaque(self):
+        caminho_imagem = self.carregar_capa()
+        
+        if caminho_imagem:
+            pixmap = QPixmap(caminho_imagem)
+            if not pixmap.isNull():
+                return pixmap
+        return None
+    
+    def info_completa_album(self):
+        try:
+            destaque_info = self.destaque_da_semana()
+            album = destaque_info['album']
+
+            return {
+                'semana': destaque_info['semana'],
+                'nome': album['nome'],
+                'artista': album['artista'],
+                'capa': self.carregar_capa(),
+                'album_completo': album
+            }
+        except Exception as e:
+            print(f'Erro ao obter informações do destaque da semana: {e}')
+            return None
+            
     @staticmethod
     def enviar_codigo(destinatario, codigo):
         mensagem = EmailMessage()
@@ -163,16 +208,16 @@ Este código é válido por 10 minutos
     
     @staticmethod
     def solicitar_codigo(email):
-        autenticador = Autenticadores()
-        usuarios = autenticador.carregar_usuarios()
+        usuarios = Autenticadores.carregar_usuarios()
         for dados in usuarios.values():
             if dados["email"] == email:
                 codigo = random.randint(100000, 999999)
+                codigo = str(codigo)
                 tempo = (datetime.now() + timedelta(minutes=10)).isoformat()
 
                 dados['codigo'] = codigo
                 dados['tempo'] = tempo
-                autenticador.salvar_usuarios()
+                Autenticadores.salvar_usuarios(usuarios)
 
                 enviado = Autenticadores.enviar_codigo(email, codigo)
                 return enviado
@@ -180,8 +225,7 @@ Este código é válido por 10 minutos
     
     @staticmethod
     def validar_codigo(email_usuario, codigo_digitado, nova_senha):
-        autenticador = Autenticadores()
-        usuarios = autenticador.carregar_usuarios()
+        usuarios = Autenticadores.carregar_usuarios()
         for dados in usuarios.values():
             if dados['email'] == email_usuario:
                 if dados['codigo'] != codigo_digitado:
@@ -189,10 +233,10 @@ Este código é válido por 10 minutos
                 if datetime.now() > datetime.fromisoformat(dados['tempo']):
                     return 'Código expirado'
                 
-                dados['senha'] == nova_senha
-                dados['codigo'] == ''
-                dados['tempo'] == ''
-                autenticador.salvar_usuarios()
+                dados['senha'] = nova_senha
+                dados['codigo'] = ''
+                dados['tempo'] = ''
+                Autenticadores.salvar_usuarios(usuarios)
                 return "Senha redefinada com sucesso!"
         return "Email não encontrado."
 

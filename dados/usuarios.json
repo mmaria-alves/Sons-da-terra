@@ -9,7 +9,14 @@
     "mari4santos012815@gmail.com": {
         "nome": "Marianne",
         "email": "mari4santos012815@gmail.com",
-        "senha": "147852",
+        "senha": "123456",
+        "tempo": "",
+        "codigo": ""
+    },
+    "dralucianakarina@gmail.com": {
+        "nome": "Luciana",
+        "email": "dralucianakarina@gmail.com",
+        "senha": "987654",
         "tempo": "",
         "codigo": ""
     }

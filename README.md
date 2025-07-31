@@ -1,17 +1,17 @@
 # Sons da Terra
+![Logo](imagens/Logo.png')
 ## 🎯 Sobre o projeto
-
-**Sons da Terra** é uma plataforma interativa desenvolvida em Python que promove a diversidade cultural e dá visibilidade a artistas independentes do cenário regional. Nosso objetivo é contribuir para um ambiente musical mais democrático, acessível e inclusivo.
+A valorização da diversidade cultural e a promoção de espaços mais inclusivos no cenário artístico são demandas crescentes na sociedade contemporânea. Nesse contexto, a plataforma **Sons da Terra** surge com o propósito de fomentar a pluralidade cultural entre seus usuários e pôr artistas independentes em evidência.
 
 ## 🛠️ Tecnologias utilizadas
 
 - **Linguagem**: Python
 - **Bibliotecas**:
-  - `random` — recomendações aleatórias de álbuns
+  - `random` — recomendações aleatórias e geração de códigos
   - `os` — manipulação de arquivos e diretórios
-  - `json` — persistência de dados
+  - `json` — armazenamento de dados
   - `PySide6` — interface gráfica (GUI)
-  - `smtplib` — envio de emails
+  - `smtplib` — envio de emails aos usuários
     
 ## ✨ Funcionalidades
 
@@ -56,14 +56,21 @@
 - [📌 Fluxograma do CRUD](https://drive.google.com/file/d/1LdmUFJJ50fUBIOtOuPOlCgfKJaNrkG8p/view?usp=drivesdk)
 - [📌 Fluxograma das funcionalidades](https://drive.google.com/file/d/12JIuusqXzoGaLwlM3jDaPeVWD9sl-XUf/view?usp=sharing)
 
-## ⏳ Futuro do projeto
-
+## ⏳ Release 3.0
+### Novas funcionalidades
 - **RF007 - Recuperação de senha**  
   Geração e envio de código por email.
+- **RF008 - Ligação direta com o Spotify**  
+  Quando o usuário clicar no nome de um álbum será automaticamente redirecionado para a página desse álbum no spotify
+### Melhorias
 - **ENH01 - Interface gráfica**  
-  Correção de bugs e melhoria da interface.
+  Correção de bugs e refatoração completa de todas as telas.
+- **ENH02 - Destaque da semana**  
+  Agora a função destaque da semana exibe a capa do álbum e uma pequena descrição do artista.
 
 ## 👩‍💻 Desenvolvedores
 
-- Luiz Filipe F. Q. da Silva
-- Maria Eduarda A. dos Santos
+- Luiz Filipe F. Q. da Silva  
+  [Github de Filipe](https://github.com/nilipe)
+- Maria Eduarda A. dos Santos  
+  [Github de Maria](https://github.com/mmaria-alves)
