@@ -1,48 +1,398 @@
 [
-    {"nome": "Megalomania (2024)", "artista": "Uana"},
-    {"nome": "Tanto pra dizer (2024)", "artista": "Mirela Hazin"},
-    {"nome": "Coisas naturais (2025)", "artista": "Marina Sena"},
-    {"nome": "Âmago (2024)", "artista": "Zendo"},
-    {"nome": "Gambiarra chic pt.2 (2025)", "artista": "Irmãs de pau"},
-    {"nome": "Grimestar (2024)", "artista": "Tremsete"},
-    {"nome": "Jogo de Cintura (2024)", "artista": "Bell Puã"},
-    {"nome": "Casa Coração (2025)", "artista": "Joyce Alane"},
-    {"nome": "Bacuri (2025)", "artista": "Boogarins", "capa": ["imagens/Capa_Bacuri_Boogarins.png"]},
-    {"nome": "Abaixo de zero: Hello Hell (2019)", "artista": "Black alien"},
-    {"nome": "KM2 (2025)", "artista": "Ebony"},
-    {"nome": "Letrux como Mulher Girafa (2023)", "artista": "Letrux"},
-    {"nome": "SIM SIM SIM (2022)", "artista": "Bala Desejo"},
-    {"nome": "Me Chama de Gato Que Eu Sou Sua (2023)", "artista": "Ana Frango Elétrico"},
-    {"nome": "o fim é um começo (2024)", "artista": "a terra vai se tornar um planeta inabitável"},
-    {"nome": "MAU (2023)", "artista": "Jaloo"},
-    {"nome": "Antiasfixiante (2024)", "artista": "Kinoa"},
-    {"nome": "Quebra Asa, vol.1 (2023)", "artista": "Fernando motta"},
-    {"nome": "Muganga (2023)", "artista": "IDLIBRA"},
-    {"nome": "No rastro de catarina (2024)", "artista": "Cátia de França"},
-    {"nome": "AINDA MAIS ATORMENTADAS Y REMIXADAS (2024)", "artista": "Katy da voz e abusadas"},
-    {"nome": "NTGMX (2024)", "artista": "Carlos do Complexo"},
-    {"nome": "CORTAVENTO (2024)", "artista": "JOCA"},
-    {"nome": "Autópsia (2024)", "artista": "Getulio Abelha"},
-    {"nome": "Palavras do amor (2021)", "artista": "N'Zambi"},
-    {"nome": "DEDO NO CUE (2025)", "artista": "CyberKills"},
-    {"nome": "SEXTAPE (2023)", "artista": "Kaya Conky"},
-    {"nome": "Raio Mata (2024)", "artista": "Beró"},
-    {"nome": "Amor (2025)", "artista": "Lupe de Lupe"},
-    {"nome": "Desencontro (2024)", "artista": "O quartinho"},
-    {"nome": "Jesus Ñ Voltará(Deluxe) (2024)", "artista": "Mateus Fazeno Rock"},
-    {"nome": "in.corpo.ração (2024)", "artista": "Jup do Bairro"},
-    {"nome": "Quase-Romântico-Malokero-Suburbano (2023)", "artista": "Matheus de Bezerra"},
-    {"nome": "Fervo 90 (2025)", "artista": "Uana"},
-    {"nome": "Original Malokera (2025)", "artista": "LEOA"},
-    {"nome": "Paisagem (2024)", "artista": "Tuyo"},
-    {"nome": "SE EU FOSSE UMA GAROTA BRANCA (2024)", "artista": "KING Saints"},
-    {"nome": "No Reino dos Afetos 2 (2024)", "artista": "Bruno Berle"},
-    {"nome": "Brutas Amam, Choram e Sentem Raiva (2023)", "artista": "AJULIACOSTA"},
-    {"nome": "O Fim! (2024)", "artista": "DJ K"},
-    {"nome": "Orí Sessions (2022)", "artista": "morgana"},
-    {"nome": "Rito de Passá (2019)", "artista": "MC Tha"},
-    {"nome": "O Som do Litoral (2024)", "artista": "Mago de Tarso"},
-    {"nome": "Independente (2024)", "artista": "Rayssa Dias"},
-    {"nome": "É Beat Melody (2024)", "artista": "Zaynara"},
-    {"nome":"Todo Cuidado É Pouco (2025)", "artista":"Ventura Profana" }
+    {
+        "nome": "Megalomania",
+        "artista": "Uana",
+        "nome_spotify": "Megalomania",
+        "artista_spotify": "UANA",
+        "link": "https://open.spotify.com/album/6HLqdB01LNcoa5TrtgEsR6",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273d6324f40a3e714ee392fbadf",
+        "descricao": "Cantora e compositora de pop nascida e residente em Recife (PE). Com raízes no brega funk e na música eletrônica, ela começou a ganhar maior destaque no cenário musical por meio de singles e pelo EP “Pena que Acabou”, lançado em 2023. Seu primeiro álbum completo, “Megalomania”, chegou em 2024, trazendo direção criativa da própria artista e produção musical assinada por Barro e Guilherme Assis."
+    },
+    {
+        "nome": "Tanto pra Dizer",
+        "artista": "Mirela Hazin",
+        "nome_spotify": "Tanto pra Dizer",
+        "artista_spotify": "Mirela Hazin",
+        "link": "https://open.spotify.com/album/0fL7mB4LUjxUzXCkLWZ7aO",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273ab59ee0d12dfd14d303ceb4f",
+        "descricao": "Artista recifense que lançou seu disco de estreia, Tanto Pra Dizer, em abril de 2024. Interpretando e compondo todas as faixas, Mirela explora temas como insegurança e amadurecimento em um álbum marcado por sensibilidade e autoconhecimento. Com produção musical de Eutimyo, o projeto reúne 12 faixas inéditas e é fruto de um processo criativo que durou três anos. Estudante de design gráfico, ela também assinou a direção criativa do disco em parceria com artistas locais"
+    },
+    {
+        "nome": "Coisas Naturais",
+        "artista": "Marina Sena",
+        "nome_spotify": "Coisas Naturais",
+        "artista_spotify": "Marina Sena",
+        "link": "https://open.spotify.com/album/2PRDU8Oeb9f0lpgSjbaJXE",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2739c99caa3d0e3d61ee2e3777f",
+        "descricao": "Cantora e compositora mineira que se destacou pela mistura de pop, MPB e influências latinas. Em março de 2025, lançou seu terceiro álbum, Coisas Naturais, com 13 faixas que exploram temas como amor, autoconhecimento e leveza. O disco combina sonoridades eletrônicas com elementos orgânicos e visuais inspirados na natureza. Com uma estética marcante e refrões envolventes, o álbum reforça o estilo singular de Marina, consolidando seu lugar no cenário pop brasileiro."
+    },
+    {
+        "nome": "Âmago",
+        "artista": "Zendo",
+        "nome_spotify": "Âmago",
+        "artista_spotify": "Zendo",
+        "link": "https://open.spotify.com/album/7fntnPjzw5IaT5YafNKn9X",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273a5fb5284b7fe4ef84009d5bf",
+        "descricao": "Artista independente, cantor e compositor brasileiro que iniciou sua carreira aos 20 anos, trazendo influências do pop e do hip-hop, além de mesclar gêneros como rap, R&B, afrobeat e ritmos locais como brega e brega-funk. Em 2023, lançou seu primeiro videoclipe totalmente independente para o single Pautando o Afrofuturismo, firmando-se na cena pop pernambucana com uma sonoridade contagiante, letras dançantes, visuais ousados e muita dança."
+    },
+    {
+        "nome": "Gambiarra Chic, Pt.2",
+        "artista": "Irmãs de Pau",
+        "nome_spotify": "Gambiarra Chic, Pt. 2",
+        "artista_spotify": "Irmãs de Pau",
+        "link": "https://open.spotify.com/album/1cDks8kvbTPzmr8McMduVi",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273ce1fae0c06f4aab30943c345",
+        "descricao": "Dupla de artistas travestis negras de Barueri (SP) que ganhou destaque por misturar funk, rap, drill e experimental em composições marcadas por humor, crítica social e afirmação de sua  identidade. São conhecidas por suas sátiras apelativas, visuais ousados e por representarem com força a vivência trans e periférica na música. Elas também atuam como coletivo artístico, promovendo ações culturais e políticas LGBTQIAPN+."
+    },
+    {
+        "nome": "Grimestar",
+        "artista": "TREMSETE",
+        "nome_spotify": "Grimestar",
+        "artista_spotify": "Tremsete, Zoe Beats",
+        "link": "https://open.spotify.com/album/1wA5kRJDWgHhljun9AbCO9",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273a8e188b04b1da87abf1a5593",
+        "descricao": "Infelizmente, não temos uma descrição oficial desta banda, por enquanto, mas você pode conhecer melhor o trabalho e acompanhar tudo (no Instagram) através do perfil: @tremsete_"
+    },
+    {
+        "nome": "Jogo de cintura",
+        "artista": "Bell Puã",
+        "nome_spotify": "Jogo de Cintura",
+        "artista_spotify": "Bell Puã",
+        "link": "https://open.spotify.com/album/2JtXykA4JWLnJmMWenZpag",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273f081d297012844485090996b",
+        "descricao": "Cantora, poeta, compositora, atriz e historiadora recifense venceu o Slam BR em 2017 e representou o Brasil no Mundial de Slam de 2018 em Paris. Seu EP de estreia, Jogo de Cintura (2024), mescla drill, trap e ritmos nordestinos com um lirismo poético afiado e crítica social. Artista multidisciplinar, frequenta palcos e poesia falada como território de resistência e identidade."
+    },
+    {
+        "nome": "Casa Coração",
+        "artista": "Joyce Alane",
+        "nome_spotify": "Casa Coração",
+        "artista_spotify": "Joyce Alane",
+        "link": "https://open.spotify.com/album/6vSNBpqihCHJcrCVTstJMv",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273109a2766dc5b8b4a900d8ce5",
+        "descricao": "Cantora e compositora pernambucana que imprime sua identidade em tudo o que canta. Suas músicas, inspiradas por vivências pessoais e pelo cotidiano ao seu redor, estabelecem uma conexão intensa com o público, que a reconhece como porta-voz de sentimentos coletivos. Revelada nas redes sociais durante a pandemia, Joyce tem ganhado destaque na cena musical, sendo indicada a premiações e participando de importantes festivais pelo Brasil."
+    },
+    {
+        "nome": "Bacuri",
+        "artista": "Boogarins",
+        "nome_spotify": "Bacuri",
+        "artista_spotify": "Boogarins",
+        "link": "https://open.spotify.com/album/5HaNv0SaVFpzuDmy0vzcx7",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27325501d236a9ed8922f1a676f",
+        "descricao": "Banda goiana que mistura psicodelia brasileira com rock alternativo e experimental. Desde 2013, o grupo se destaca internacionalmente por sua sonoridade hipnótica, letras introspectivas e performances enérgicas."
+    },
+    {
+        "nome": "Abaixo de Zero: Hello Hell",
+        "artista": "Black Alien",
+        "nome_spotify": "Abaixo de Zero: Hello Hell",
+        "artista_spotify": "Black Alien",
+        "link": "https://open.spotify.com/album/0d9km1VogLi6sN6S95ilyT",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273de82ffcfe8f5dca0ef611e9c",
+        "descricao": "Rapper e compositor fluminense, um dos nomes mais influentes do rap nacional. Iniciou a carreira no grupo Planet Hemp nos anos 1990 e consolidou-se em carreira solo com álbuns como Babylon by Gus (2004) e Abaixo de Zero: Hello Hell (2019). Seu disco de 2019 foi aclamado como um dos melhores do ano por diversas publicações brasileiras."
+    },
+    {
+        "nome": "KM2",
+        "artista": "Ebony",
+        "nome_spotify": "KM2",
+        "artista_spotify": "Ebony",
+        "link": "https://open.spotify.com/album/5o7rJ8g9O5ltC3QJeTfvjD",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273dfa8db04f7ad181308e8a2b3",
+        "descricao": "Rapper carioca que se destacou na cena do soundcloud rap brasileiro, com letras intensas e produções melódicas e sombrias. Ela ganhou atenção com faixas autorais e mixtapes no estilo emo trap, abordando temas como saúde mental, juventude e autoimagem. Se destacou ao usar suas letras para desafiar o machismo na cena, com a diss track “Espero que Entendam” que virou assunto na cena do rap nacional em 2023."
+    },
+    {
+        "nome": "Letrux como Mulher Girafa",
+        "artista": "Letrux",
+        "nome_spotify": "Letrux como Mulher Girafa",
+        "artista_spotify": "Letrux",
+        "link": "https://open.spotify.com/album/5GT6PsXU6NutW6d197R0vU",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273798a9a2c81f6e707e77fc87e",
+        "descricao": "Infelizmente, não temos uma descrição oficial desta artista, por enquanto, mas você pode conhecer melhor o trabalho e acompanhar tudo (no Instagram) através do perfil: @leticialetrux"
+    },
+    {
+        "nome": "SIM SIM SIM",
+        "artista": "Bala Desejo",
+        "nome_spotify": "SIM SIM SIM",
+        "artista_spotify": "Bala Desejo",
+        "link": "https://open.spotify.com/album/5lPgAWFWtQOUllSFzoWJtx",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273b8476fccdbc3d98353b799ac",
+        "descricao": "Quarteto musical carioca formado por Dora Morelenbaum, Julia Mestre, Lucas Nunes e Zé Ibarra. O grupo une MPB, psicodelia, samba e pop em uma sonoridade retrô com clima de baile tropicalista."
+    },
+    {
+        "nome": "Me Chama de Gato Que Eu Sou Sua",
+        "artista": "Ana Frango Elétrico",
+        "nome_spotify": "Me Chama de Gato Que Eu Sou Sua",
+        "artista_spotify": "Ana Frango Elétrico",
+        "link": "https://open.spotify.com/album/0ge5ZLyto8vFQrif125mtW",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27334f55bdd0179fef96e842e89",
+        "descricao": "Cantora e compositora carioca conhecida por seu estilo único que mistura MPB, indie e experimentalismo. Suas músicas combinam letras poéticas e intimistas com sonoridades que transitam entre o acústico e o eletrônico, criando atmosferas sensíveis e originais. Com uma voz marcante e arranjos criativos, Ana é uma das vozes mais autênticas da nova geração da música brasileira independente."
+    },
+    {
+        "nome": "o fim é um começo",
+        "artista": "a terra vai se tornar um planeta inabitável",
+        "nome_spotify": "o fim é um começo",
+        "artista_spotify": "a terra vai se tornar um planeta inabitável, magnólia",
+        "link": "https://open.spotify.com/album/0gzmYbVouBACqA8uEiXm4g",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2736a29b0a6ba0805c79195331e",
+        "descricao": "Infelizmente, não temos uma descrição oficial desta banda, por enquanto, mas você pode conhecer melhor o trabalho e acompanhar tudo (no Instagram) através do perfil: @atvstupi"
+    },
+    {
+        "nome": "MAU",
+        "artista": "Jaloo",
+        "nome_spotify": "MAU",
+        "artista_spotify": "Jaloo",
+        "link": "https://open.spotify.com/album/5itWC5VVY2sbQgQP0pCxo3",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27325a7cf8241479b7e27182e56",
+        "descricao": "Cantora, produtora e performer que mistura pop, eletrônica e sonoridades regionais brasileiras em uma musicalidade única e futurista. Nascida no Pará, ela transforma influências do Norte em faixas sensoriais e emocionais, sempre com uma estética visual marcante. Do experimental ao dançante, Jaloo — agora Jade Melo — é puro impacto criativo e originalidade."
+    },
+    {
+        "nome": "Antiasfixiante",
+        "artista": "Kinoa",
+        "nome_spotify": "Antiasfixiante",
+        "artista_spotify": "Kinoa",
+        "link": "https://open.spotify.com/album/2mbAAWCZUkn3xrKy4kvBwz",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2734e5baf4ea7969e255155409b",
+        "descricao": "Infelizmente, não temos uma descrição oficial desta banda, por enquanto, mas você pode conhecer melhor o trabalho e acompanhar tudo (no Instagram) através do perfil: @kinoa.band"
+    },
+    {
+        "nome": "Quebra Asa, vol.1",
+        "artista": "Fernando motta",
+        "nome_spotify": "Quebra Asa, Vol. 1",
+        "artista_spotify": "Fernando Motta, Jonathan Tadeu, Vitor Brauer",
+        "link": "https://open.spotify.com/album/4s1Jms2IquvzlFKCMgEnWm",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2735bc349613158d721dac10297",
+        "descricao": "Compositor mineiro que resgata vertentes enérgicas e harmônicas do indie, transitando entre jangle, shoegaze, dream pop, pós-punk e slowcore. Natural de Coromandel e radicado em Belo Horizonte, ele incorpora elementos da música local de forma espontânea, refletidos principalmente no lirismo e na força das melodias."
+    },
+    {
+        "nome": "Muganga (2023)",
+        "artista": "IDLIBRA",
+        "nome_spotify": "Muganga",
+        "artista_spotify": "IDLIBRA",
+        "link": "https://open.spotify.com/album/0HwlP4OqYtYGOEEOmxjZQn",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273bc70986f64bd81e3fdd2f795",
+        "descricao": "DJ do Nordeste do Brasil, reconhecida por sua sonoridade fluida e energética, fundamentada em referências negras e dissidentes. Sua pesquisa musical abrange ritmos progressivos, como techno e hip house, além de batidas quebradas, como afrobeat e guetto club. Além de atuar como DJ, ela é responsável pela curadoria de artistas e DJs do festival Coquetel Molotov."
+    },
+    {
+        "nome": "AINDA MAIS ATORMENTADAS Y REMIXADAS (2024)",
+        "artista": "Katy da voz e abusadas",
+        "nome_spotify": "AINDA MAIS ATORMENTADAS Y REMIXADAS",
+        "artista_spotify": "Katy da Voz e as abusadas",
+        "link": "https://open.spotify.com/album/4lVVzs2owhriY02244nAUJ",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2733cd39b14ff5c054e4a2781cb",
+        "descricao": "Katy da Voz e Abusadas é um coletivo artístico pernambucano que mistura ritmos regionais, rap e elementos urbanos em suas produções. Com letras fortes e um som que valoriza a cultura periférica, o grupo destaca a voz feminina e a representatividade na música brasileira contemporânea."
+    },
+    {
+        "nome": "NTGMX (2024)",
+        "artista": "Carlos do Complexo",
+        "nome_spotify": "NTGMX",
+        "artista_spotify": "Carlos do Complexo",
+        "link": "https://open.spotify.com/album/1PX0GHNvrbAHtOyfBSilVQ",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2738c8b4d7321e8db2860aa16c3",
+        "descricao": "Rapper e compositor carioca conhecido por suas letras contundentes que refletem a vida nas favelas do Rio de Janeiro. Seu som combina o trap com influências do rap tradicional, trazendo relatos reais, crítica social e uma visão autêntica da periferia."
+    },
+    {
+        "nome": "CORTAVENTO",
+        "artista": "JOCA",
+        "nome_spotify": "CORTAVENTO",
+        "artista_spotify": "JOCA",
+        "link": "https://open.spotify.com/album/7nyXHb7J8I4piuHtHodwKF",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273693ac3b9982f8bb79aaa2fab",
+        "descricao": "Compositor, artista de rua e baterista da banda Almoço Nu. Em 2019, lançou seu álbum de estreia A Salvação É Pelo Risco, que usa samples para explorar memórias sonoras e visuais. Atua ativamente na cena cultural independente."
+    },
+    {
+        "nome": "Autópsia",
+        "artista": "Getulio Abelha",
+        "nome_spotify": "Autópsia",
+        "artista_spotify": "Getúlio Abelha",
+        "link": "https://open.spotify.com/album/1aD0HNALN0uF2PVlAQSHlE",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2739dea1d78d7069f4e2ceccf75",
+        "descricao": "Multiartista brasileiro que transita entre o forró tradicional, o pop e a música eletrônica. Suas obras abordam temas atuais como política, gênero, corpo e críticas ao conservadorismo, permeando sua música, dança e audiovisual. Nos palcos, Getúlio é pura energia, com figurinos vibrantes e performances poderosas ao lado de seus bailarinos coreografados, mesclando atitude punk e pop. Com letras ácidas, irônicas e críticas, ele nos convida a dançar, refletir e resistir."
+    },
+    {
+        "nome": "DEDO NO CUE (2025)",
+        "artista": "CyberKills",
+        "nome_spotify": "DEDO NO CUE",
+        "artista_spotify": "CyberKills",
+        "link": "https://open.spotify.com/album/3vz7Ri0QELAyRGd0x645vd",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273c4cefc0d80d81b10465242d7",
+        "descricao": "Duo que funde funk, pop e eletrônica com atitude queer e beats futuristas. Entre remixes explosivos e faixas autorais cheias de identidade, o projeto nasceu da internet e hoje marca presença nos palcos, pistas e playlists do Brasil. Produção de ponta, estética afiada e som pra sentir no corpo."
+    },
+    {
+        "nome": "SEXTAPE (2023)",
+        "artista": "Kaya Conky",
+        "nome_spotify": "SEXTAPE",
+        "artista_spotify": "Kaya Conky",
+        "link": "https://open.spotify.com/album/5m2Qjtg2Og7ee5TcTgJZkn",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273b989a876667811aa48c1b63d",
+        "descricao": "Cantora, compositora, performer e transformista paulistana, Kaya Conky mescla rap, funk e música eletrônica em um som experimental e cheio de atitude. Suas letras são provocativas, abordando temas como identidade, política e corpo, e ela se destaca como uma voz potente na cena independente e LGBTQIA+ brasileira."
+    },
+    {
+        "nome": "Raio Mata (2024)",
+        "artista": "Beró",
+        "nome_spotify": "Raio Mata",
+        "artista_spotify": "Beró",
+        "link": "https://open.spotify.com/album/5wHoR2i17bOULUduNtS5Pj",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273bce617f8994452f8ab8ed246",
+        "descricao": "Infelizmente, não temos uma descrição oficial deste artista, por enquanto, mas você pode conhecer melhor o trabalho e acompanhar tudo (no Instagram) através do perfil: @berolero"
+    },
+    {
+        "nome": "Amor (2025)",
+        "artista": "Lupe de Lupe",
+        "nome_spotify": "Amor",
+        "artista_spotify": "Lupe De Lupe",
+        "link": "https://open.spotify.com/album/31cdOaeEbzQO8yLI8w8xip",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27363fdd4da169de8d4c33e1f54",
+        "descricao": "Banda de rock alternativo do interior de Minas Gerais, formada por Vitor Brauer, Jonathan Tadeu, Renan Benini e Gustavo Scholz. Contabilizam mais de quinze anos de estrada e diversas críticas mistas ao longo da carreira."
+    },
+    {
+        "nome": "Desencontro (2024)",
+        "artista": "O quartinho",
+        "nome_spotify": "Desencontro",
+        "artista_spotify": "O Quartinho",
+        "link": "https://open.spotify.com/album/383zG5sCow8SBk0lARjb8V",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27326ea6b90aa24d4a4beccb1b4",
+        "descricao": "Banda alternativa recifense que inicia sua trajetória musical a partir do brega, um dos ritmos mais populares da cidade. Também conta com influências do rock alternativo e do indie, o grupo busca construir uma sonoridade original, unindo a diversidade cultural de Recife a outras estéticas musicais contemporâneas e emergentes."
+    },
+    {
+        "nome": "Jesus Ñ Voltará(Deluxe) (2024)",
+        "artista": "Mateus Fazeno Rock",
+        "nome_spotify": "Jesus Ñ Voltará (Deluxe)",
+        "artista_spotify": "Mateus Fazeno Rock",
+        "link": "https://open.spotify.com/album/2QTXZFCPiqFZcuGT2JkngO",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27351811b429132e670d0c8c8e2",
+        "descricao": "Cria da Sapiranga, bairro de Fortaleza, Mateus é o elo fundador e criativo do Fazeno Rock, potente rede de produção cultural formada por artistas ligados pelo rock de favela. O projeto busca contrapor às formas hegemônicas de criar rock sob as influências do grunge, punk, funk br, rap, reggae/dub e r&b."
+    },
+    {
+        "nome": "in.corpo.ração (2024)",
+        "artista": "Jup do Bairro",
+        "nome_spotify": "sinfonia do corpo (in.corpo.ração)",
+        "artista_spotify": "Jup do Bairro",
+        "link": "https://open.spotify.com/album/3GwM3umGHBVqPg9YubFee5",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273c6fb712d548c33fe08f285f3",
+        "descricao": "Cantora, compositora e produtora baiana que mistura música eletrônica, samba e beats contemporâneos, com letras que falam sobre vivências LGBTQIA+ e a periferia. É uma das vozes mais autênticas e inovadoras da nova cena brasileira."
+    },
+    {
+        "nome": "Quase-Romântico-Malokero-Suburbano (2023)",
+        "artista": "Matheus de Bezerra",
+        "nome_spotify": "Quase-Romântico-Malokero-Suburbano",
+        "artista_spotify": "Matheus de Bezerra",
+        "link": "https://open.spotify.com/album/2Ib2CLGMnZGTE831Vx0IEU",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273a15a9b7aae709d16c7cc997c",
+        "descricao": "Artista recifense que começou a compor aos 9 anos e descobriu na adolescência, com um violão herdado do avô, sua maneira de dar forma a letras inspiradas na MPB clássica. Suas canções refletem visões de futuro, conselhos pessoais e a união das pessoas pela força das ondas sonoras, que ele vê como as “primeiras pinturas rupestres nas paredes da alma”."
+    },
+    {
+        "nome": "Fervo 90 (2025)",
+        "artista": "Uana",
+        "nome_spotify": "Fervo 90!",
+        "artista_spotify": "UANA, eutimyo",
+        "link": "https://open.spotify.com/album/2X15ZYmULWbUPZWGztxJ8X",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2738e640f12dc7c5d2689e3f893",
+        "descricao": "Cantora e compositora de pop nascida e residente em Recife (PE). Com raízes no brega funk e na música eletrônica, ela começou a ganhar maior destaque no cenário musical por meio de singles e pelo EP “Pena que Acabou”, lançado em 2023. Seu primeiro álbum completo, “Megalomania”, chegou em 2024, trazendo direção criativa da própria artista e produção musical assinada por Barro e Guilherme Assis."
+    },
+    {
+        "nome": "Original Malokera (2025)",
+        "artista": "LEOA",
+        "nome_spotify": "Original Malokera",
+        "artista_spotify": "LEOA",
+        "link": "https://open.spotify.com/album/7DbMfDyobV6VHroeOMZjU8",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273ea51cfa86f3b9bf170b20285",
+        "descricao": "De Natal, Rio Grande do Norte, pro Mundo. Depois de 9 anos à frente da banda Luisa e os alquimistas, Luisa Nascimento se transforma em LEOA para alçar novos vôos como artista solo e sacudir o Pop Under Brasileiro com muita autenticidade."
+    },
+    {
+        "nome": "Paisagem (2024)",
+        "artista": "Tuyo",
+        "nome_spotify": "Paisagem",
+        "artista_spotify": "Tuyo",
+        "link": "https://open.spotify.com/album/6QJfLIoORUht7DGSfZmcNo",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273bae9ad97b494ba3f5cccecd2",
+        "descricao": "Duo paulistano de indie pop formado por Ana e Denis. Com letras introspectivas e sonoridade minimalista, Tuyo cria uma atmosfera íntima e sensível, explorando temas como vulnerabilidade, relações e autoconhecimento. É uma das bandas mais aclamadas da nova cena independente brasileira."
+    },
+    {
+        "nome": "SE EU FOSSE UMA GAROTA BRANCA (2024)",
+        "artista": "KING Saints",
+        "nome_spotify": "SE EU FOSSE UMA GAROTA BRANCA",
+        "artista_spotify": "KING Saints",
+        "link": "https://open.spotify.com/album/37ZRSsLiy3YUa4OuerQnU9",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273a69b587d69058ec40b32122d",
+        "descricao": "Mariane Chuaque, apresenta o nome artístico KING Saints e traz uma mistura de pop contemporâneo com influências de R&B e eletrônico. Seu som é marcado por uma voz suave, letras que falam sobre identidade e empoderamento, e produções modernas que dialogam com o universo da música negra e urbana."
+    },
+    {
+        "nome": "No Reino dos Afetos 2 (2024)",
+        "artista": "Bruno Berle",
+        "nome_spotify": "No Reino dos Afetos 2",
+        "artista_spotify": "Bruno Berle",
+        "link": "https://open.spotify.com/album/4ttWO2l1X4mcpwFoKZiaAR",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2731c0e7a1b80427df050705cb5",
+        "descricao": "Compositor e cantor mineiro, Bruno Berle mescla elementos de MPB, samba e pop em suas músicas. Conhecido por suas letras sensíveis e melodias envolventes, ele vem ganhando destaque na cena independente com trabalhos autorais que falam de amor, cotidiano e reflexões pessoais."
+    },
+    {
+        "nome": "Brutas Amam, Choram e Sentem Raiva (2023)",
+        "artista": "AJULIACOSTA",
+        "nome_spotify": "Brutas Amam, Choram e Sentem Raiva",
+        "artista_spotify": "AJULIACOSTA",
+        "link": "https://open.spotify.com/album/0LVN0GsRFWkrhfhMVbJuBj",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273397e0a1e123457d142f010aa",
+        "descricao": "Artista mineira que transita entre o rap, o R&B e o pop, AJULIACOSTA mistura batidas urbanas com letras intensas e reflexivas. Sua música tem um toque contemporâneo e forte presença feminina na cena independente."
+    },
+    {
+        "nome": "O Fim! (2024)",
+        "artista": "DJ K",
+        "nome_spotify": "O Fim!",
+        "artista_spotify": "DJ K",
+        "link": "https://open.spotify.com/album/3qelC5WxzH4eBL3w1BjCNL",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2737660279ffc885762048d3ef7",
+        "descricao": "DJ e produtora paulista, DJ K é conhecida por sets que misturam funk, trap e música eletrônica, trazendo energia e inovação para as pistas. Atua também como curadora de festas e eventos que celebram a diversidade cultural."
+    },
+    {
+        "nome": "Orí Sessions (2022)",
+        "artista": "morgana",
+        "nome_spotify": "Orí Sessions",
+        "artista_spotify": "morgana",
+        "link": "https://open.spotify.com/album/3fHMgzzatqT2doXtSSEeCL",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27385d86553e7a266cf42755d1c",
+        "descricao": "Cantora e compositora sergipana de 22 anos, uma promessa da nova geração da MPB e pop brasileiro. Desde a infância, influenciada pelos pais músicos, desenvolveu paixão pela música. Ficou conhecida nacionalmente aos 15 anos no The Voice Kids 2018, impressionando jurados com sua versão de “Hey Jude”."
+    },
+    {
+        "nome": "Rito de Passá (2019)",
+        "artista": "MC Tha",
+        "nome_spotify": "Rito de Passá",
+        "artista_spotify": "Mc Tha",
+        "link": "https://open.spotify.com/album/1KsyfFpeMbShnbcI0aXkqJ",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273d75a0bbde6a6ba3b52bdafd6",
+        "descricao": "Nascida no Recife, MC Tha é uma voz importante do rap e da cultura periférica brasileira. Com letras engajadas e flow marcante, ela aborda temas como racismo, identidade e empoderamento feminino, conquistando destaque nacional."
+    },
+    {
+        "nome": "O Som do Litoral (2024)",
+        "artista": "Mago de Tarso",
+        "nome_spotify": "O Som do Litoral",
+        "artista_spotify": "Mago de Tarso",
+        "link": "https://open.spotify.com/album/3NMCvWJPRL56sFSfmEabuL",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273d5a9be761542b22fdee37b82",
+        "descricao": "Rapper recifense que iniciou sua carreira nas batalhas de rima, destacando-se rapidamente no cenário local. Seu estilo único mistura trap com influências do manguebeat, criando uma sonoridade autêntica e representativa da cultura pernambucana."
+    },
+    {
+        "nome": "Independente (2024)",
+        "artista": "Rayssa Dias",
+        "nome_spotify": "Independente",
+        "artista_spotify": "Rayssa Dias",
+        "link": "https://open.spotify.com/album/4YftSigUO1HmG0IBPb7lyl",
+        "capa": "https://i.scdn.co/image/ab67616d0000b2731c8efa0e0e4c95b29d1cc30a",
+        "descricao": "Cantora e compositora pernambucana, pioneira do brega funk feminino. Natural de Olinda, começou sua carreira solo aos 20 anos e, desde então, tem se destacado por suas letras empoderadas e performances cativantes. Rayssa representa a força e a autenticidade da periferia em sua música."
+    },
+    {
+        "nome": "É Beat Melody",
+        "artista": "Zaynara",
+        "nome_spotify": "É Beat Melody",
+        "artista_spotify": "Zaynara",
+        "link": "https://open.spotify.com/album/52wMdwicif5wocjT6Zh1dy",
+        "capa": "https://i.scdn.co/image/ab67616d0000b27386f101c5efb5a6295906268f",
+        "descricao": "Zaynara é cantora e compositora brasileira que combina MPB, pop e elementos eletrônicos para criar uma sonoridade contemporânea e envolvente. Suas músicas exploram temas como identidade, afeto e autoconhecimento, transmitidos por uma voz delicada e expressiva. Com influências da música brasileira tradicional e do pop alternativo, Zaynara vem se consolidando como uma artista promissora na cena independente nacional."
+    },
+    {
+        "nome": "Todo Cuidado É Pouco (2025)",
+        "artista": "Ventura Profana",
+        "nome_spotify": "Todo Cuidado É Pouco",
+        "artista_spotify": "Ventura Profana",
+        "link": "https://open.spotify.com/album/4ZCEEi3n7nEgHvHLY6xZrv",
+        "capa": "https://i.scdn.co/image/ab67616d0000b273283e91f8eb092ba1ce74e533",
+        "descricao": "Pastora, cantora, escritora, compositora e artista visual. Seu trabalho artístico e missionário celebra a resistência e as infinitas possibilidades de vida para pessoas trans e travestis. Ela desenvolve uma “teologia da transmutação”, que busca transformar as experiências de corpos negros, indígenas e LGBTQIA+."
+    }
 ]

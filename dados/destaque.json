@@ -1,9 +1,10 @@
 {
     "semana": 31,
     "album": {
-        "nome": "Bacuri (2025)",
-        "artista": "Boogarins",
-        "capa": "imagens/Capa_Bacuri_Boogarins",
-        "descricao": "blebleble"
+        "nome": "sinfonia do corpo (in.corpo.ração)",
+        "artista": "Jup do Bairro",
+        "capa_url": "https://i.scdn.co/image/ab67616d0000b273c6fb712d548c33fe08f285f3",
+        "spotify_url": "https://open.spotify.com/album/3GwM3umGHBVqPg9YubFee5",
+        "descricao": "Cantora, compositora e produtora baiana que mistura música eletrônica, samba e beats contemporâneos, com letras que falam sobre vivências LGBTQIA+ e a periferia. É uma das vozes mais autênticas e inovadoras da nova cena brasileira."
     }
 }

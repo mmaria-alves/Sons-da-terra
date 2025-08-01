@@ -46,7 +46,6 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 ### Novas funcionalidades
 - **RF007 - Recuperação de senha**  
   Geração e envio de código por email.
-  
 - **RF008 - API do Spotify**  
   Quando o usuário clicar no nome de um álbum será automaticamente redirecionado para a página desse álbum no spotify
 ### Melhorias

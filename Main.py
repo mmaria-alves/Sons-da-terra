@@ -1,9 +1,11 @@
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QInputDialog, QHBoxLayout
+import webbrowser
+from urllib.request import urlopen
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QInputDialog, QHBoxLayout, QScrollArea
 from PySide6.QtGui import QFontDatabase, QFont, QIcon, QPixmap, QTransform
 from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, Property
 from autenticadores import Autenticadores, configuracoesUsuario
-from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
+from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd, Album
 
 
 class telaLogin(QWidget):
@@ -17,9 +19,8 @@ class telaLogin(QWidget):
         self.setStyleSheet('background-color: #fcd967')
         
         # Definindo as fontes que serão utilizadas
-        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
         
         # Definindo as configurações da animação da imagem
         self.original_pixmap = None
@@ -72,7 +73,6 @@ class telaLogin(QWidget):
 
         if familias:
             return QFont(familias[0], 50)
-
         else:
             return QFont("Arial", 20)
 
@@ -135,7 +135,7 @@ class telaLogin(QWidget):
         self.timer.start(500)
 
         label_login = QLabel('Login: ')
-        label_login.setFont(self.fonte_subtitulo)
+        label_login.setFont(self.fonte_titulo)
         label_login.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold;")
         label_login.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
@@ -202,9 +202,10 @@ class telaCadastro(QWidget):
         self.setGeometry(200, 200, 500, 500)
         self.setStyleSheet('background-color: #fcd967')
         
-        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        # Definindo as fontes que serão utilizadas
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
+        
         # Configurações iniciais da animação:
         self.original_pixmap = None
         self._angle = 0
@@ -285,7 +286,7 @@ class telaCadastro(QWidget):
         botao_voltar.clicked.connect(self.voltar)
 
         label_cadastro = QLabel("Cadastro:")
-        label_cadastro.setFont(self.fonte_subtitulo)
+        label_cadastro.setFont(self.fonte_titulo)
         label_cadastro.setStyleSheet("color: #fffffd; font-size: 70px; font-weight: bold;")
         label_cadastro.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
@@ -339,9 +340,9 @@ class telaRecuperar1(QWidget):
         self.setGeometry(200, 200, 400, 200)
         self.setStyleSheet('background-color: #fcd967')
         
-        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        #Definindo as fontes que serão utilizadas
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
 
         self.init_ui()
 
@@ -385,7 +386,7 @@ class telaRecuperar1(QWidget):
 Recuperação 
 De senha: ''')
         
-        label_recuperacao.setFont(self.fonte_subtitulo)
+        label_recuperacao.setFont(self.fonte_titulo)
         label_recuperacao.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold;")
         label_recuperacao.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
@@ -429,9 +430,9 @@ class telaRecuperar2(QWidget):
             self.setGeometry(200, 200, 400, 300)
             self.setStyleSheet('background-color: #fcd967')
             
-            self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-            self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-            self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+            # Definindo as fontes que serão utilizadas
+            self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+            self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
 
             self.init_ui()
         
@@ -466,7 +467,7 @@ class telaRecuperar2(QWidget):
         def init_ui(self):
             layout = QVBoxLayout()
             label_recuperacao = QLabel('Código: ')
-            label_recuperacao.setFont(self.fonte_subtitulo)
+            label_recuperacao.setFont(self.fonte_titulo)
             label_recuperacao.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold;")
             label_recuperacao.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
@@ -476,7 +477,7 @@ class telaRecuperar2(QWidget):
             self.codigo_input.setPlaceholderText('Digite o código')
             
             label_nova_senha = QLabel('Nova senha: ')
-            label_nova_senha.setFont(self.fonte_subtitulo)
+            label_nova_senha.setFont(self.fonte_titulo)
             label_nova_senha.setStyleSheet("color: #fffffd; font-size: 40px; font-weight: bold")
             label_nova_senha.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
 
@@ -512,9 +513,8 @@ class menuPrincipal(QWidget):
         self.setGeometry(200, 100, 960, 540)
         self.setStyleSheet('background-color: #fcd967')
         
-        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
         
         self.original_pixmap = None
         self._angle = 0
@@ -529,7 +529,6 @@ class menuPrincipal(QWidget):
 
         if familias:
             return QFont(familias[0], 50)
-
         else:
             return QFont("Arial", 20)
     
@@ -575,7 +574,7 @@ class menuPrincipal(QWidget):
         botao_avaliar.setFixedSize(480, 25)
         botao_avaliar.setFont(self.fonte_texto)
         botao_avaliar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
-        botao_avaliar.clicked.connect(self.avaliar_albuns)
+        botao_avaliar.clicked.connect(self.abrir_avaliacao)
         
         botao_shoutboxd = QPushButton("Shoutboxd")
         botao_shoutboxd.setFixedSize(480, 25)
@@ -612,6 +611,7 @@ class menuPrincipal(QWidget):
         self.iniciar_animacao()
 
         layout_esquerda.addWidget(self.label_imagem)
+        layout_esquerda.addStretch()
         layout_esquerda.addWidget(botao_recomendacao)
         layout_esquerda.addWidget(botao_avaliar)
         layout_esquerda.addWidget(botao_shoutboxd)
@@ -624,31 +624,47 @@ class menuPrincipal(QWidget):
         label_destaque.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 40px")
         label_destaque.setAlignment(Qt.AlignHCenter| Qt.AlignTop)
         
-        destaque = self.autenticador.destaque_da_semana()
+        album_destaque = self.autenticador.destaque_da_semana()
+        texto_destaque = f'{album_destaque.nome} \npor {album_destaque.artista}'
+        descricao_destaque = f'{album_destaque.descricao}'
 
-        album = destaque['album']
-        texto_destaque = (f'''{album['nome']}
-por {album['artista']}''')
-        
-        capa = QPixmap(album['capa'])
-        self.pixmap_capa = capa.scaled(230, 230, Qt.KeepAspectRatio, Qt.SmoothTransformation) 
+        capa = self.autenticador.carregar_pixmap(album_destaque.capa_url)
+        if not capa.isNull():
+            self.pixmap_capa = capa.scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        else:
+            print("Erro ao carregar a imagem da capa")
 
         self.label_album_destaque = QLabel(texto_destaque)
         self.label_album_destaque.setFixedSize(480, 70)
         self.label_album_destaque.setFont(self.fonte_titulo)
         self.label_album_destaque.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 20px; border-radius: 5px;")
         self.label_album_destaque.setAlignment(Qt.AlignCenter)
-    
-        
+
         self.label_capa = QLabel(self)
-        self.label_capa.setFixedSize(480, 240)
+        self.label_capa.setFixedSize(480, 210)
         self.label_capa.setStyleSheet("background-color: #fcd967; border-radius: 15px")
         self.label_capa.setPixmap(self.pixmap_capa)
         self.label_capa.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
+        self.label_descricao = QLabel(descricao_destaque)
+        self.label_descricao.setFixedSize(480, 135)
+        self.label_descricao.setFont(self.fonte_texto)
+        self.label_descricao.setWordWrap(True)
+        self.label_descricao.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 15px; font-weight: bold")
+        self.label_descricao.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+
+        self.botao_abrir_spotify = QPushButton("Abrir no Spotify")
+        self.botao_abrir_spotify.setFixedSize(480, 25)
+        self.botao_abrir_spotify.setFont(self.fonte_texto)
+        self.botao_abrir_spotify.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        self.botao_abrir_spotify.clicked.connect(lambda: webbrowser.open(album_destaque.spotify_url))
+
         layout_direita.addWidget(label_destaque)
         layout_direita.addWidget(self.label_capa)
         layout_direita.addWidget(self.label_album_destaque)
+        layout_direita.addWidget(self.label_descricao)
+        layout_direita.addWidget(self.botao_abrir_spotify)        
         layout_direita.addStretch()
 
         main_layout.addLayout(layout_esquerda)
@@ -688,12 +704,19 @@ por {album['artista']}''')
         except Exception as e:
             print(f"Erro ao abrir 'ouvindo agora': {e}")
     
+    
     def abrir_configuracoes(self):
         self.parar_animacao()
         self.tela_config = TelaConfiguracoes(self.usuario, self.usuarios)
         self.tela_config.show()
         self.close()
-    
+
+    def abrir_avaliacao(self):
+        self.parar_animacao()
+        self.tela_avaliacao = telaAvaliacao(autenticador)
+        self.tela_avaliacao.show()
+        self.close()
+
 class TelaConfiguracoes(QWidget):
     def __init__(self, usuario_logado, usuarios):
         super().__init__()
@@ -705,9 +728,8 @@ class TelaConfiguracoes(QWidget):
         self.setStyleSheet('background-color: #fcd967')
         
         # Definindo as fontes que serão utilizadas
-        self.fonte_subtitulo = self.carregar_fonte("fontes/Coco-Sharp-Bold-trial.ttf")
-        self.fonte_titulo = self.carregar_fonte("fontes/Coco-Sharp-Regular-trial.ttf")
-        self.fonte_texto = self.carregar_fonte("fontes/Coco-Sharp-Light-trial.ttf")
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
         
         # Configurações iniciais da animação:
         self.original_pixmap = None
@@ -858,7 +880,228 @@ class TelaConfiguracoes(QWidget):
             if sucesso:
                 QMessageBox.information(self, "Sucesso", "Conta apagada.")
                 self.voltar_login()
-                
+
+class telaAvaliacao(QWidget):
+        def __init__(self, autenticador):
+            super().__init__()
+            self.autenticador = autenticador
+            self.usuario = autenticador.usuario_logado
+            self.usuarios = autenticador.carregar_usuarios()
+            self.albuns = autenticador.carregar_albuns()
+
+            self.setWindowTitle("Sons da Terra")
+            self.setWindowIcon(QIcon('imagens/Logo.png'))
+            self.setGeometry(200, 100, 960, 540)
+            self.setStyleSheet('background-color: #fcd967')
+
+            self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+            self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
+
+            # Configurações iniciais da animação:
+            self.original_pixmap = None
+            self._angle = 0
+            self.animacao = None
+            self.label_imagem = None
+        
+            self.init_ui()
+        
+        def carregar_fonte(self, caminho_fonte: str):
+            id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+            familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+            if familias:
+                return QFont(familias[0], 50)
+            else:
+                return QFont("Arial", 20)
+        
+        @Property(float)
+        def angle(self):
+            return self._angle
+
+        @angle.setter
+        def angle(self, valor):
+            self._angle = valor
+            self.atualizar_rotacao()
+
+        def atualizar_rotacao(self):
+            if self.original_pixmap and self.label_imagem:
+                transform = QTransform()
+                transform.rotate(self._angle)
+                rotated_pixmap = self.original_pixmap.transformed(transform, Qt.SmoothTransformation)
+                self.label_imagem.setPixmap(rotated_pixmap)
+
+        def animacao_logo(self):
+            self.animacao = QPropertyAnimation(self, b"angle")
+            self.animacao.setDuration(3000)
+            self.animacao.setStartValue(0)
+            self.animacao.setEndValue(360)
+            self.animacao.setLoopCount(-1)
+            self.animacao.setEasingCurve(QEasingCurve.Linear)
+
+        def iniciar_animacao(self):
+            '''Inicia a animação'''
+            if self.animacao:
+                self.animacao.start()
+
+        def parar_animacao(self):
+            '''Para a animação'''
+            if self.animacao:
+                self.animacao.stop()   
+
+        def voltar(self):
+            self.parar_animacao()
+            self.hide()
+            self.menu = menuPrincipal(self.autenticador)
+            self.menu.show()
+
+        def salvar_avaliacao(self):
+            nome_album = self.nome_input.text().strip()
+            artista = self.artista_input.text().strip()
+            nota_str = self.nota_input.text().strip()
+            comentario = self.comentario_input.text().strip()
+
+            email = self.usuario.email if hasattr(self.usuario, 'email') else self.usuario.get('email')
+
+            if not nome_album or not artista or not nota_str or not comentario:
+                QMessageBox.warning(self, "Erro", "O preenchimento de todos os campos é obrigatório.")
+                return
+            
+            try: 
+                nota = float(nota_str)
+                if nota < 0 or nota > 5:
+                    raise ValueError
+            except ValueError:
+                QMessageBox.warning(self, "Erro", "A nota deve ser um número de 0 a 5.")
+                return
+            
+            if len(comentario) > 250:
+                QMessageBox.warning(self, "Erro", "Comentário não pode ultrapassar o limite de 250 caracteres")
+                return
+            
+            try:
+                self.autenticador.salvar_avaliacao(email, nome_album, artista, nota, comentario)
+                QMessageBox.information(self, "Sucesso", "Avaliação salva com sucesso.")
+                self.nome_input.clear()
+                self.artista_input.clear()
+                self.nota_input.clear()
+                self.comentario_input.clear()
+            except Exception as e:
+                QMessageBox.critical(self, "Erro", f"Erro ao salvar: {e}")
+
+        def criar_card(self, album):
+            card = QWidget()
+            layout = QVBoxLayout(card)
+
+            info_album = QLabel(f"{album.nome} — {album.artista}")
+            info_album.setWordWrap(True)
+            info_album.setFont(self.fonte_texto)
+            info_album.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 20px")
+            
+            botao_spotify = QPushButton("Ver no Spotify")
+            botao_spotify.setFont(self.fonte_texto)
+            botao_spotify.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+            botao_spotify.clicked.connect(lambda: webbrowser.open(album.spotify_url))
+            
+            layout.addWidget(info_album)
+            layout.addWidget(botao_spotify)
+
+            return card
+            
+
+        def init_ui(self):
+            main_layout = QHBoxLayout()
+            layout_esquerda = QVBoxLayout()
+            layout_direita = QVBoxLayout()
+
+            # layout da parte esquerda da janela
+            label_avaliacao = QLabel("Avaliação")
+            label_avaliacao.setFixedSize(480, 100)
+            label_avaliacao.setFont(self.fonte_titulo)
+            label_avaliacao.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 40px")
+            label_avaliacao.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+            imagem = QPixmap('imagens/Logo.png')
+            self.original_pixmap = imagem.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+            self.label_imagem = QLabel(self)
+            self.label_imagem.setFixedSize(480, 170)
+            self.label_imagem.setAlignment(Qt.AlignCenter)
+            self.label_imagem.setPixmap(self.original_pixmap)
+
+            self.animacao_logo()
+            self.iniciar_animacao()
+
+            label_nome = QLabel("Nome: ")
+            label_nome.setFont(self.fonte_titulo)
+            label_nome.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+            label_nome.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+            
+            label_nota = QLabel('Nota: ')
+            label_nota.setFont(self.fonte_titulo)
+            label_nota.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+            label_nota.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+            label_artista = QLabel("Artista: ")
+            label_artista.setFont(self.fonte_titulo)
+            label_artista.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+            label_artista.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+            label_comentario = QLabel("Comentário: ")
+            label_comentario.setFont(self.fonte_titulo)
+            label_comentario.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+            label_comentario.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+        
+            self.nome_input = QLineEdit()
+            self.nome_input.setPlaceholderText("Nome do álbum")
+
+            self.artista_input = QLineEdit()
+            self.artista_input.setPlaceholderText("Nome do artista")
+            
+            self.nota_input = QLineEdit()
+            self.nota_input.setPlaceholderText('Nota (0-5)')
+
+            self.comentario_input = QLineEdit()
+            self.comentario_input.setPlaceholderText('Comentário (até 250 caracteres)')
+
+            botao_salvar_avaliacao = QPushButton("Salvar")
+            botao_salvar_avaliacao.setFont(self.fonte_texto)
+            botao_salvar_avaliacao.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+            botao_salvar_avaliacao.clicked.connect(self.salvar_avaliacao)
+
+            botao_voltar = QPushButton("Voltar")
+            botao_voltar.setFont(self.fonte_texto)
+            botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+            botao_voltar.clicked.connect(self.voltar)
+
+            layout_esquerda.addWidget(label_avaliacao)
+            layout_esquerda.addWidget(self.label_imagem)
+            layout_esquerda.addWidget(label_nome)
+            layout_esquerda.addWidget(self.nome_input)
+            layout_esquerda.addWidget(label_artista)
+            layout_esquerda.addWidget(self.artista_input)
+            layout_esquerda.addWidget(label_nota)
+            layout_esquerda.addWidget(self.nota_input)
+            layout_esquerda.addWidget(label_comentario)
+            layout_esquerda.addWidget(self.comentario_input)
+            layout_esquerda.addWidget(botao_salvar_avaliacao)
+            layout_esquerda.addWidget(botao_voltar)
+
+            # layout da parte direita da janela
+            scroll_area = QScrollArea()
+            scroll_area.setWidgetResizable(True)
+
+            conteudo_scroll = QWidget()
+            layout_scroll = QVBoxLayout(conteudo_scroll)
+            
+            for album in self.albuns:
+                layout_scroll.addWidget(self.criar_card(album))
+            
+            scroll_area.setWidget(conteudo_scroll)
+            layout_direita.addWidget(scroll_area)
+
+            main_layout.addLayout(layout_esquerda)
+            main_layout.addLayout(layout_direita)
+
+            self.setLayout(main_layout)            
  
 
 

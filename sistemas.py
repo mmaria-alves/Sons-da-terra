@@ -1,6 +1,9 @@
 import os
 import random
 import json
+import webbrowser
+import base64
+import requests
 ARQUIVO_USUARIOS = "dados/usuarios.json"
 ARQUIVO_SHOUTBOXD = "dados/shoutbox.json"
 ARQUIVO_AVALIACOES = "dados/avaliações.json"
@@ -49,17 +52,32 @@ class Aunteticadores:
         
 
 class Album:
-    def __init__(self, album, artista):
-        self.album = album
-        self.artista = artista
-
+    def __init__(self, nome, artista, spotify_id="", capa_url="", spotify_url="", descricao=""):
+        self.nome = nome                  # Nome do álbum
+        self.artista = artista            # Nome do artista
+        self.capa_url = capa_url          # URL da imagem da capa
+        self.spotify_url = spotify_url    # Link para abrir o álbum no Spotify
+        self.descricao = descricao        # Descrição do artista adicionada manualmente ao JSON
+    
     @staticmethod
     def from_dict(dados):
-        return Album(dados['album'], dados['artista'])
-        
+        return Album(
+            nome=dados.get("nome_spotify", dados.get("nome", "")),
+            artista=dados.get("artista_spotify", dados.get("artista", "")),
+            capa_url=dados.get("capa", dados.get("capa_url", "")),
+            spotify_url=dados.get("link", dados.get("spotify_url", "")),
+            descricao=dados.get("descricao", "")
+        )
+
     def to_dict(self):
-        return {'album': self.album, 'artista': self.artista}
-        
+        return {
+            "nome_spotify": self.nome,
+            "artista_spotify": self.artista,
+            "capa": self.capa_url,
+            "link": self.spotify_url,
+            "descricao": self.descricao
+        }
+    
 class gerenciarAlbuns:
     def __init__(self):
         self.albuns = self.carregar_albuns()
@@ -242,21 +260,30 @@ class sistemaDados:
                 print('Opção inválida. Digite apenas "s" se sim e "n" se não.')
 
 class Avaliacao:
-    def __init__(self, email, album, nota, comentario):
+    def __init__(self, email, nome_album, artista, nota, comentario):
         self.email = email
-        self.album = album
+        self.nome_album = nome_album
+        self.artista = artista
         self.nota = nota
         self.comentario = comentario
 
     @staticmethod
     def from_dict(dados):
-        return Avaliacao(dados['email'], dados['album'], dados['nota'], dados['comentario'])
+        return Avaliacao(
+            email=dados['email'], 
+            nome_album=dados['nome_album'], 
+            artista=dados['artista'],
+            nota=dados['nota'], 
+            comentario=dados['comentario']
+            )
     
     def to_dict(self):
-        return {'email': self.email, 
-                'album': self.album, 
-                'nota': self.nota, 
-                'comentario': self.comentario
+        return {
+            'email': self.email, 
+            'nome_album': self.nome_album,
+            'artista': self.artista, 
+            'nota': self.nota, 
+            'comentario': self.comentario
         }
 
 class sistemaAvaliacao:
@@ -271,9 +298,22 @@ class sistemaAvaliacao:
                 return json.load(arquivo)
             return {}
         
-    def salvar_avaliacoes(self):
+    def salvar_avaliacoes(self, avaliacoes):
         with open(ARQUIVO_AVALIACOES, 'w', encoding='UTF-8') as arquivo:
-            json.dump(self.avaliacoes, arquivo, indent=4, ensure_ascii=False)
+            json.dump(avaliacoes, arquivo, indent=4, ensure_ascii=False)
+
+    def salvar_avaliacao(self, email, nome_album, artista, nota, comentario):
+        album = next((a for a in self.albuns_disponiveis
+                      if a.nome == nome_album and a.artista == artista), None)
+        
+        if not album:
+            raise ValueError("Álbum não encontrado")
+        
+        avaliacao = Avaliacao(email, album, nota, comentario)
+
+        avaliacoes = self.carregar_avaliacoes()
+        avaliacoes[email] = avaliacao.to_dict()
+        self.salvar_avaliacoes(avaliacoes)
 
     def avaliar_album(self):
         gerenciar = gerenciarAlbuns
@@ -394,3 +434,7 @@ class sistemaOuvindo:
                 nota = item.get('nota')
                 comentario = item.get('comentario')
                 print(f'- {album} by {artista} | ({nota}/5): \"{comentario}\"')
+
+class sistemaRecomedacao:
+    def __init__(self):
+        pass

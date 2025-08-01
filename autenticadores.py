@@ -2,14 +2,21 @@ import os
 import json
 import random
 import smtplib
-from PySide6.QtGui import QPixmap, Qt
+import spotipy
+from urllib.request import urlopen
+from spotipy.oauth2 import SpotifyClientCredentials
+from PySide6.QtGui import QPixmap
 from datetime import datetime, timedelta, date
 from pathlib import Path
 from email.message import EmailMessage
-from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd
+from sistemas import Avaliacao, sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd, Album
 
 EMAIL_REMETENTE = 'noreply.sonsdaterra@gmail.com'
 SENHA_REMETENTE = 'pppd jwml xftl uwxb'
+
+ARQUIVO_ALBUNS = "dados/albuns.json"
+CLIENTE_ID="245d8233453d4e1ca80e73e160fdb42b"
+CLIENT_SECRET="f56d813be60b4416b0ba4b35830e74dd"
 
 class Usuario:
     def __init__(self, nome, email, senha,):
@@ -51,7 +58,10 @@ class Autenticadores:
     
     def carregar_albuns(self, caminho="dados/albuns.json"):
         with open(caminho, "r", encoding="utf-8") as arquivo:
-            return json.load(arquivo)
+            dados = json.load(arquivo)
+        
+        self.albuns_disponiveis = [Album.from_dict(album) for album in dados]
+        return self.albuns_disponiveis
 
        
     def cadastrar_usuario(self, nome, email, senha, confirmar_senha):
@@ -125,19 +135,19 @@ class Autenticadores:
             with open(caminho, 'r', encoding='utf-8') as arquivo:
                 dados = json.load(arquivo)
                 if dados.get('semana') == semana_atual:
-                    return dados
-        
+                    return Album.from_dict(dados['album'])
+                
         destaque = random.choice(self.albuns_disponiveis)
         
         resultado = {
             'semana': semana_atual,
-            'album': destaque
+            'album': destaque.__dict__
         }
 
         with open(caminho, 'w', encoding='utf-8') as arquivo:
             json.dump(resultado, arquivo, ensure_ascii=False, indent=4)
         
-        return resultado
+        return destaque
     
     def carregar_capa(self):
         try:
@@ -159,14 +169,17 @@ class Autenticadores:
         except (KeyError, IndexError, FileNotFoundError) as e:
             print(f"Erro ao carregar capa do álbum: {e}")
     
-    def pixmap_capa_destaque(self):
-        caminho_imagem = self.carregar_capa()
-        
-        if caminho_imagem:
-            pixmap = QPixmap(caminho_imagem)
-            if not pixmap.isNull():
+    @staticmethod
+    def carregar_pixmap(url: str):
+        try:
+            with urlopen(url) as resposta:
+                dados = resposta.read()
+                pixmap = QPixmap()
+                pixmap.loadFromData(dados)
                 return pixmap
-        return None
+        except Exception as erro:
+            print(f"Erro ao carregar imagem: {erro}")
+            return QPixmap()
     
     def info_completa_album(self):
         try:
@@ -191,10 +204,14 @@ class Autenticadores:
         mensagem['From'] = EMAIL_REMETENTE
         mensagem['To'] = destinatario
         mensagem.set_content(f'''
-Bem vindo(a) ao Sons da Terra!
+Olá!
 Seu código de verificação é {codigo}
 
 Este código é válido por 10 minutos
+Se você não tentou fazer login, ignore este e-mail.
+
+Atenciosamente,
+Sons da Terra
                             ''')
         try:
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -239,6 +256,32 @@ Este código é válido por 10 minutos
                 Autenticadores.salvar_usuarios(usuarios)
                 return "Senha redefinada com sucesso!"
         return "Email não encontrado."
+    
+    def carregar_avaliacoes(self, caminho="dados/avaliações.json"):
+        if os.path.exists(caminho):
+            with open(caminho, 'r', encoding='UTF-8') as arquivo:
+                return json.load(arquivo)
+            return {}
+        
+    def salvar_avaliacoes(self, avaliacoes,caminho="dados/avaliações.json"):
+        with open(caminho, 'w', encoding='UTF-8') as arquivo:
+            json.dump(avaliacoes, arquivo, indent=4, ensure_ascii=False)
+
+    def salvar_avaliacao(self, email, nome_album, artista, nota, comentario):
+        album = next((a for a in self.albuns_disponiveis
+                      if a.nome == nome_album and a.artista == artista), None)
+        
+        if not album:
+            raise ValueError("Álbum não encontrado")
+        
+        avaliacao = Avaliacao(email, album.nome, album.artista, nota, comentario)
+        avaliacoes = self.carregar_avaliacoes()
+        if email not in avaliacoes:
+            avaliacoes[email] = []
+        
+        avaliacoes[email].append(avaliacao.to_dict())
+        
+        self.salvar_avaliacoes(avaliacoes)
 
 class configuracoesUsuario:
     def __init__(self, usuario_logado, usuarios):
@@ -275,3 +318,64 @@ class configuracoesUsuario:
             self.salvar_usuarios()
             return True
         return False
+    
+
+class AtualizadorSpotify:
+    '''Utilizado para atualizar o arquivo json com as informações dos nomes corretos, imagem da capa e link do álbum/EPs'''
+    def __init__(self, caminho_arquivo: str, client_id: str, client_secret: str):
+        self.caminho_arquivo = caminho_arquivo
+        self.sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
+            client_id=client_id,
+            client_secret=client_secret
+        ))
+        self.albuns = []
+
+    def carregar_arquivo(self):
+        try:
+            with open(self.caminho_arquivo, "r", encoding="utf-8") as f:
+                self.albuns = json.load(f)
+        except FileNotFoundError:
+            print("Arquivo não encontrado.")
+        except json.JSONDecodeError:
+            print("Erro ao ler o JSON.")
+
+    def buscar_dados_album(self, nome_album: str, artista: str):
+        resultado = self.sp.search(q=f"album:{nome_album} artist:{artista}", type="album", limit=1)
+        items = resultado.get("albums", {}).get("items", [])
+        if items:
+            info = items[0]
+            return {
+                "nome_spotify": info["name"],
+                "artista_spotify": ", ".join([a["name"] for a in info["artists"]]),
+                "link": info["external_urls"]["spotify"],
+                "capa": info["images"][0]["url"] if info["images"] else None
+            }
+        else:
+            return {"erro": "Álbum não encontrado"}
+
+    def atualizar_albuns(self):
+        for album in self.albuns:
+            nome = album.get("nome")
+            artista = album.get("artista")
+            dados = self.buscar_dados_album(nome, artista)
+            album.update(dados)
+
+    def salvar_arquivo(self):
+        with open(self.caminho_arquivo, "w", encoding="utf-8") as f:
+            json.dump(self.albuns, f, indent=4, ensure_ascii=False)
+        print("Arquivo atualizado com sucesso.")
+
+    def executar(self):
+        self.carregar_arquivo()
+        if self.albuns:
+            self.atualizar_albuns()
+            self.salvar_arquivo()
+
+# Só executar este arquivo quando for necessário atualizar os álbuns
+if __name__ == "__main__":
+    atualizador = AtualizadorSpotify(
+        caminho_arquivo="dados/albuns.json",
+        client_id=CLIENTE_ID,
+        client_secret=CLIENT_SECRET
+    )
+    atualizador.executar()
