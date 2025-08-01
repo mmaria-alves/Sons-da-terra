@@ -9,7 +9,7 @@ from PySide6.QtGui import QPixmap
 from datetime import datetime, timedelta, date
 from pathlib import Path
 from email.message import EmailMessage
-from sistemas import Avaliacao, sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd, Album
+from sistemas import Avaliacao, sistemaAvaliacao, sistemaOuvindo, Album, Shout
 
 EMAIL_REMETENTE = 'noreply.sonsdaterra@gmail.com'
 SENHA_REMETENTE = 'pppd jwml xftl uwxb'
@@ -118,10 +118,7 @@ class Autenticadores:
             print(f"Erro ao avaliar álbum: {e}")
             return False
         return True
-    
-    def adicionar_shouts_terminal(self):
-        sistema = sistemaShoutboxd(self.usuario_logado, self.albuns_disponiveis)
-        sistema.adicionar_shouts()
+
     
     def ouvindo_agora_terminal(self):
         sistema = sistemaOuvindo()
@@ -282,6 +279,51 @@ Sons da Terra
         avaliacoes[email].append(avaliacao.to_dict())
         
         self.salvar_avaliacoes(avaliacoes)
+
+    def carregar_shouts(self):
+        caminho="dados/shoutbox.json"
+        if os.path.exists(caminho):
+            with open(caminho, 'r', encoding='utf-8') as arquivo:
+                return json.load(arquivo)
+            return {}
+        
+    def salvar_shouts(self, shouts):
+        caminho="dados/shoutbox.json"
+        with open(caminho, 'w', encoding='utf-8') as arquivo:
+            return json.dump(shouts, arquivo, indent=4, ensure_ascii=False)
+        
+    def adicionar_shout(self, email, nome_album, artista):
+        shout = Shout(email, nome_album, artista)
+        shouts = self.carregar_shouts()
+
+        if email not in shouts:
+            shouts[email] = []
+        
+        shouts[email].append(shout.to_dict())
+        self.salvar_shouts(shouts)
+
+    def obter_shouts_usuario(self, email):
+        shouts = self.carregar_shouts()
+        return shouts.get(email, [])
+    
+    def ouvindo_agora(self):
+        caminho = "dados/avaliações.json"
+        if not os.path.exists(caminho):
+            return []
+
+        with open(caminho, 'r', encoding='utf-8') as arquivo:
+            dados = json.load(arquivo)
+
+        avaliacoes = []
+
+        for lista_avaliacoes in dados.values():
+            if isinstance(lista_avaliacoes, dict):
+                lista_avaliacoes = [lista_avaliacoes]
+            for a in lista_avaliacoes:
+                avaliacoes.append(Avaliacao.from_dict(a))
+
+        return random.sample(avaliacoes, k=min(2, len(avaliacoes)))
+
 
 class configuracoesUsuario:
     def __init__(self, usuario_logado, usuarios):

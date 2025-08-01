@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineE
 from PySide6.QtGui import QFontDatabase, QFont, QIcon, QPixmap, QTransform
 from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, Property
 from autenticadores import Autenticadores, configuracoesUsuario
-from sistemas import sistemaAvaliacao, sistemaOuvindo, sistemaShoutboxd, Album
+from sistemas import sistemaOuvindo
 
 
 class telaLogin(QWidget):
@@ -580,7 +580,7 @@ class menuPrincipal(QWidget):
         botao_shoutboxd.setFixedSize(480, 25)
         botao_shoutboxd.setFont(self.fonte_texto)
         botao_shoutboxd.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
-        botao_shoutboxd.clicked.connect(self.adicionar_shout)
+        botao_shoutboxd.clicked.connect(self.abrir_shoutboxd)
 
         botao_ouvindo_agora = QPushButton("O que as pessoas estão ouvindo?")
         botao_ouvindo_agora.setFixedSize(480, 25)
@@ -672,37 +672,21 @@ class menuPrincipal(QWidget):
 
         self.setLayout(main_layout)
 
-    def avaliar_albuns(self):
-        if not hasattr(self.autenticador, 'albuns_disponiveis'):
-            self.autenticador.albuns_disponiveis = self.autenticador.carregar_albuns()
-
-        self.avaliacao_window = sistemaAvaliacao(
-            usuario_logado=self.autenticador.usuario_logado,
-            albuns_disponiveis=self.autenticador.albuns_disponiveis
-        )
-        self.avaliacao_window.show()
-    
-    def adicionar_shout(self):
-        try:
-            if not self.autenticador.usuario_logado:
-                print("Erro: Nenhum usuário logado")
-                return
-                
-            if not hasattr(self.autenticador, 'albuns_disponiveis'):
-                self.autenticador.albuns_disponiveis = self.autenticador.carregar_albuns()
-                
-            sistema = sistemaShoutboxd(self.autenticador.usuario_logado,
-                                     self.autenticador.albuns_disponiveis)
-            sistema.adicionar_shouts()
-        except Exception as e:
-            print(f"Erro ao adicionar shout: {e}")
     
     def ouvindo_agora(self):
-        try:
-            sistema = sistemaOuvindo()
-            sistema.ouvindo_agora()
-        except Exception as e:
-            print(f"Erro ao abrir 'ouvindo agora': {e}")
+        avaliacoes = autenticador.ouvindo_agora()
+        if not avaliacoes:
+            QMessageBox.information(self, "Sem avaliações", "Nenhuma avaliação disponível no momento.")
+            return
+        
+        mensagem = ""
+        for avaliacao in avaliacoes:
+            mensagem +=(
+                f"Álbum: {avaliacao.nome_album} - {avaliacao.artista}\n"
+                f"Nota: {avaliacao.nota}\n"
+                f"Comentário: {avaliacao.comentario}\n"
+            )
+        QMessageBox.information(self, "Avaliações dos Amigos", mensagem.strip())
     
     
     def abrir_configuracoes(self):
@@ -715,6 +699,12 @@ class menuPrincipal(QWidget):
         self.parar_animacao()
         self.tela_avaliacao = telaAvaliacao(autenticador)
         self.tela_avaliacao.show()
+        self.close()
+
+    def abrir_shoutboxd(self):
+        self.parar_animacao()
+        self.tela_shoutboxd = telaShoutboxd(autenticador)
+        self.tela_shoutboxd.show()
         self.close()
 
 class TelaConfiguracoes(QWidget):
@@ -836,7 +826,7 @@ class TelaConfiguracoes(QWidget):
         self.label_imagem = QLabel(self)
         self.label_imagem.setFixedSize(500, 170)
         self.label_imagem.setPixmap(self.original_pixmap)
-        self.label_imagem.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        self.label_imagem.setAlignment(Qt.AlignCenter)
 
         self.animacao_logo()
         self.iniciar_animacao()
@@ -1101,9 +1091,215 @@ class telaAvaliacao(QWidget):
             main_layout.addLayout(layout_esquerda)
             main_layout.addLayout(layout_direita)
 
-            self.setLayout(main_layout)            
- 
+            self.setLayout(main_layout)
 
+class telaShoutboxd(QWidget):
+    def __init__(self, autenticador):
+        super().__init__()
+        self.autenticador = autenticador
+        self.usuario = autenticador.usuario_logado
+        self.usuarios = autenticador.carregar_usuarios()
+        self.albuns = autenticador.carregar_albuns()
+
+        self.setWindowTitle("Sons da Terra")
+        self.setWindowIcon(QIcon('imagens/Logo.png'))
+        self.setGeometry(200, 100, 960, 540)
+        self.setStyleSheet('background-color: #fcd967')
+
+        self.fonte_titulo = self.carregar_fonte("fontes/Nexa-Heavy.ttf")
+        self.fonte_texto = self.carregar_fonte("fontes/Nexa-ExtraLight.ttf")
+
+        # Configurações iniciais da animação:
+        self.original_pixmap = None
+        self._angle = 0
+        self.animacao = None
+        self.label_imagem = None
+        
+        self.init_ui()
+
+    def carregar_fonte(self, caminho_fonte: str):
+        id_fonte = QFontDatabase.addApplicationFont(caminho_fonte)
+        familias = QFontDatabase.applicationFontFamilies(id_fonte)
+
+        if familias:
+            return QFont(familias[0], 50)
+        else:
+           return QFont("Arial", 20)
+
+    @Property(float)
+    def angle(self):
+        return self._angle
+    
+    @angle.setter
+    def angle(self, valor):
+        self._angle = valor
+        self.atualizar_rotacao()
+    
+    def atualizar_rotacao(self):
+        if self.original_pixmap and self.label_imagem:
+            transform = QTransform()
+            transform.rotate(self._angle)
+            rotated_pixmap = self.original_pixmap.transformed(transform, Qt.SmoothTransformation)
+            self.label_imagem.setPixmap(rotated_pixmap)
+    
+    def animacao_logo(self):
+        self.animacao = QPropertyAnimation(self, b"angle")
+        self.animacao.setDuration(3000)
+        self.animacao.setStartValue(0)
+        self.animacao.setEndValue(360)
+        self.animacao.setLoopCount(-1)
+        self.animacao.setEasingCurve(QEasingCurve.Linear)
+    
+    def iniciar_animacao(self):
+        '''Inicia a animação'''
+        if self.animacao:
+            self.animacao.start()
+
+    def parar_animacao(self):
+        '''Para a animação'''
+        if self.animacao:
+            self.animacao.stop()
+
+    def voltar(self):
+        self.parar_animacao()
+        self.hide()
+        self.menu = menuPrincipal(self.autenticador)
+        self.menu.show()
+
+    def criar_card(self, album):
+        card = QWidget()
+        layout = QVBoxLayout(card)
+
+        info_album = QLabel(f"{album.nome} — {album.artista}")
+        info_album.setWordWrap(True)
+        info_album.setFont(self.fonte_texto)
+        info_album.setStyleSheet("background-color: #5966b1; color: #fffffd; font-size: 20px")
+            
+        botao_spotify = QPushButton("Ver no Spotify")
+        botao_spotify.setFont(self.fonte_texto)
+        botao_spotify.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        botao_spotify.clicked.connect(lambda: webbrowser.open(album.spotify_url))
+            
+        layout.addWidget(info_album)
+        layout.addWidget(botao_spotify)
+
+        return card
+    
+    def adicionar_shout(self):
+        nome_album = self.nome_input.text().strip()
+        artista = self.artista_input.text().strip()
+
+        if not nome_album or not artista:
+            QMessageBox.warning(self, "Erro", "Preencha o nome do álbum e do artista")
+            return
+        
+        email = self.usuario.email if hasattr(self.usuario, 'email') else self.usuario.get("email")
+        autenticador.adicionar_shout(email, nome_album, artista)
+        QMessageBox.information(self, "Sucesso", "Seu shout foi adicionado com sucesso")
+
+        self.nome_input.clear()
+        self.artista_input.clear()
+    
+    def shouts_usuario(self):
+        email = self.usuario.email if hasattr(self.usuario, 'email') else self.usuario.get("email")
+        shouts = autenticador.obter_shouts_usuario(email)
+
+        if not shouts:
+            QMessageBox.information(self, "Shoutboxd", "Você ainda não adicionou nenhum shout")
+            return
+        
+        texto = "\n".join(
+            f"{s['nome_album']} — {s['artista']}" for s in shouts
+        )
+        QMessageBox.information(self, "Seus shouts", texto)
+
+    def init_ui(self):
+        main_layout = QHBoxLayout()
+        layout_esquerda = QVBoxLayout()
+        layout_direita = QVBoxLayout()   
+        
+        # layout da parte esquerda da janela
+        label_shoutboxd = QLabel("Shoutboxd")
+        label_shoutboxd.setFixedSize(480, 100)
+        label_shoutboxd.setFont(self.fonte_titulo)
+        label_shoutboxd.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 40px")
+        label_shoutboxd.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        imagem = QPixmap('imagens/Logo.png')
+        self.original_pixmap = imagem.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        self.label_imagem = QLabel(self)
+        self.label_imagem.setFixedSize(480, 170)
+        self.label_imagem.setAlignment(Qt.AlignCenter)
+        self.label_imagem.setPixmap(self.original_pixmap)
+        
+        self.animacao_logo()
+        self.iniciar_animacao()
+
+        label_nome = QLabel("Nome: ")
+        label_nome.setFont(self.fonte_titulo)
+        label_nome.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+        label_nome.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+        label_artista = QLabel("Artista: ")
+        label_artista.setFont(self.fonte_titulo)
+        label_artista.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 23px")
+        label_artista.setAlignment(Qt.AlignLeft | Qt.AlignBottom)
+
+        self.nome_input = QLineEdit()
+        self.nome_input.setPlaceholderText("Nome do álbum")
+        
+        self.artista_input = QLineEdit()
+        self.artista_input.setPlaceholderText("Nome do artista")
+
+        botao_salvar_shout = QPushButton("Salvar Shout")
+        botao_salvar_shout.setFont(self.fonte_texto)
+        botao_salvar_shout.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        botao_salvar_shout.clicked.connect(self.adicionar_shout)
+
+        botao_voltar = QPushButton("Voltar")
+        botao_voltar.setFont(self.fonte_texto)
+        botao_voltar.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        botao_voltar.clicked.connect(self.voltar)
+        
+        botao_meus_shouts = QPushButton("Meus Shouts")
+        botao_meus_shouts.setFont(self.fonte_texto)
+        botao_meus_shouts.setStyleSheet("background-color: #5966b1; color: #fffffd; font-weight: bold; font-size: 14px")
+        botao_meus_shouts.clicked.connect(self.shouts_usuario)
+        
+        layout_esquerda.addWidget(label_shoutboxd)
+        layout_esquerda.addWidget(self.label_imagem)
+        layout_esquerda.addStretch()
+        layout_esquerda.addWidget(botao_meus_shouts)
+        layout_esquerda.addWidget(label_nome)
+        layout_esquerda.addWidget(self.nome_input)
+        layout_esquerda.addWidget(label_artista)
+        layout_esquerda.addWidget(self.artista_input)
+        layout_esquerda.addWidget(botao_salvar_shout)
+        layout_esquerda.addWidget(botao_voltar)
+        # layout do lado direito da janela
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        
+        conteudo_scroll = QWidget()
+        layout_scroll = QVBoxLayout(conteudo_scroll)
+        label_albuns_disponiveis = QLabel("Álbuns já disponíveis na plataforma:")
+        label_albuns_disponiveis.setWordWrap(True)
+        label_albuns_disponiveis.setFixedSize(480, 100)
+        label_albuns_disponiveis.setFont(self.fonte_titulo)
+        label_albuns_disponiveis.setStyleSheet("color: #fffffd; font-weight: bold; font-size: 30px")
+        label_albuns_disponiveis.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        
+        for album in self.albuns:
+            layout_scroll.addWidget(self.criar_card(album))
+            
+        scroll_area.setWidget(conteudo_scroll)
+        layout_direita.addWidget(label_albuns_disponiveis)
+        layout_direita.addWidget(scroll_area)
+
+        main_layout.addLayout(layout_esquerda)
+        main_layout.addLayout(layout_direita)
+
+        self.setLayout(main_layout)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
