@@ -56,6 +56,28 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 - **ENH04 - Álbuns disponíveis**  
   Novos álbuns foram adicionados à plataforma.
 
+## Conceitos:
+### Funções de tratamento de strings
+Métodos usados para manipular textos, como .upper(), .lower(), .strip(), .replace() e .split().
+
+### Estruturas de decisão e repetição
+Decisão: if, elif, else — permitem executar diferentes blocos de código com base em condições.
+
+Repetição: for e while — usados para repetir ações várias vezes.
+
+### Funções
+Blocos de código reutilizáveis definidos com def.
+
+Podem receber parâmetros e retornar valores com return.
+
+### Listas e dicionários
+Listas: coleções ordenadas de itens ([]), acessadas por índice.
+
+Dicionários: coleções de pares chave-valor ({}), acessadas por chave.
+
+### Conceitos de Programação Orientada a Objetos -POO-
+A Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias de classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. Também são usados conceitos como encapsulamento, que protege os dados internos dos objetos; herança, que permite que uma classe herde características de outra; e polimorfismo, que permite que métodos com o mesmo nome se comportem de maneiras diferentes dependendo do contexto.
+
 ## 🧪 Como executar o projeto
 
 1. Instale a biblioteca PySide6:
