@@ -37,7 +37,7 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
   Experiência visual amigável e intuitiva.
 ### Melhorias
 - **ENH01 - Substituição do banco de dados**  
-  Todos os bancos de dados agora estão em um arquivo `json`.
+  Os bancos de dados dos usuários agora estão em um arquivo `json`.
   
 - **ENH02 - Refatorização e modularização do código**  
   Código inteiramente reorganizado/modularizado e atualizado para POO.
@@ -46,50 +46,80 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 ### Novas funcionalidades
 - **RF007 - Recuperação de senha**  
   Geração e envio de código por email.
-- **RF008 - API do Spotify**  
-  Quando o usuário clicar no nome de um álbum será automaticamente redirecionado para a página desse álbum no spotify
+- **RF008 - Ligação direta com o Spotify**  
+  Agora o usuário pode ser redirecionado para um álbum específico no spotify sempre que desejar.
+- **RF009 - Meus Shouts**  
+  O usuário, sempre que desejar, pode verificar quais shous (sugestões) ele já deixou na plataforma.
+- **RF010 - Criação de novas telas para organizar a interface gráfica**  
+  As telas de recuperação, avaliação e shoutboxd foram adicionadas para uma melhor estruturação do código
 ### Melhorias
 - **ENH02 - Interface gráfica**  
   Correção de bugs e refatoração completa de todas as telas.
 - **ENH03 - Destaque da semana**  
   Agora a função destaque da semana exibe a capa do álbum e uma pequena descrição do artista.
 - **ENH04 - Álbuns disponíveis**  
-  Novos álbuns foram adicionados à plataforma.
+  Novos álbuns e EPs foram adicionados à plataforma.
+- **ENH05 - Estruturação dos dados**  
+  Todos os dados estão devidamente modularizados em arquvos `json`, não apenas os dados dos usuários.
+- **ENH06 - Correção de bugs no armazenamento de avaliações e shouts**  
+  Agora, os usuários podem deixar mais de uma avaliação/shout, o que antes não era possível devido a um erro ao salvar os dados.
+- **ENH07 - Automatização no processo de atualização de dados dos álbuns/EPS**  
+  Utilizamos a API do spotify para automatizar o processo que envolvia pegar o link e a capa do álbum, agora basta adicionar o nome e o artista responsável pelo álbum no arquivo `albuns.json` que, automaticamente, ele se atualiza com os novos dados.
+## 📷 Imagens do Sons da Terra
+- Tela inicial/tela de login:  
+  <img width="521" height="562" alt="telaInicial_ST" src="https://github.com/user-attachments/assets/45ae748e-3c4a-4164-867f-5b02fc021e2d" />
+- Menu principal:  
+  <img width="986" height="539" alt="menuPrincipal_ST" src="https://github.com/user-attachments/assets/448ac8f1-088c-41f6-a8ff-7fe1696f6f5c" />
+- Tela de avaliações dos álbuns:  
+  <img width="959" height="617" alt="avaliacao_ST" src="https://github.com/user-attachments/assets/0a6a76ea-7d84-49a3-865c-140671477051" />
+- Configurações:  
+  <img width="519" height="499" alt="configuracoes_ST" src="https://github.com/user-attachments/assets/3bca8fce-3d54-4436-ba22-a5a6f8941b8f" />
 
-## Conceitos:
+
+## 👀 Conceitos:
 ### Funções de tratamento de strings
-Métodos usados para manipular textos, como .upper(), .lower(), .strip(), .replace() e .split().
+- Métodos usados para manipular textos:  
+  `upper()`- Retorna a string com todas as suas letras maiúsculas;  
+  `lower()`- Retorna a string com todas as suas letras minúsculas;  
+  `strip()`- Remove espaçoes em branco na frente e ao final da string;  
+  `title()`- Retorna a string com a primeira letra de cada palavra maiúscula;  
+  `len()`- Retorna um valor inteiro com o número de caracteres de uma string.
 
 ### Estruturas de decisão e repetição
-Decisão: if, elif, else — permitem executar diferentes blocos de código com base em condições.
+- Decisão: permitem executar diferentes blocos de código com base em condições.  
+  `if` = se  
+  `elif` = se não, se  
+  `else` = se não
 
-Repetição: for e while — usados para repetir ações várias vezes.
+- Repetição: usados para repetir ações.  
+  `while`: itera sobre um bloco de código enquanto uma determiada condição for verdadeira;  
+  `for`: um valor x é variável e que recebe o valor do item dentro da sequência a cada nova iteração, até a sequência chegar ao fim. 
 
 ### Funções
-Blocos de código reutilizáveis definidos com def.
-
-Podem receber parâmetros e retornar valores com return.
+- Definição: blocos de código reutilizáveis definidos por `def`, que podem receber parâmetros e retornar valores;
 
 ### Listas e dicionários
-Listas: coleções ordenadas de itens ([]), acessadas por índice.
-
-Dicionários: coleções de pares chave-valor ({}), acessadas por chave.
+- Listas: coleções ordenadas de itens ([]), acessadas por índice.  
+- Dicionários: coleções de pares chave-valor ({}), acessadas por chave.
 
 ### Conceitos de Programação Orientada a Objetos -POO-
-A Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias de classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. Também são usados conceitos como encapsulamento, que protege os dados internos dos objetos; herança, que permite que uma classe herde características de outra; e polimorfismo, que permite que métodos com o mesmo nome se comportem de maneiras diferentes dependendo do contexto.
+- Definição: a Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias das classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. Também são usados conceitos como encapsulamento, que protege os dados internos dos objetos, herança, que permite que uma classe herde características de outra e polimorfismo, que permite que métodos com o mesmo nome se comportem de maneiras diferentes dependendo do contexto.
 
 ## 🧪 Como executar o projeto
 
 1. Instale a biblioteca PySide6:
    ```bash
     pip install PySide6
-2. Clone o repositório:
+2. Instale a biblioteca Spotipy:
+   ```bash
+   pip instal spotipy
+4. Clone o repositório:
    ```bash
    git clone https://github.com/seuusuario/sons-da-terra.git
-3. Navegue até o diretório do projeto:
+5. Navegue até o diretório do projeto:
    ```bash
    cd sons-da-terra
-4. Execute o arquivo:
+6. Execute o arquivo:
    ```bash
    python main.py
 
