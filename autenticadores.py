@@ -349,10 +349,10 @@ class configuracoesUsuario:
             return True, "Senha atualizada com sucesso."
         return False, "Senha inválida. Use exatamente 6 números."
 
-    def salvar_usuarios(self, caminho="usuarios.json"):
+    def salvar_usuarios(self, caminho="dados/usuarios.json"):
         self.usuarios[self.usuario_logado.email] = self.usuario_logado.to_dict()
         with open(caminho, 'w', encoding='utf-8') as arquivo:
-            json.dump({'usuarios': self.usuarios}, arquivo, indent=4, ensure_ascii=False)
+            json.dump(self.usuarios, arquivo, indent=4, ensure_ascii=False)
 
     def apagar_conta(self):
         if self.usuario_logado.email in self.usuarios:

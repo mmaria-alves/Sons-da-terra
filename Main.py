@@ -1,6 +1,5 @@
 import sys
 import webbrowser
-from urllib.request import urlopen
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QInputDialog, QHBoxLayout, QScrollArea
 from PySide6.QtGui import QFontDatabase, QFont, QIcon, QPixmap, QTransform
 from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, Property

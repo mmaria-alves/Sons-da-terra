@@ -13,6 +13,7 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
   - `json` — armazenamento de dados
   - `PySide6` — interface gráfica (GUI)
   - `smtplib` — envio de emails aos usuários por meio do protocolo SMTP.
+  - `webbrowser` — exibir URLs no navegador padrão do usuário
     
 ## ✨ Release 1.0
 
@@ -92,18 +93,24 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
   `else` = se não
 
 - Repetição: usados para repetir ações.  
-  `while`: itera sobre um bloco de código enquanto uma determiada condição for verdadeira;  
-  `for`: um valor x é variável e que recebe o valor do item dentro da sequência a cada nova iteração, até a sequência chegar ao fim. 
+  `while`: itera sobre um bloco de código enquanto uma determinada condição for verdadeira;  
+  `for`: um valor x é uma variável que recebe o valor do item dentro da sequência a cada nova iteração, até a sequência chegar ao fim. 
 
 ### Funções
 - Definição: blocos de código reutilizáveis definidos por `def`, que podem receber parâmetros e retornar valores;
 
 ### Listas e dicionários
 - Listas: coleções ordenadas de itens ([]), acessadas por índice.  
-- Dicionários: coleções de pares chave-valor ({}), acessadas por chave.
+- Dicionários: coleções de pares chave-valor ({}), acessadas por chaves.
 
-### Conceitos de Programação Orientada a Objetos -POO-
-- Definição: a Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias das classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. Também são usados conceitos como encapsulamento, que protege os dados internos dos objetos, herança, que permite que uma classe herde características de outra e polimorfismo, que permite que métodos com o mesmo nome se comportem de maneiras diferentes dependendo do contexto.
+### Programação Orientada a Objetos (POO)
+- Definição: a Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias das classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. 
+
+- Princípios de POO: conceitos importantes que guiam a orientação a objetos  
+  `Encapsulamento` protege/oculta os dados internos dos objetos;  
+  `Herança` permite que uma classe herde atributos e métodos de outra classe;  
+  `Polimorfismo` capacidade de usar uma mesma interface para diferentes tipos de objetos.
+
 
 ## 🧪 Como executar o projeto
 
@@ -112,7 +119,7 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
     pip install PySide6
 2. Instale a biblioteca Spotipy:
    ```bash
-   pip instal spotipy
+   pip install spotipy
 4. Clone o repositório:
    ```bash
    git clone https://github.com/seuusuario/sons-da-terra.git
@@ -131,7 +138,7 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 
 ## 👩‍💻 Desenvolvedores
 
-- Luiz Filipe F. Q. da Silva  
+- 🎵 Luiz Filipe F. Q. da Silva  
   [Github de Filipe](https://github.com/nilipe)
-- Maria Eduarda A. dos Santos  
+- ☀️ Maria Eduarda A. dos Santos  
   [Github de Maria](https://github.com/mmaria-alves)

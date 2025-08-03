@@ -5,7 +5,7 @@
             "nome_album": "Megalomania",
             "artista": "UANA",
             "nota": 5.0,
-            "comentario": "comentaroa"
+            "comentario": "comentario"
         },
         {
             "email": "myaay1506@gmail.com",
@@ -13,6 +13,13 @@
             "artista": "Boogarins",
             "nota": 4.0,
             "comentario": "grande album"
+        },
+        {
+            "email": "myaay1506@gmail.com",
+            "nome_album": "Brutas Amam, Choram e Sentem Raiva",
+            "artista": "AJULIACOSTA",
+            "nota": 5.0,
+            "comentario": "ela é boazuda demais"
         }
     ]
 }
