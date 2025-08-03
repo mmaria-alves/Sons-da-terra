@@ -107,9 +107,9 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 - Definição: a Programação Orientada a Objetos (POO) é um paradigma que organiza o código em torno de objetos, que são instâncias das classes. Cada classe define atributos, que representam as características dos objetos, e métodos, que representam as ações que esses objetos podem realizar. Esse modelo permite maior organização, reutilização e manutenção do código. 
 
 - Princípios de POO: conceitos importantes que guiam a orientação a objetos  
-  `Encapsulamento` protege/oculta os dados internos dos objetos;  
-  `Herança` permite que uma classe herde atributos e métodos de outra classe;  
-  `Polimorfismo` capacidade de usar uma mesma interface para diferentes tipos de objetos.
+  - `Encapsulamento` protege/oculta os dados internos dos objetos;  
+  - `Herança` permite que uma classe herde atributos e métodos de outra classe;  
+  - `Polimorfismo` capacidade de usar uma mesma interface para diferentes tipos de objetos.
 
 
 ## 🧪 Como executar o projeto
@@ -138,7 +138,7 @@ A valorização da diversidade cultural e a promoção de espaços mais inclusiv
 
 ## 👩‍💻 Desenvolvedores
 
-- 🎵 Luiz Filipe F. Q. da Silva  
+- Luiz Filipe F. Q. da Silva  
   [Github de Filipe](https://github.com/nilipe)
-- ☀️ Maria Eduarda A. dos Santos  
+- Maria Eduarda A. dos Santos  
   [Github de Maria](https://github.com/mmaria-alves)
